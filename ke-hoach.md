@@ -442,7 +442,7 @@ Ký hiệu: ⏱ ước lượng giờ · ✅ Xong khi · ⚠️ Bẫy/Ghi chú �
 |---|---|---|---|---|
 | [x] B1.1 | Khởi tạo monorepo | 3h | | 2026-10-20 |
 | [x] B1.2 | Khung API Express | 3h | | 2026-10-20 |
-| [ ] B1.3 | Khung web React | 2h | | |
+| [x] B1.3 | Khung web React | 2h | | 2026-10-20 |
 | [ ] B1.4 | PostgreSQL + pool | 2h | | |
 | [ ] B1.5 | Migration schema | 4h | | |
 | [ ] B1.6 | Seed dữ liệu giả | 4h | | |
