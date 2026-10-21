@@ -2,7 +2,7 @@
 
 - **Trạng thái:** Đã chấp nhận
 - **Ngày:** 2026-10-21
-- **Liên quan:** `ke-hoach.md` §1.2, §5, B2.2; `docs/phan-tich/05-tac-nhan-va-use-case.md` §5.4
+- **Liên quan:** `ke-hoach.md` §1.2, §5, S2.3; `docs/phan-tich/05-tac-nhan-va-use-case.md` §5.4
 
 ## Bối cảnh
 
@@ -21,7 +21,7 @@ Dùng 3 vai trò có thứ bậc `viewer < analyst < admin` (vai trò cao hơn l
 ## Hệ quả
 
 - **Tích cực:** nhân viên nhập liệu không tiếp cận được bí mật nguồn dữ liệu; người xem không xuất được dữ liệu; phân quyền khớp với tổ chức thật của cửa hàng.
-- **Tiêu cực:** thêm khoảng 0,5 h (B2.2) cho phần auth và 5 h (B4.8) cho giao diện quản lý người dùng; thêm test phân quyền theo ma trận.
+- **Tiêu cực:** thêm khoảng 0,5 h (S2.3) cho phần auth và 5 h (S6.3) cho giao diện quản lý người dùng; thêm test phân quyền theo ma trận.
 - **Phương án đã loại:**
   - _Giữ 2 vai trò:_ đơn giản nhưng sai nguyên tắc đặc quyền tối thiểu.
   - _Phân quyền theo từng quyền (permission-based RBAC):_ linh hoạt nhưng quá mức cần thiết cho cửa hàng 1–4 người dùng. Có thể nâng cấp sau mà không đổi API, vì middleware đã tách biệt.

@@ -34,7 +34,7 @@ _Hình H2 — Quy trình tổng hợp báo cáo thủ công hiện nay. Ghi chú
 | 5    | Chủ shop  | Xem; muốn góc nhìn khác thì nhắn nhân viên làm lại                    | P5     |
 | 6    | Chủ shop  | Ra quyết định dựa trên số liệu có thể sai, không so được kỳ trước     | P6     |
 
-**Nhận xét phân tích:** điểm nghẽn không nằm ở việc _vẽ biểu đồ_ (Excel vẽ được) mà ở bước **2–3: chuẩn hoá và làm sạch dữ liệu**. Vì vậy phần lớn công sức đồ án (Sprint 2) dồn vào pipeline nhập dữ liệu, không phải giao diện biểu đồ. Đây là luận điểm quan trọng khi giải thích phân bổ thời gian với GVHD.
+**Nhận xét phân tích:** điểm nghẽn không nằm ở việc _vẽ biểu đồ_ (Excel vẽ được) mà ở bước **2–3: chuẩn hoá và làm sạch dữ liệu**. Vì vậy phần lớn công sức đồ án (Sprint 2–3) dồn vào pipeline nhập dữ liệu, không phải giao diện biểu đồ. Đây là luận điểm quan trọng khi giải thích phân bổ thời gian với GVHD.
 
 ## 2.2 QT-01 — Nhập dữ liệu bán hàng từ file (TO-BE)
 
@@ -111,7 +111,7 @@ _Hình H5 — Use case: UC14, UC15, UC16._
 | 7    | Analyst/Admin | "Xuất CSV" theo đúng bộ lọc đang xem                                                | FR-40              |
 | 8    | Người dùng    | Ra quyết định ngoài hệ thống                                                        | —                  |
 
-**Câu hỏi kinh doanh → nơi trả lời** (dùng để kiểm thử UAT ở B5.6):
+**Câu hỏi kinh doanh → nơi trả lời** (dùng để kiểm thử UAT ở S7.4):
 
 | Câu hỏi của chủ shop                                 | Trả lời bằng             | Thao tác                                |
 | ---------------------------------------------------- | ------------------------ | --------------------------------------- |

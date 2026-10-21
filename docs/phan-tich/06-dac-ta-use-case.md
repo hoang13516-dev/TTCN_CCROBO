@@ -331,7 +331,7 @@ Hai use case dùng **chung luồng xử lý**, khác tác nhân kích hoạt và
 - UC15.3 Click một lát donut / một cột kênh → thêm giá trị đó vào bộ lọc tương ứng.
 - UC14.6 Đổi độ chi tiết ngày/tuần/tháng → chỉ gọi lại API xu hướng.
 
-**Hợp đồng API (tóm tắt, chi tiết ở `docs/api.md` – B3.2):**
+**Hợp đồng API (tóm tắt, chi tiết ở `docs/api.md` – S4.1):**
 
 | API             | Tham số ngoài bộ lọc chung                | Trả về                                                                                                        |
 | --------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- |

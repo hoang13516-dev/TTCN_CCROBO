@@ -101,7 +101,7 @@ Quy trình hiện tại được mô hình hoá ở **Hình H2** ([`02-as-is.png
 | A2  | Mỗi sản phẩm có **SKU** (hoặc mã hàng) ổn định                            | Top sản phẩm không gộp được giữa các kênh → cần UC18 để gộp tay                                  |
 | A3  | Hai nguồn khác nhau **không dùng chung** một mã đơn cho hai đơn khác nhau | Đơn bị ghi đè nhầm → xem [O-03](07-truy-vet-va-tu-kiem-tra.md#4-vấn-đề-còn-mở--cần-bạn-tự-xử-lý) |
 | A4  | Người dùng có máy tính để nhập liệu; điện thoại chỉ để xem                | Màn hình nhập liệu không cần tối ưu cho mobile                                                   |
-| C1  | 1 sinh viên, 10–15 giờ/tuần, 10 tuần                                      | Ưu tiên theo MoSCoW, có phương án cắt (`ke-hoach.md` §7)                                         |
+| C1  | 1 sinh viên, ~18,5 giờ/tuần, 50 ngày (21/10 → 09/12/2026)                 | Ưu tiên theo MoSCoW, có phương án cắt (`ke-hoach.md` §8)                                         |
 | C2  | Stack đã chốt: TS, React, Express, PostgreSQL                             | —                                                                                                |
 | C3  | Deploy free tier, chỉ **1 instance** API (vì `node-cron`)                 | Chạy 2 instance sẽ chạy trùng job đồng bộ                                                        |
 

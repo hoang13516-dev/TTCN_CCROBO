@@ -3,7 +3,7 @@
 > Phiên bản: **v1.0** · Ngày: 2026-10-21 · Người thực hiện: Nguyễn Minh Hoàng
 > Trạng thái: **Bản nháp chờ GVHD duyệt** (xem các mục "Cần xác nhận" ở [07](07-truy-vet-va-tu-kiem-tra.md#4-vấn-đề-còn-mở--cần-bạn-tự-xử-lý))
 > Đầu vào: [`ke-hoach.md`](../../ke-hoach.md) (phạm vi, kiến trúc, mô hình dữ liệu đã chốt)
-> Đầu ra: tài liệu này là **căn cứ** cho Sprint 1→5. Mọi thay đổi phạm vi sau này phải sửa ở đây trước rồi mới code.
+> Đầu ra: tài liệu này là **căn cứ** cho Sprint 1→7 của `ke-hoach.md` (50 ngày, 21/10 → 09/12/2026). Mọi thay đổi phạm vi sau này phải sửa ở đây trước rồi mới code.
 
 ## Mục lục
 
@@ -49,16 +49,16 @@ Không muốn cài: dán nội dung file `.puml` vào https://www.plantuml.com/p
 
 ## Quy ước mã định danh
 
-| Tiền tố | Ý nghĩa                                    | Ví dụ                                     |
-| ------- | ------------------------------------------ | ----------------------------------------- |
-| `P`     | Vấn đề hiện trạng (pain point)             | P3 — tên sản phẩm khác nhau giữa các kênh |
-| `QT`    | Quy trình nghiệp vụ TO-BE                  | QT-01 — nhập dữ liệu từ file              |
-| `FR`    | Yêu cầu chức năng                          | FR-12 — gợi ý ánh xạ cột                  |
-| `NFR`   | Yêu cầu phi chức năng                      | NFR-01 — dashboard < 2 s                  |
-| `BR`    | Quy tắc nghiệp vụ                          | BR-06 — nhập lại không nhân đôi doanh thu |
-| `F`     | Chức năng trong BFD                        | F2.6 — hủy lần nhập                       |
-| `UC`    | Use case                                   | UC05 — nhập dữ liệu từ file               |
-| `AC`    | Tiêu chí chấp nhận (acceptance criteria)   | AC-05.3                                   |
-| `B`     | Bước trong kế hoạch sprint (`ke-hoach.md`) | B2.5                                      |
+| Tiền tố | Ý nghĩa                                                    | Ví dụ                                     |
+| ------- | ---------------------------------------------------------- | ----------------------------------------- |
+| `P`     | Vấn đề hiện trạng (pain point)                             | P3 — tên sản phẩm khác nhau giữa các kênh |
+| `QT`    | Quy trình nghiệp vụ TO-BE                                  | QT-01 — nhập dữ liệu từ file              |
+| `FR`    | Yêu cầu chức năng                                          | FR-12 — gợi ý ánh xạ cột                  |
+| `NFR`   | Yêu cầu phi chức năng                                      | NFR-01 — dashboard < 2 s                  |
+| `BR`    | Quy tắc nghiệp vụ                                          | BR-06 — nhập lại không nhân đôi doanh thu |
+| `F`     | Chức năng trong BFD                                        | F2.6 — hủy lần nhập                       |
+| `UC`    | Use case                                                   | UC05 — nhập dữ liệu từ file               |
+| `AC`    | Tiêu chí chấp nhận (acceptance criteria)                   | AC-05.3                                   |
+| `S`     | Bước trong kế hoạch (`ke-hoach.md`), dạng `S<sprint>.<số>` | S3.1                                      |
 
 Mã là **ổn định**: không đánh lại số khi xoá một mục (đánh dấu "đã bỏ") để không làm gãy truy vết.
