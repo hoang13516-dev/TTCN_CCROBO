@@ -3,7 +3,7 @@ import { errorHandler, notFoundHandler } from "./middlewares/error.js";
 
 /**
  * Tạo ứng dụng Express nhưng KHÔNG mở cổng.
- * Tách khỏi server.ts để Supertest import app và test trực tiếp (từ S2.3) mà không bị chiếm port.
+ * Tách khỏi server.ts để Supertest import app và test trực tiếp (từ S2.2) mà không bị chiếm port.
  */
 export function createApp(): express.Express {
   const app = express();

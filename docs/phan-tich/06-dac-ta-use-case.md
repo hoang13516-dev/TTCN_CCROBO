@@ -2,11 +2,11 @@
 
 > **Mẫu đặc tả:** Tác nhân · Mục tiêu · Tiền điều kiện · Hậu điều kiện (thành công ✓ / thất bại ✗) · Luồng chính · Luồng thay thế (A) · Ngoại lệ (E) · Quy tắc · API · **Tiêu chí chấp nhận (AC)** dạng _Cho trước – Khi – Thì_.
 >
-> **Mỗi AC = ít nhất 1 test case** (Supertest cho API, Testing Library hoặc thao tác tay cho UI). Một bước trong `ke-hoach.md` chỉ được tick khi các AC tương ứng pass.
+> **Mỗi AC = ít nhất 1 test case** (Supertest cho API, Testing Library hoặc thao tác tay cho UI). Một bước trong kế hoạch chỉ được coi là xong khi các AC nó trỏ tới đã pass.
 
 Đặc tả đầy đủ cho các use case Must có luồng phức tạp (UC01, UC06+UC07, UC11, UC12+UC13+UC14, UC15, UC17); các use case còn lại đặc tả rút gọn ở [6.7](#67-đặc-tả-rút-gọn).
 
-Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-ví-dụ-file-mẫu-mau-du-lieuxlsx-sheet-donhang--đồng-thời-là-bộ-dữ-liệu-kiểm-thử-chuẩn) và 5 chi nhánh khởi tạo (`ke-hoach.md` §5.2).
+Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-ví-dụ-file-mẫu-mau-du-lieuxlsx-sheet-donhang--đồng-thời-là-bộ-dữ-liệu-kiểm-thử-chuẩn) và 5 chi nhánh khởi tạo ([§8.4.2](08-kien-truc-va-dinh-huong.md#842-bảng-vận-hành)).
 
 ---
 
@@ -123,7 +123,7 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 ┌ Bộ lọc: [30 ngày ▾] [Chi nhánh ▾] [Danh mục ▾] [Kênh ▾]   [Xoá lọc]  [Xuất Excel] [Xuất PDF] ┐
 ├ ⚠ Cảnh báo (UC15) ───────────────────────────────────────────────────────────────────────────┤
 ├ Doanh thu │ Lợi nhuận gộp │ Biên lợi nhuận │ Số đơn │ AOV │ Tỷ lệ giữ chân   (mỗi thẻ có delta) ┤
-├ Xu hướng doanh thu & lợi nhuận   Năm 2026 › Quý 4 › Tháng 10   (click điểm để drill) ──────────┤
+├ Xu hướng doanh thu & lợi nhuận   2026 › Tháng 10   (breadcrumb sau khi drill)        ──────────┤
 ├ Theo vùng (click → chi nhánh)            │ Top 10 sản phẩm   vùng: [Tất cả ▾]                 ┤
 ├ Theo danh mục (donut, click → sản phẩm)  │ Theo kênh (cột)                                    ┤
 └ Dữ liệu đến hết ngày 21/10/2026 ─────────────────────────────────────────────────────────────┘
@@ -168,12 +168,13 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 **Quy tắc:** BR-05, BR-15, BR-20 · **API:** `GET /api/alerts`
 
-| AC      | Cho trước                                          | Khi                        | Thì                                                                  |
-| ------- | -------------------------------------------------- | -------------------------- | -------------------------------------------------------------------- |
-| AC-15.1 | R1 bật (ngưỡng 20 %); doanh thu kỳ trước 1.000.000 | kỳ này 750.000 (−25 %)     | có cảnh báo R1 mức warning; kỳ này 850.000 (−15 %) → **không** có R1 |
-| AC-15.2 | R3 bật (ngưỡng 15 %)                               | biên lợi nhuận kỳ này 10 % | có cảnh báo R3 mức critical, đứng đầu danh sách                      |
-| AC-15.3 | R1 bị tắt                                          | doanh thu giảm 50 %        | không có cảnh báo R1                                                 |
-| AC-15.4 | chỉ chi nhánh HCM01 sụt giảm; manager của HN01     | xem dashboard              | không thấy cảnh báo sụt giảm của HCM01                               |
+| AC      | Cho trước                                                                                           | Khi                                     | Thì                                                                                |
+| ------- | --------------------------------------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------- |
+| AC-15.1 | R1 bật (ngưỡng 20 %); doanh thu kỳ trước 1.000.000                                                  | kỳ này 750.000 (−25 %)                  | có cảnh báo R1 mức warning; kỳ này 850.000 (−15 %) → **không** có R1               |
+| AC-15.2 | R3 bật (ngưỡng 15 %)                                                                                | biên lợi nhuận kỳ này 10 %              | có cảnh báo R3 mức critical, đứng đầu danh sách                                    |
+| AC-15.3 | R1 bị tắt                                                                                           | doanh thu giảm 50 %                     | không có cảnh báo R1                                                               |
+| AC-15.4 | chỉ chi nhánh HCM01 sụt giảm; manager của HN01                                                      | xem dashboard                           | không thấy cảnh báo sụt giảm của HCM01                                             |
+| AC-15.5 | R5 bật (`k = 2`); 28 ngày trước ngày 14/10 doanh thu trung bình 10.000.000, độ lệch chuẩn 1.000.000 | ngày 14/10 doanh thu 6.000.000 (z = −4) | có cảnh báo R5 "Ngày 14/10/2026 doanh thu bất thường"; ngày có z = −1,5 → không có |
 
 ---
 
@@ -277,4 +278,4 @@ Bảng 5 quy tắc (BR-20): bật/tắt, ngưỡng, mức → `PATCH /api/alert-
 
 ---
 
-**Thống kê:** 61 AC — UC01 7 · UC02 1 · UC03 2 · UC04 4 · UC05 2 · UC06 10 · UC07 2 · UC08 1 · UC09 2 · UC10 3 · UC11 4 · UC12 6 · UC13 4 · UC14 3 · UC15 4 · UC16 2 · UC17 4.
+**Thống kê:** 62 AC — UC01 7 · UC02 1 · UC03 2 · UC04 4 · UC05 2 · UC06 10 · UC07 2 · UC08 1 · UC09 2 · UC10 3 · UC11 4 · UC12 6 · UC13 4 · UC14 3 · UC15 5 · UC16 2 · UC17 4.

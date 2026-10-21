@@ -99,26 +99,26 @@ _Hình H9 — Use case tổng quát. Đọc kèm Hình H9b (phân cấp tác nh�
 
 Quy ước: `public` = không cần đăng nhập; `manager+` = đăng nhập với vai trò bất kỳ; `analyst+` = analyst hoặc admin. 🔒 = áp dụng phạm vi chi nhánh BR-15.
 
-| Method & đường dẫn                                                                                   | Quyền tối thiểu | UC         | Bước KH    |
-| ---------------------------------------------------------------------------------------------------- | --------------- | ---------- | ---------- |
-| `GET /api/health`                                                                                    | public          | —          | S1.2       |
-| `POST /api/auth/login`                                                                               | public          | UC01       | S2.3       |
-| `POST /api/auth/logout` · `GET /api/auth/me`                                                         | manager+        | UC01, UC02 | S2.3       |
-| `PATCH /api/auth/password`                                                                           | manager+        | UC03       | S6.1       |
-| `GET /api/users` · `POST /api/users` · `PATCH /api/users/:id` · `POST /api/users/:id/reset-password` | admin           | UC04       | S6.1       |
-| `GET /api/branches`                                                                                  | manager+        | UC13       | S4.1       |
-| `POST /api/branches` · `PATCH /api/branches/:id`                                                     | admin           | UC05       | S6.1       |
-| `GET /api/imports/template`                                                                          | analyst+        | UC08       | S3.3       |
-| `POST /api/imports/preview` · `POST /api/imports`                                                    | analyst+        | UC06, UC07 | S3.1, S3.2 |
-| `GET /api/imports` · `GET /api/imports/:id` · `GET /api/imports/:id/errors.csv`                      | analyst+        | UC09       | S3.3       |
-| `GET /api/sources` (không có API key)                                                                | analyst+        | UC10, UC11 | S5.3       |
-| `POST /api/sources` · `PATCH /api/sources/:id` · `POST /api/sources/:id/test`                        | admin           | UC10       | S5.3       |
-| `POST /api/sources/:id/sync` → `200` / `409 đang đồng bộ`                                            | analyst+        | UC11       | S5.3       |
-| `GET /api/analytics/summary\|trend\|top-products\|by-region\|by-category\|by-channel` 🔒             | manager+        | UC12–UC14  | S4.1       |
-| `GET /api/catalog/categories` · `GET /api/catalog/channels`                                          | manager+        | UC13       | S4.1       |
-| `GET /api/alerts` 🔒                                                                                 | manager+        | UC15       | S5.1       |
-| `GET /api/alert-rules` · `PATCH /api/alert-rules/:id`                                                | admin           | UC16       | S6.2       |
-| `GET /api/reports/excel` 🔒                                                                          | manager+        | UC17       | S5.2       |
+| Method & đường dẫn                                                                                   | Quyền tối thiểu | UC         |
+| ---------------------------------------------------------------------------------------------------- | --------------- | ---------- |
+| `GET /api/health`                                                                                    | public          | —          |
+| `POST /api/auth/login`                                                                               | public          | UC01       |
+| `POST /api/auth/logout` · `GET /api/auth/me`                                                         | manager+        | UC01, UC02 |
+| `PATCH /api/auth/password`                                                                           | manager+        | UC03       |
+| `GET /api/users` · `POST /api/users` · `PATCH /api/users/:id` · `POST /api/users/:id/reset-password` | admin           | UC04       |
+| `GET /api/branches`                                                                                  | manager+        | UC13       |
+| `POST /api/branches` · `PATCH /api/branches/:id`                                                     | admin           | UC05       |
+| `GET /api/imports/template`                                                                          | analyst+        | UC08       |
+| `POST /api/imports/preview` · `POST /api/imports`                                                    | analyst+        | UC06, UC07 |
+| `GET /api/imports` · `GET /api/imports/:id` · `GET /api/imports/:id/errors.csv`                      | analyst+        | UC09       |
+| `GET /api/sources` (không có API key)                                                                | analyst+        | UC10, UC11 |
+| `POST /api/sources` · `PATCH /api/sources/:id` · `POST /api/sources/:id/test`                        | admin           | UC10       |
+| `POST /api/sources/:id/sync` → `200` / `409 đang đồng bộ`                                            | analyst+        | UC11       |
+| `GET /api/analytics/summary\|trend\|top-products\|by-region\|by-category\|by-channel` 🔒             | manager+        | UC12–UC14  |
+| `GET /api/catalog/categories` · `GET /api/catalog/channels`                                          | manager+        | UC13       |
+| `GET /api/alerts` 🔒                                                                                 | manager+        | UC15       |
+| `GET /api/alert-rules` · `PATCH /api/alert-rules/:id`                                                | admin           | UC16       |
+| `GET /api/reports/excel` 🔒                                                                          | manager+        | UC17       |
 
 > **Thiết kế:** trang PDF (`/report`) là trang web gọi lại các API phân tích 🔒, nên không cần endpoint riêng và tự động đúng phạm vi chi nhánh.
 

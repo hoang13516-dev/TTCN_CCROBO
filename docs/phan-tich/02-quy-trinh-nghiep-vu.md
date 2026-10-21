@@ -33,7 +33,7 @@ _Hình H2 — Quy trình tổng hợp báo cáo thủ công hiện nay. Ghi chú
 | 4    | Nhân viên văn phòng | Tạo PivotTable, biểu đồ theo chi nhánh; gửi file tổng cho mọi người        | P5, P8     |
 | 5    | Giám đốc            | Xem cuối tháng; muốn góc nhìn khác thì nhờ làm lại                         | P5, P6, P7 |
 
-**Nhận xét phân tích:** điểm nghẽn không nằm ở _vẽ biểu đồ_ (Excel vẽ được) mà ở bước **2–3: gom và làm sạch dữ liệu**, và ở chỗ **không có mô hình dữ liệu chung** để nhìn đa chiều. Vì vậy đồ án dồn công sức vào ETL (Sprint 3) và kho dữ liệu hình sao (Sprint 1), sau đó dashboard chỉ còn là các truy vấn tổng hợp trên kho.
+**Nhận xét phân tích:** điểm nghẽn không nằm ở _vẽ biểu đồ_ (Excel vẽ được) mà ở bước **2–3: gom và làm sạch dữ liệu**, và ở chỗ **không có mô hình dữ liệu chung** để nhìn đa chiều. Vì vậy đồ án dồn công sức vào ETL và kho dữ liệu hình sao; sau đó dashboard chỉ còn là các truy vấn tổng hợp trên kho.
 
 ## 2.2 QT-01 — Nhập dữ liệu bán hàng từ file (TO-BE)
 
@@ -98,14 +98,14 @@ _Hình H5 — Use case: UC12–UC15, UC17._
 | 1    | Người dùng | Mở dashboard (trang chủ hoặc link chia sẻ có bộ lọc trên URL)                                         | FR-24              |
 | 2    | Hệ thống   | Chưa đăng nhập → `/login?next=<link>`; đăng nhập xong quay lại đúng link                              | FR-03              |
 | 3    | Hệ thống   | Manager → ép bộ lọc chi nhánh = chi nhánh của mình                                                    | BR-15              |
-| 4    | Hệ thống   | Bộ lọc mặc định: 30 ngày gần nhất, mọi chi nhánh/danh mục/kênh được phép                              | BR-18              |
+| 4    | Hệ thống   | Bộ lọc mặc định: 30 ngày tính đến ngày có dữ liệu mới nhất; mọi chi nhánh/danh mục/kênh được phép     | BR-18              |
 | 5    | Hệ thống   | Gọi song song các API: KPI, xu hướng, top sản phẩm, theo vùng, theo danh mục, theo kênh, **cảnh báo** | FR-19…FR-23, FR-29 |
 | 6    | Hệ thống   | Hiển thị **cảnh báo** ở đầu trang (nếu có), 6 thẻ KPI có delta, các biểu đồ                           | BR-05, BR-20       |
 | 7    | Người dùng | Đổi bộ lọc; **click** vùng/danh mục/kênh để lọc chéo; **drill-down** thời gian, vùng, danh mục        | FR-24…FR-27        |
 | 8    | Người dùng | "Xuất Excel" hoặc "Xuất PDF" theo đúng bộ lọc đang xem                                                | FR-32, FR-33       |
 | 9    | Người dùng | Ra quyết định ngoài hệ thống                                                                          | —                  |
 
-**Câu hỏi kinh doanh → nơi trả lời** (kịch bản UAT ở S7.3):
+**Câu hỏi kinh doanh → nơi trả lời** (dùng làm kịch bản kiểm thử với người dùng — UAT):
 
 | Câu hỏi                                                     | Trả lời bằng                       | Thao tác                                 |
 | ----------------------------------------------------------- | ---------------------------------- | ---------------------------------------- |
@@ -137,7 +137,7 @@ _Hình H7 — QT-01 và QT-02 đều thay đổi `import_jobs.status` theo sơ �
 
 | Từ → Đến              | Điều kiện                                                                                                                                   |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| — → `running`         | Bấm "Nhập dữ liệu" (file) hoặc "Đồng bộ ngay" (API) và đã lấy được khoá                                                                     |
+| — → `running`         | Bấm "Nhập dữ liệu" (file); hoặc bấm "Đồng bộ ngay" (API) và lấy được khoá của nguồn (BR-16)                                                 |
 | `running` → `success` | Load commit, `error_rows = 0`                                                                                                               |
 | `running` → `partial` | Load commit, `ok_rows > 0` và `error_rows > 0`                                                                                              |
 | `running` → `failed`  | `ok_rows = 0`, hoặc lỗi hệ thống/mạng (đã rollback)                                                                                         |

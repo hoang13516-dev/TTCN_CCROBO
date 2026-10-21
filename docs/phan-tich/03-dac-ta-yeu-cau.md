@@ -2,7 +2,7 @@
 
 > Mức ưu tiên theo **MoSCoW** (Must / Should / Could / Won't). Phạm vi đồ án = **Must + Should**.
 > Mỗi yêu cầu phải **kiểm chứng được**: câu nào không viết được test hoặc thao tác kiểm tra thì chưa phải yêu cầu.
-> Chương này là **nguồn sự thật duy nhất** cho định nghĩa KPI, quy tắc nhập và từ điển dữ liệu. `ke-hoach.md` và các chương khác chỉ tham chiếu, không định nghĩa lại.
+> Chương này là **nguồn sự thật duy nhất** cho định nghĩa KPI, quy tắc nhập và từ điển dữ liệu. Các chương khác, `ke-hoach.md` và ADR chỉ tham chiếu, không định nghĩa lại.
 
 ## 3.1 Yêu cầu chức năng (Functional Requirements)
 
@@ -75,37 +75,39 @@
 
 ### 3.1.7 Ngoài phạm vi (Won't) — ghi là hướng phát triển
 
-| Không làm                                           | Lý do                                            | Mở rộng sau này bằng cách                                            |
-| --------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------- |
-| Kết nối trực tiếp CSDL ngoài                        | Đề cho chọn "CSDL **hoặc** API"; đã chọn API     | Thêm 1 extractor `database.ts`, dùng lại Transform/Load              |
-| Đồng bộ tự động theo lịch (cron)                    | Cần khoá phân tán, job nền; vượt mức cơ bản      | `node-cron` gọi đúng hàm `syncSource()` của FR-17                    |
-| Xử lý nhập nền (job queue), file > 10.000 dòng      | Xử lý trong request đủ cho 10.000 dòng           | Đưa `runImport()` vào hàng đợi (BullMQ), API trả `202 + jobId`       |
-| Hủy một lần nhập                                    | Nhập lại file đúng đã ghi đè được (BR-06)        | Thêm cột `created_job_id` vào `fact_sales`                           |
-| Lưu mẫu ánh xạ cột                                  | Gợi ý theo từ điển đã đủ cho file mẫu chuẩn      | Bảng `mapping_templates(source_id, mapping JSONB)`                   |
-| Mã hoá API key trong CSDL                           | Chỉ một nguồn demo; key không bao giờ trả ra API | AES-256-GCM với khoá trong biến môi trường                           |
-| Dự báo bằng ML, phát hiện bất thường bằng ML        | Ngoài thời lượng                                 | Thay hàm đánh giá quy tắc bằng mô hình, giữ nguyên API `/api/alerts` |
-| Gửi cảnh báo/báo cáo qua email                      | Cần dịch vụ gửi thư                              | Job định kỳ gọi lại API xuất báo cáo                                 |
-| Giảm giá cấp đơn (voucher toàn đơn), phí vận chuyển | Mô hình tính giảm giá theo **dòng**              | Thêm bảng `fact_order` cấp đơn                                       |
-| Nhiều doanh nghiệp trên 1 bản deploy                | Độ phức tạp cao cho 1 sinh viên                  | Thêm `tenant_id` vào mọi bảng                                        |
+| Không làm                                                 | Lý do                                            | Mở rộng sau này bằng cách                                                                                |
+| --------------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
+| Kết nối trực tiếp CSDL ngoài                              | Đề cho chọn "CSDL **hoặc** API"; đã chọn API     | Thêm 1 extractor `database.ts`, dùng lại Transform/Load                                                  |
+| Đồng bộ tự động theo lịch (cron)                          | Cần khoá phân tán, job nền; vượt mức cơ bản      | `node-cron` gọi đúng hàm `syncSource()` của FR-17                                                        |
+| Xử lý nhập nền (job queue), file > 10.000 dòng            | Xử lý trong request đủ cho 10.000 dòng           | Đưa `runImport()` vào hàng đợi (BullMQ), API trả `202 + jobId`                                           |
+| Bảng tổng hợp sẵn (materialized view / `agg_sales_daily`) | 100.000 dòng + index đã đạt NFR-01               | Thêm bảng tổng hợp theo ngày; chỉ repository đổi nguồn đọc, API giữ nguyên                               |
+| Hủy một lần nhập                                          | Nhập lại file đúng đã ghi đè được (BR-06)        | Thêm cột `created_job_id` vào `fact_sales` (cột `import_job_id` hiện chỉ ghi lần nhập gần nhất của dòng) |
+| Lưu mẫu ánh xạ cột                                        | Gợi ý theo từ điển đã đủ cho file mẫu chuẩn      | Bảng `mapping_templates(source_id, mapping JSONB)`                                                       |
+| Mã hoá API key trong CSDL                                 | Chỉ một nguồn demo; key không bao giờ trả ra API | AES-256-GCM với khoá trong biến môi trường                                                               |
+| Dự báo bằng ML, phát hiện bất thường bằng ML              | Ngoài thời lượng                                 | Thay hàm đánh giá quy tắc bằng mô hình, giữ nguyên API `/api/alerts`                                     |
+| Tạo file PDF ở server (tải trực tiếp)                     | Trang in A4 của trình duyệt đã giữ được biểu đồ  | Puppeteer render cùng trang `/report`                                                                    |
+| Gửi cảnh báo/báo cáo qua email                            | Cần dịch vụ gửi thư                              | Job định kỳ gọi lại API xuất báo cáo                                                                     |
+| Giảm giá cấp đơn (voucher toàn đơn), phí vận chuyển       | Mô hình tính giảm giá theo **dòng**              | Thêm bảng `fact_order` cấp đơn                                                                           |
+| Nhiều doanh nghiệp trên 1 bản deploy                      | Độ phức tạp cao cho 1 sinh viên                  | Thêm `tenant_id` vào mọi bảng                                                                            |
 
 ## 3.2 Yêu cầu phi chức năng (Non-functional Requirements)
 
-| Mã     | Nhóm        | Yêu cầu                                                                                                                           | Cách đo / kiểm chứng                             | Bước KH    |
-| ------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ---------- |
-| NFR-01 | Hiệu năng   | Dashboard tải đầy đủ < **2 s**; mỗi API phân tích < **500 ms** với 100.000 dòng `fact_sales`                                      | DevTools Network (tắt cache), 5 lần lấy trung vị | S6.3       |
-| NFR-02 | Hiệu năng   | Nhập file 10.000 dòng < **15 s**                                                                                                  | Đo thời gian request                             | S3.2       |
-| NFR-03 | Bảo mật     | Mật khẩu hash **bcrypt** cost ≥ 10; không response nào chứa `password_hash`                                                       | Test API; xem CSDL                               | S2.3       |
-| NFR-04 | Bảo mật     | JWT trong cookie `httpOnly; SameSite=Lax` (`Secure` ở production)                                                                 | Kiểm tra header `Set-Cookie`                     | S2.3, S6.4 |
-| NFR-05 | Bảo mật     | Phân quyền và **phạm vi chi nhánh** kiểm tra ở server; FE ẩn nút chỉ để tiện dùng                                                 | Test Supertest theo ma trận §5.4.2               | S2.3, S4.1 |
-| NFR-06 | Bảo mật     | Mọi SQL tham số hoá `$1…`; cấp độ thời gian, cột sắp xếp đi qua **whitelist**                                                     | Review code; test chuỗi `'; DROP TABLE`          | S4.1       |
-| NFR-07 | Toàn vẹn    | Nạp dữ liệu atomic (lỗi giữa chừng → rollback toàn bộ) và idempotent                                                              | Integration test                                 | S3.2       |
-| NFR-08 | Dễ dùng     | Giao diện tiếng Việt; lỗi nhập ghi **dòng + cột + lý do**; nhập file ≤ 3 bước                                                     | Người không học IT tự nhập được file mẫu         | S3.3, S7.3 |
-| NFR-09 | Tương thích | Dashboard ở **375 px**: không cuộn ngang, KPI lưới 2 cột; trang nhập liệu/quản trị thiết kế cho ≥ 1280 px                         | DevTools responsive                              | S4.3       |
-| NFR-10 | Bảo trì     | TypeScript `strict`; ESLint 0 lỗi; có unit test cho chuẩn hoá, ETL, công thức KPI; coverage thư mục `etl`, `analytics` ≥ 60 %     | `npm run lint`, `npm test -- --coverage`         | S7.1       |
-| NFR-11 | Dữ liệu     | Múi giờ nghiệp vụ `Asia/Ho_Chi_Minh`; tiền `BIGINT` VND                                                                           | Test đơn lúc 00:30 giờ VN rơi đúng ngày          | S1.3, S3.2 |
-| NFR-12 | Triển khai  | Người khác dựng lại được từ README (Postgres + migrate + seed + chạy)                                                             | Làm theo hướng dẫn trên máy khác                 | S6.4, S7.2 |
-| NFR-13 | Mở rộng     | Thêm nguồn mới = thêm 1 **extractor**; thêm chiều phân tích = thêm 1 bảng `dim_*` + 1 cột khoá ở `fact_sales`; không sửa pipeline | Review kiến trúc (ADR-0003, ADR-0004)            | S3.2, S5.3 |
-| NFR-14 | Bảo mật     | API key nguồn không xuất hiện trong response, log, thông báo lỗi                                                                  | Test API; đọc log                                | S5.3       |
+| Mã     | Nhóm        | Yêu cầu                                                                                                                           | Cách đo / kiểm chứng                             |
+| ------ | ----------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| NFR-01 | Hiệu năng   | Dashboard tải đầy đủ < **2 s**; mỗi API phân tích < **500 ms** với 100.000 dòng `fact_sales`                                      | DevTools Network (tắt cache), 5 lần lấy trung vị |
+| NFR-02 | Hiệu năng   | Nhập file 10.000 dòng < **15 s**                                                                                                  | Đo thời gian request                             |
+| NFR-03 | Bảo mật     | Mật khẩu hash **bcrypt** cost ≥ 10; không response nào chứa `password_hash`                                                       | Test API; xem CSDL                               |
+| NFR-04 | Bảo mật     | JWT trong cookie `httpOnly; SameSite=Lax` (`Secure` ở production)                                                                 | Kiểm tra header `Set-Cookie`                     |
+| NFR-05 | Bảo mật     | Phân quyền và **phạm vi chi nhánh** kiểm tra ở server; FE ẩn nút chỉ để tiện dùng                                                 | Test Supertest theo ma trận §5.4.2               |
+| NFR-06 | Bảo mật     | Mọi SQL tham số hoá `$1…`; cấp độ thời gian, cột sắp xếp đi qua **whitelist**                                                     | Review code; test chuỗi `'; DROP TABLE`          |
+| NFR-07 | Toàn vẹn    | Nạp dữ liệu atomic (lỗi giữa chừng → rollback toàn bộ) và idempotent                                                              | Integration test                                 |
+| NFR-08 | Dễ dùng     | Giao diện tiếng Việt; lỗi nhập ghi **dòng + cột + lý do**; nhập file ≤ 3 bước                                                     | Người không học IT tự nhập được file mẫu         |
+| NFR-09 | Tương thích | Dashboard ở **375 px**: không cuộn ngang, KPI lưới 2 cột; trang nhập liệu/quản trị thiết kế cho ≥ 1280 px                         | DevTools responsive                              |
+| NFR-10 | Bảo trì     | TypeScript `strict`; ESLint 0 lỗi; có unit test cho chuẩn hoá, ETL, công thức KPI; coverage thư mục `etl`, `analytics` ≥ 60 %     | `npm run lint`, `npm test -- --coverage`         |
+| NFR-11 | Dữ liệu     | Múi giờ nghiệp vụ `Asia/Ho_Chi_Minh`; tiền `BIGINT` VND                                                                           | Test đơn lúc 00:30 giờ VN rơi đúng ngày          |
+| NFR-12 | Triển khai  | Người khác dựng lại được từ README (Postgres + migrate + seed + chạy)                                                             | Làm theo hướng dẫn trên máy khác                 |
+| NFR-13 | Mở rộng     | Thêm nguồn mới = thêm 1 **extractor**; thêm chiều phân tích = thêm 1 bảng `dim_*` + 1 cột khoá ở `fact_sales`; không sửa pipeline | Review kiến trúc (ADR-0003, ADR-0004)            |
+| NFR-14 | Bảo mật     | API key nguồn không xuất hiện trong response, log, thông báo lỗi                                                                  | Test API; đọc log                                |
 
 ## 3.3 Quy tắc nghiệp vụ (Business Rules)
 
@@ -151,9 +153,9 @@ Mọi KPI chỉ tính trên dòng có `status = 'completed'` và nằm trong b�
 
 ## 3.4 Ràng buộc thiết kế
 
-- Stack: TypeScript · React (Vite) · Node.js/Express · PostgreSQL · SQL viết tay (`ke-hoach.md` §2).
+- Stack: TypeScript · React (Vite) · Node.js/Express · PostgreSQL · SQL viết tay; chi tiết và lý do chọn: [§8.5](08-kien-truc-va-dinh-huong.md#85-công-nghệ).
 - Một pipeline ETL dùng chung cho mọi nguồn: **Extract (theo nguồn) → Map → Transform/Validate → Load**. Chỉ bước Extract khác nhau giữa file và API.
-- Kho dữ liệu theo **mô hình hình sao** (star schema): 1 bảng sự kiện `fact_sales` + 5 bảng chiều. Thiết kế chi tiết: `ke-hoach.md` §5 và [ADR-0003](../adr/0003-mo-hinh-hinh-sao.md).
+- Kho dữ liệu theo **mô hình hình sao** (star schema): 1 bảng sự kiện `fact_sales` + 5 bảng chiều. Thiết kế chi tiết: [§8.4](08-kien-truc-va-dinh-huong.md#84-mô-hình-dữ-liệu) và [ADR-0003](../adr/0003-mo-hinh-hinh-sao.md).
 
 ## 3.5 Từ điển dữ liệu đầu vào (Import Row)
 

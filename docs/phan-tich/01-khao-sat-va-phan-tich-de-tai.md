@@ -97,7 +97,7 @@ Danh sách và cách mở rộng sau này: [§3.1.7](03-dac-ta-yeu-cau.md#317-ng
 | A3  | Dữ liệu xuất có **giá vốn** từng dòng (POS quản lý kho đều có) | Không tính được lợi nhuận cho nguồn đó → ghi hạn chế, nhập giá vốn = 0 sẽ làm sai |
 | A4  | Mỗi đơn (kể cả đơn online) gắn với **một chi nhánh** xử lý     | Không phân tích theo vùng được cho đơn đó                                         |
 | A5  | Người nhập liệu dùng máy tính; điện thoại chủ yếu để xem       | Trang nhập liệu không tối ưu cho mobile                                           |
-| C1  | 1 sinh viên, ~13 giờ/tuần, 50 ngày (21/10 → 09/12/2026)        | Ưu tiên MoSCoW, có thứ tự cắt (`ke-hoach.md` §8)                                  |
+| C1  | 1 sinh viên, ~13 giờ/tuần, 50 ngày (21/10 → 09/12/2026)        | Ưu tiên MoSCoW; trễ thì cắt Should trước, không cắt Must                          |
 | C2  | Stack đã chốt: TypeScript, React, Node.js/Express, PostgreSQL  | —                                                                                 |
 
 ## 1.6 Thuật ngữ

@@ -2,7 +2,7 @@
 
 - **Trạng thái:** Đã chấp nhận
 - **Ngày:** 21/10/2026
-- **Liên quan:** `docs/phan-tich/03-dac-ta-yeu-cau.md` §3.1.7; `ke-hoach.md` §2, §3.2
+- **Liên quan:** `docs/phan-tich/03-dac-ta-yeu-cau.md` §3.1.7; `docs/phan-tich/08-kien-truc-va-dinh-huong.md` §8.2.2, §8.6
 
 ## Bối cảnh
 
@@ -10,16 +10,18 @@ Kế hoạch v1 cần 131 giờ cho 1 sinh viên, gồm nhiều cơ chế hạ t
 
 ## Quyết định
 
-| Cơ chế v1                | v2                                        | Điểm mở rộng giữ lại                                               |
-| ------------------------ | ----------------------------------------- | ------------------------------------------------------------------ |
-| Nhập nền (202 + polling) | Xử lý trong request, giới hạn 10.000 dòng | `runImport(rows: AsyncIterable)` tách riêng → đưa vào hàng đợi sau |
-| Bảng `staging_rows`      | Kiểm tra trong bộ nhớ (≤ 10.000 dòng)     | Thêm staging khi bỏ giới hạn dòng                                  |
-| Materialized view        | Truy vấn trực tiếp fact + index           | Bảng tổng hợp `agg_sales_daily` cùng giao diện repository          |
-| Đồng bộ theo lịch (cron) | Đồng bộ bằng nút bấm                      | `syncSource(id)` là một hàm; cron chỉ cần gọi lại                  |
-| Kết nối CSDL ngoài       | Không làm (đề cho chọn CSDL **hoặc** API) | Extractor là interface; thêm `database.ts`                         |
-| Mã hoá AES API key       | Lưu thường, không bao giờ trả ra API/log  | Bọc đọc/ghi key trong 1 module `secrets.ts`                        |
-| Hủy lần nhập, mẫu ánh xạ | Không làm; nhập lại file đúng để ghi đè   | Cột `import_job_id` trên fact đã có để truy vết                    |
-| PDF tạo ở server         | Trang in A4 + `window.print()`            | Puppeteer render cùng trang `/report`                              |
+| Cơ chế v1                | v2                                        |
+| ------------------------ | ----------------------------------------- |
+| Nhập nền (202 + polling) | Xử lý trong request, giới hạn 10.000 dòng |
+| Bảng `staging_rows`      | Kiểm tra trong bộ nhớ (≤ 10.000 dòng)     |
+| Materialized view        | Truy vấn trực tiếp fact + index           |
+| Đồng bộ theo lịch (cron) | Đồng bộ bằng nút bấm                      |
+| Kết nối CSDL ngoài       | Không làm (đề cho chọn CSDL **hoặc** API) |
+| Mã hoá API key           | Lưu thường, không bao giờ trả ra API/log  |
+| Hủy lần nhập, mẫu ánh xạ | Không làm; nhập lại file đúng để ghi đè   |
+| PDF tạo ở server         | Trang in A4 + `window.print()`            |
+
+Cách mở rộng từng mục khi cần: `docs/phan-tich/03-dac-ta-yeu-cau.md` §3.1.7 (nguồn duy nhất); lộ trình theo giai đoạn: `docs/phan-tich/08-kien-truc-va-dinh-huong.md` §8.6.
 
 ## Hệ quả
 

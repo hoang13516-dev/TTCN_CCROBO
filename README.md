@@ -4,11 +4,12 @@
 
 ## Tài liệu
 
-| Tài liệu                                      | Nội dung                                                           |
-| --------------------------------------------- | ------------------------------------------------------------------ |
-| [`ke-hoach.md`](ke-hoach.md)                  | Kế hoạch 7 sprint, kiến trúc, mô hình dữ liệu, bảng tiến độ        |
-| [`docs/phan-tich/`](docs/phan-tich/README.md) | Phân tích yêu cầu: FR, NFR, quy tắc nghiệp vụ, use case, AC, sơ đồ |
-| [`docs/adr/`](docs/adr/)                      | Quyết định kiến trúc và lý do                                      |
+| Tài liệu                                      | Nội dung                                                                   |
+| --------------------------------------------- | -------------------------------------------------------------------------- |
+| [`docs/phan-tich/`](docs/phan-tich/README.md) | Phân tích (ch.1–7) và kiến trúc, công nghệ, định hướng phát triển (ch.8)   |
+| [`docs/adr/`](docs/adr/)                      | Lý do các quyết định kiến trúc                                             |
+| [`ke-hoach.md`](ke-hoach.md)                  | Lịch 7 sprint, bước, giờ, bảng tiến độ                                     |
+| [`CLAUDE.md`](CLAUDE.md)                      | Quy tắc làm việc: nơi định nghĩa từng thông tin, kiểm tra trước khi commit |
 
 ## Cấu trúc monorepo (npm workspaces)
 
@@ -33,6 +34,8 @@ cp .env.example .env   # sửa DATABASE_URL, JWT_SECRET
 ## Lệnh chính
 
 ```bash
+npm run check         # kiểm tra nhất quán tài liệu + Prettier + ESLint (tự chạy trước mỗi commit)
+npm run check:docs    # chỉ kiểm tra nhất quán tài liệu
 npm run lint          # ESLint toàn repo
 npm run format:check  # Prettier kiểm tra định dạng
 npm run format        # Prettier tự sửa định dạng

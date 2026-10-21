@@ -1,0 +1,38 @@
+@startuml 13-seq-dashboard
+!include _style.iuml
+title Luồng request: GET /api/analytics/summary (xem dashboard)
+autonumber
+actor "Người dùng" as U
+participant "React SPA\n(useSummary)" as FE
+participant "requireAuth" as AU
+participant "applyBranchScope" as SC
+participant "validate\n(Zod)" as VA
+participant "Controller" as CT
+participant "AnalyticsService" as SV
+participant "AnalyticsRepository" as RP
+database "PostgreSQL" as DB
+
+U -> FE : mở / đổi bộ lọc
+FE -> AU : GET /api/analytics/summary?from&to&branch\n(cookie token)
+AU -> DB : đọc user theo id trong JWT\n(qua users.repository)
+alt token sai / hết hạn / user bị khoá
+  AU --> FE : 401
+end
+AU -> SC : req.user = {role, branchKey}
+SC -> SC : manager → branch = chi nhánh của user (BR-15)
+SC -> VA
+alt tham số sai (BR-18, BR-19)
+  VA --> FE : 400
+end
+VA -> CT : req.query đã hợp lệ
+CT -> SV : summary(filters)
+SV -> SV : tính khoảng kỳ trước (BR-05)
+SV -> RP : sumKpis(kỳ này, kỳ trước, filters)
+RP -> DB : 1 câu SQL tham số hoá\nfact_sales JOIN dim_* … FILTER (WHERE …)
+DB --> RP : tổng doanh thu, giá vốn, số đơn, tập khách
+RP --> SV : số liệu thô
+SV -> SV : delta, AOV, biên LN, tỷ lệ giữ chân (BR-01…BR-04)
+SV --> CT : KPI + delta
+CT --> FE : 200 JSON
+FE --> U : 6 thẻ KPI
+@enduml

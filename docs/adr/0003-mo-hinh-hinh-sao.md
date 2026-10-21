@@ -1,8 +1,8 @@
 # ADR-0003: Kho dữ liệu theo mô hình hình sao (star schema)
 
-- **Trạng thái:** Đã chấp nhận (chờ GVHD xác nhận — câu 4 trong `docs/phan-tich/cau-hoi-gvhd.md`)
+- **Trạng thái:** Đã chấp nhận (chờ GVHD xác nhận — O-15)
 - **Ngày:** 21/10/2026
-- **Liên quan:** `ke-hoach.md` §5.1, S1.3, S2.1; `docs/phan-tich/so-do/out/06-star-schema.png`
+- **Liên quan:** `docs/phan-tich/08-kien-truc-va-dinh-huong.md` §8.4; `docs/phan-tich/so-do/out/06-star-schema.png`
 
 ## Bối cảnh
 
