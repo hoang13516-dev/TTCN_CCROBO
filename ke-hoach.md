@@ -14,7 +14,8 @@
 3. Không đổi quyết định kỹ thuật ở mục 2 nếu không ghi lý do vào `docs/adr/` (Architecture Decision Record).
 4. Sinh viên **chưa quen** TS/React/Express/PostgreSQL → mỗi bước có mục "Học trước" ngắn. Khi viết code, giải thích *vì sao* chứ không chỉ đưa code.
 5. Cuối mỗi bước: commit theo quy ước `feat(api): ...`, `fix(web): ...`, `docs: ...`, `test: ...`; cập nhật bảng tiến độ.
-6. Máy dev: laptop 8 GB RAM → tránh chạy quá nhiều container; ưu tiên cài PostgreSQL native hoặc 1 container Postgres duy nhất.
+6. **Tài liệu phân tích yêu cầu** ở `docs/phan-tich/` (FR/NFR/BR, use case, tiêu chí chấp nhận AC) là căn cứ của mọi bước: khi làm bước nào, mở ma trận truy vết `docs/phan-tich/07-truy-vet-va-tu-kiem-tra.md` §2 để biết các AC phải pass.
+7. Máy dev: laptop 8 GB RAM → tránh chạy quá nhiều container; ưu tiên cài PostgreSQL native hoặc 1 container Postgres duy nhất.
 
 ---
 
@@ -27,7 +28,7 @@ Một web app giúp **chủ cửa hàng nhỏ** nạp dữ liệu bán hàng t�
 
 | Mức | Chức năng |
 |---|---|
-| **Must** | Đăng nhập (JWT), phân quyền `admin` / `viewer` |
+| **Must** | Đăng nhập (JWT), phân quyền `admin` / `analyst` / `viewer` (3 vai trò — xem `docs/adr/0001-ba-vai-tro-nguoi-dung.md`) |
 | **Must** | Nhập dữ liệu từ **CSV/Excel** với bước **ánh xạ cột** (column mapping) + kiểm tra lỗi từng dòng |
 | **Must** | Dashboard: KPI cards, doanh thu theo thời gian, top sản phẩm, theo danh mục, theo kênh bán |
 | **Must** | Bộ lọc khoảng thời gian, so sánh với kỳ trước |
@@ -35,7 +36,9 @@ Một web app giúp **chủ cửa hàng nhỏ** nạp dữ liệu bán hàng t�
 | **Should** | **Kết nối trực tiếp CSDL** bên ngoài (PostgreSQL/MySQL, chỉ đọc) |
 | **Should** | **Đồng bộ qua API** (REST JSON) theo lịch |
 | **Should** | Xuất báo cáo CSV |
-| **Could** | Phân tích khách hàng mới/quay lại, RFM đơn giản |
+| **Should** | Quản lý người dùng (thêm, đổi vai trò, khoá/mở, đặt lại mật khẩu) + đổi mật khẩu |
+| **Should** | Hủy một lần nhập bị nhầm; tải file mẫu |
+| **Could** | Phân tích khách hàng mới/quay lại, RFM đơn giản; chỉnh danh mục sản phẩm |
 | **Won't (đồ án này)** | Multi-tenant SaaS, dự báo bằng ML, ứng dụng mobile |
 
 ### 1.3 Yêu cầu phi chức năng
@@ -159,7 +162,9 @@ cn019-sales-dashboard/
 ## 5. MÔ HÌNH DỮ LIỆU
 
 ```
-users(id, email UNIQUE, password_hash, role CHECK IN('admin','viewer'), created_at)
+users(id, email UNIQUE, full_name, password_hash, role CHECK IN('admin','analyst','viewer'),
+      is_active DEFAULT true, must_change_password DEFAULT false,
+      password_changed_at, last_login_at NULL, created_at)
 
 categories(id, name UNIQUE)
 products(id, sku UNIQUE, name, category_id FK, created_at)
@@ -168,14 +173,18 @@ channels(id, code UNIQUE)            -- 'store','facebook','shopee',...
 
 orders(id, external_code UNIQUE, customer_id FK NULL, channel_id FK,
        ordered_at TIMESTAMPTZ, status CHECK IN('completed','cancelled','returned'),
-       source_id FK NULL, import_job_id FK NULL)
+       source_id FK NULL, created_job_id FK NULL, last_job_id FK NULL, updated_at)
+       -- 2 cột job để "Hủy lần nhập" không xoá nhầm đơn có từ trước (docs/phan-tich §2.5)
 order_items(id, order_id FK ON DELETE CASCADE, product_id FK,
             quantity INT CHECK > 0, unit_price BIGINT CHECK >= 0, discount BIGINT DEFAULT 0)
 
-data_sources(id, type CHECK IN('csv','excel','database','api'), name,
+data_sources(id, type CHECK IN('csv','excel','database','api'), name UNIQUE, is_active, created_by FK NULL,
              config_encrypted TEXT, column_mapping JSONB, schedule_cron TEXT NULL, last_synced_at)
-import_jobs(id, source_id FK NULL, status, total_rows, ok_rows, error_rows, started_at, finished_at)
-import_errors(id, import_job_id FK, row_number, message, raw JSONB)
+import_jobs(id, source_id FK NULL, trigger CHECK IN('upload','manual','schedule'), created_by FK NULL, file_name,
+            status CHECK IN('pending','running','success','partial','failed','undone'),
+            total_rows, processed_rows, ok_rows, error_rows, skipped_rows, new_orders, updated_orders,
+            error_message, started_at, finished_at, undone_at, undone_by FK NULL)
+import_errors(id, import_job_id FK, row_number, column_name, message, raw JSONB)
 staging_rows(import_job_id, row_number, data JSONB)
 
 mv_daily_sales  -- MATERIALIZED VIEW: day, product_id, category_id, channel_id,
@@ -184,7 +193,7 @@ mv_daily_sales  -- MATERIALIZED VIEW: day, product_id, category_id, channel_id,
 
 **Định nghĩa KPI (ghi rõ để FE/BE/báo cáo thống nhất):**
 - Doanh thu (revenue) = `Σ(quantity × unit_price − discount)` của đơn `completed`.
-- Số đơn = `COUNT(DISTINCT order_id)` đơn `completed`.
+- Số đơn = `COUNT(DISTINCT order_id)` đơn `completed`. ⚠️ Không cộng dồn được từ `mv_daily_sales` (đơn nhiều sản phẩm bị đếm lặp) → tính từ `orders` (docs/phan-tich ch.7 §3.2). Tương tự Số khách hàng.
 - AOV (giá trị đơn trung bình) = Doanh thu / Số đơn (trả `null` khi số đơn = 0, không chia cho 0).
 - Tăng trưởng = (kỳ này − kỳ trước) / kỳ trước; kỳ trước = khoảng thời gian **cùng độ dài** ngay trước đó.
 - Ngày = `(ordered_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date` — **bẫy hay gặp**: group theo UTC làm đơn lúc 0h–7h sáng VN bị đếm sang ngày hôm trước.
@@ -259,7 +268,7 @@ Ký hiệu: ⏱ ước lượng giờ · ✅ Xong khi · ⚠️ Bẫy/Ghi chú �
 - ✅ Cả `apps/api` và `apps/web` import được `@cn019/shared` và type-check pass (`npm run typecheck`).
 
 #### B2.2 — API đăng nhập/đăng xuất ⏱ 4h
-- **Làm gì:** `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`; bcrypt so sánh mật khẩu; JWT ký bằng `JWT_SECRET`, set cookie `httpOnly; SameSite=Lax; Secure (prod)`; middleware `requireAuth`, `requireRole('admin')`; script tạo admin đầu tiên.
+- **Làm gì:** `POST /api/auth/login`, `POST /api/auth/logout`, `GET /api/auth/me`; bcrypt so sánh mật khẩu; JWT ký bằng `JWT_SECRET`, set cookie `httpOnly; SameSite=Lax; Secure (prod)`; middleware `requireAuth` (đọc lại user mỗi request: khoá/đổi vai trò/đổi mật khẩu có hiệu lực ngay), `requireRole(min)` theo thứ bậc `viewer < analyst < admin`; script tạo admin đầu tiên.
 - **File:** `apps/api/src/modules/auth/*`, `src/middlewares/auth.ts`, `scripts/create-admin.ts`.
 - ✅ Test Supertest: đúng mật khẩu → 200 + có cookie; sai → 401 với thông báo chung "Sai email hoặc mật khẩu" (không lộ email có tồn tại); gọi `/me` không cookie → 401; viewer gọi route admin → 403.
 - ⚠️ Không trả `password_hash` trong bất kỳ response nào → dùng DTO.
@@ -328,6 +337,11 @@ Ký hiệu: ⏱ ước lượng giờ · ✅ Xong khi · ⚠️ Bẫy/Ghi chú �
 
 #### B3.6 — Báo cáo Sprint 3 + demo giữa kỳ ⏱ 2h — `docs/bao-cao/sprint-3.md` kèm video/ảnh demo.
 
+#### B3.7 — Hủy lần nhập (UC08) ⏱ 3h
+- **Làm gì:** `GET /api/imports/:id/undo-preview`, `POST /api/imports/:id/undo`; xoá đơn `created_job_id = J AND last_job_id = J` trong transaction, job → `undone`, refresh MV; nút "Hủy lần nhập" ở chi tiết job.
+- **File:** `modules/imports/undo.ts`, `features/imports/ImportHistory.tsx`.
+- ✅ AC-08.1…AC-08.5 (`docs/phan-tich/06-dac-ta-use-case.md` §6.6) pass.
+
 ---
 
 ### SPRINT 4 (Tuần 8–9) — Kết nối CSDL ngoài, đồng bộ API, xuất báo cáo
@@ -362,6 +376,11 @@ Ký hiệu: ⏱ ước lượng giờ · ✅ Xong khi · ⚠️ Bẫy/Ghi chú �
 #### B4.6 — Xuất báo cáo CSV ⏱ 2h
 - **File:** `modules/export/*`; nút "Xuất CSV" trên dashboard.
 - ✅ File CSV tải về mở bằng Excel không lỗi tiếng Việt (ghi BOM UTF-8), số liệu khớp dashboard với cùng bộ lọc.
+
+#### B4.8 — Quản lý người dùng + đổi mật khẩu (UC03, UC04) ⏱ 5h
+- **Làm gì:** `GET/POST /api/users`, `PATCH /api/users/:id`, `POST /api/users/:id/reset-password`, `PATCH /api/auth/password`; trang "Người dùng" (admin), trang đổi mật khẩu, bắt đổi mật khẩu tạm.
+- **File:** `modules/users/*`, `features/users/UsersPage.tsx`, `features/auth/ChangePasswordPage.tsx`.
+- ✅ AC-03.1…03.3, AC-04.1…04.5 pass; không thể còn 0 admin.
 
 #### B4.7 — Báo cáo Sprint 4 ⏱ 1h — `docs/bao-cao/sprint-4.md`
 
@@ -462,12 +481,14 @@ Ký hiệu: ⏱ ước lượng giờ · ✅ Xong khi · ⚠️ Bẫy/Ghi chú �
 | [ ] B3.4 | Biểu đồ | 5h | | |
 | [ ] B3.5 | Lọc chéo | 3h | | |
 | [ ] B3.6 | Báo cáo Sprint 3 + demo | 2h | | |
+| [ ] B3.7 | Hủy lần nhập | 3h | | |
 | [ ] B4.1 | Nguồn dữ liệu + mã hoá | 3h | | |
 | [ ] B4.2 | Kết nối CSDL ngoài | 5h | | |
 | [ ] B4.3 | Mock shop API | 2h | | |
 | [ ] B4.4 | Đồng bộ REST API | 5h | | |
 | [ ] B4.5 | Lập lịch đồng bộ | 3h | | |
 | [ ] B4.6 | Xuất CSV | 2h | | |
+| [ ] B4.8 | Quản lý người dùng + đổi mật khẩu | 5h | | |
 | [ ] B4.7 | Báo cáo Sprint 4 | 1h | | |
 | [ ] B5.1 | Tối ưu hiệu năng | 3h | | |
 | [ ] B5.2 | Hoàn thiện test | 4h | | |
@@ -478,3 +499,5 @@ Ký hiệu: ⏱ ước lượng giờ · ✅ Xong khi · ⚠️ Bẫy/Ghi chú �
 | [ ] B5.7 | Báo cáo tổng kết | 3h | | |
 
 **Tổng ước lượng:** Sprint 1 = 22h · Sprint 2 = 26h · Sprint 3 = 22h · Sprint 4 = 21h · Sprint 5 = 23h → **114h / 10 tuần (~11,4h/tuần)**, còn dư ~10–30h làm vùng đệm cho việc học công nghệ mới.
+
+**Điều chỉnh sau phân tích yêu cầu (2026-10-21):** +11,5h (B3.7 3h, B4.8 5h, và +3,5h rải ở B1.5/B2.2/B2.5/B2.7/B3.5 — chi tiết `docs/phan-tich/07-truy-vet-va-tu-kiem-tra.md` §3.3) → **125,5h (~12,6h/tuần)**. Thứ tự cắt khi trễ: Could → B3.7 → UI của B4.8.

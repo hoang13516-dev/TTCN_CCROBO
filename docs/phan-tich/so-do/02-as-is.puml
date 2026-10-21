@@ -1,0 +1,58 @@
+@startuml 02-as-is
+!include _style.iuml
+title Quy trình hiện tại (AS-IS): tổng hợp báo cáo bán hàng thủ công
+
+|Nhân viên|
+start
+:Cuối tuần / cuối tháng: bắt đầu làm báo cáo;
+:Xuất file đơn hàng từ phần mềm POS;
+:Xuất file đơn hàng từ Seller Center (Shopee...);
+:Chép tay đơn Facebook/Zalo từ tin nhắn, sổ ghi;
+note right
+  **P1** Dữ liệu phân tán 3–4 nơi,
+  mỗi nơi một định dạng cột khác nhau
+end note
+|Excel|
+:Dán tất cả vào một file Excel tổng;
+:Chuẩn hoá tay: đổi tên cột, định dạng ngày,
+bỏ dấu chấm ở số tiền, gộp tên sản phẩm;
+note right
+  **P2** Tốn 3–6 giờ mỗi kỳ, dễ sai
+  **P3** Tên sản phẩm khác nhau giữa các kênh
+  (cùng 1 SKU nhưng 2 tên) → đếm sai top SP
+end note
+if (Có kiểm tra đơn trùng / đơn hủy?) then (thường bỏ qua)
+  :Đơn hủy, đơn nhập 2 lần
+  vẫn được cộng vào doanh thu;
+  note right
+    **P4** Doanh thu bị thổi phồng,
+    không ai biết sai ở đâu
+  end note
+else (có, nếu kịp)
+  :Lọc tay bằng Filter;
+endif
+:Tạo PivotTable + biểu đồ;
+|Nhân viên|
+:Chụp ảnh / gửi file qua Zalo cho chủ;
+|Chủ cửa hàng|
+:Xem báo cáo;
+if (Muốn xem theo góc khác
+(kênh khác, tháng trước...)?) then (có)
+  :Nhắn nhân viên làm lại;
+  note right
+    **P5** Không tự xem được,
+    phải chờ, phản hồi chậm 1–2 ngày
+  end note
+  |Nhân viên|
+  :Làm lại pivot theo yêu cầu;
+  |Chủ cửa hàng|
+else (không)
+endif
+:Ra quyết định (nhập hàng, khuyến mãi)
+dựa trên số liệu có thể sai/cũ;
+note right
+  **P6** Không so sánh được với kỳ trước
+  một cách nhất quán; không có lịch sử
+end note
+stop
+@enduml

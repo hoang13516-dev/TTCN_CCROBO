@@ -1,0 +1,26 @@
+@startuml 01-ngu-canh
+!include _style.iuml
+title Sơ đồ ngữ cảnh hệ thống CN-019
+left to right direction
+
+actor "Quản trị viên\n(admin)" as AD
+actor "Nhân viên phân tích\n(analyst)" as AN
+actor "Người xem\n(viewer)" as V
+actor "Bộ lập lịch\n(thời gian)" as SCH
+
+rectangle "Hệ thống Dashboard\nphân tích dữ liệu bán hàng\nCN-019" as SYS #dbeafe
+
+file "File CSV / Excel\n(xuất từ POS, Shopee,\nTikTok Shop, sổ tay...)" as FILE
+database "CSDL bán hàng ngoài\n(PostgreSQL / MySQL)" as EXTDB
+cloud "REST API của\ncửa hàng / sàn" as EXTAPI
+
+AD --> SYS : quản lý người dùng,\nkhai báo nguồn kết nối,\nđặt lịch đồng bộ
+AN --> SYS : tải file, ánh xạ cột,\nđồng bộ ngay, hủy lần nhập,\nxuất CSV
+V --> SYS : xem dashboard,\nlọc & so sánh
+SCH --> SYS : kích hoạt đồng bộ\ntheo lịch (cron)
+
+SYS <-- FILE : dữ liệu đơn hàng\n(upload thủ công)
+SYS --> EXTDB : SELECT chỉ đọc
+SYS --> EXTAPI : GET /orders?updated_since
+SYS ..> AN : KPI, biểu đồ,\nbáo cáo lỗi nhập,\nfile CSV
+@enduml
