@@ -1,161 +1,84 @@
 # Phiếu khảo sát hiện trạng — CN-019
 
-> Dùng để phỏng vấn 1–2 chủ shop hoặc nhân viên thật (15–20 phút/người). Bản này mở rộng mục [1.7](01-khao-sat-va-phan-tich-de-tai.md#17-phiếu-khảo-sát-dùng-để-xác-nhận-hiện-trạng) và giữ nguyên mã câu hỏi **Q1–Q12** để đối chiếu với các giả định (A1–A4, P1–P3, BR-xx, O-xx).
+> Dùng để phỏng vấn 1–2 chủ/quản lý cửa hàng hoặc nhân viên văn phòng (15–20 phút/người). Mỗi câu ghi rõ giả định nào trong phân tích nó kiểm chứng (A1–A5, G1, BR-xx). Không bắt buộc; nếu không phỏng vấn được, báo cáo ghi rõ phần hiện trạng là giả định (O-16).
 
 ## Thông tin buổi phỏng vấn
 
-| Mục                                 | Ghi chú                                                |
-| ----------------------------------- | ------------------------------------------------------ |
-| Ngày, giờ                           |                                                        |
-| Người phỏng vấn                     |                                                        |
-| Vai trò người được hỏi              | ☐ Chủ shop  ☐ Nhân viên bán hàng  ☐ Kế toán  ☐ Khác: … |
-| Quy mô đơn/tháng (ước lượng)        | ☐ < 100  ☐ 100–500  ☐ 500–2.000  ☐ > 2.000             |
-| Số kênh bán đang hoạt động          |                                                        |
-| Đồng ý ghi âm / ghi chú (có / không) |                                                        |
+| Mục                          | Ghi chú                                                      |
+| ---------------------------- | ------------------------------------------------------------ |
+| Ngày, giờ                    |                                                              |
+| Vai trò người được hỏi       | ☐ Chủ/giám đốc ☐ Quản lý cửa hàng ☐ Kế toán/văn phòng ☐ Khác |
+| Số chi nhánh / số tỉnh       |                                                              |
+| Quy mô đơn/tháng (ước lượng) | ☐ < 500 ☐ 500–2.000 ☐ 2.000–10.000 ☐ > 10.000                |
+| Đồng ý ghi chú (có / không)  |                                                              |
 
-> **Lưu ý đạo đức:** không ghi tên, SĐT, địa chỉ của khách hoặc của người được hỏi vào phiếu. Nếu nhận được file mẫu, xoá các cột thông tin cá nhân trước khi lưu vào repo.
+> **Lưu ý đạo đức:** không ghi tên, SĐT, địa chỉ của khách hoặc của người được hỏi. File mẫu nhận được phải xoá cột thông tin cá nhân trước khi lưu vào repo.
 
----
+## Phần A — Chi nhánh, kênh bán, phần mềm
 
-## Phần A — Kênh bán và phần mềm
+**Q1. Doanh nghiệp có bao nhiêu chi nhánh, ở những tỉnh nào? Bán qua những kênh nào?**
+Chi nhánh/tỉnh: … Kênh: ☐ Tại quầy ☐ Website ☐ Shopee ☐ TikTok Shop ☐ Facebook/Zalo ☐ Khác: …
+_Kiểm chứng:_ `dim_branch`, `dim_channel`, giả định A4 (đơn online gắn với một chi nhánh xử lý).
 
-**Q1. Anh/chị bán trên những kênh nào? Kênh nào nhiều đơn nhất?**
+**Q2. Mỗi chi nhánh dùng phần mềm bán hàng nào? Xuất được Excel/CSV không?**
+☐ KiotViet ☐ Sapo ☐ Haravan ☐ Excel tự làm ☐ Khác: … — xin **1 file mẫu đã xoá thông tin khách**.
+_Kiểm chứng:_ tên cột thật cho từ điển §3.5.3.
 
-☐ Shopee  ☐ TikTok Shop  ☐ Lazada  ☐ Website riêng  ☐ Cửa hàng trực tiếp (POS)  ☐ Khác: …
-Kênh nhiều đơn nhất: …
+**Q3. Website/kênh online có API để lấy đơn không?** ☐ Có ☐ Không ☐ Không biết
+_Kiểm chứng:_ ưu tiên UC10, UC11.
 
-_Kiểm chứng:_ danh sách bảng `channels`, ưu tiên P1.
+## Phần B — Dữ liệu đơn hàng
 
-**Q2. Anh/chị đang dùng phần mềm bán hàng nào? Có xuất được Excel/CSV không?**
+**Q4. Mỗi đơn có mã đơn không? Một đơn nhiều sản phẩm thì file thể hiện thế nào?**
+☐ Nhiều dòng, lặp lại mã đơn ☐ Một dòng, gộp sản phẩm trong một ô ☐ Khác: …
+_Câu phụ:_ "Hai chi nhánh có thể cùng có mã `HD0001` không?"
+_Kiểm chứng:_ A1, BR-06 (đơn xác định bởi nguồn + mã đơn), BR-07.
 
-☐ KiotViet  ☐ Sapo  ☐ Haravan  ☐ Không dùng phần mềm, ghi sổ/Excel  ☐ Khác: …
-Xuất được file: ☐ Có  ☐ Không  ☐ Không chắc
+**Q5. Sản phẩm có SKU không? SKU có giống nhau giữa các chi nhánh và kênh online không?**
+_Kiểm chứng:_ A2.
 
-- Xin **1 file mẫu**, đã xoá tên/SĐT khách. Ghi: tên file, số dòng, số cột (không lưu dữ liệu thật vào repo).
+**Q6. File xuất có giá vốn (giá nhập) từng dòng không? Nếu không, giá vốn nằm ở đâu?**
+_Kiểm chứng:_ A3, BR-02.
 
-_Kiểm chứng:_ định dạng file (O-01), giả định A1 và A2.
+**Q7. Đơn hủy, đơn hoàn có tính vào doanh thu không? Giảm giá/voucher ghi ở đâu?**
+_Kiểm chứng:_ BR-01, BR-08; voucher toàn đơn nằm ngoài phạm vi (§3.1.7).
 
-**Q11. Có hệ thống hoặc website riêng có CSDL hoặc API không?**
+## Phần C — Báo cáo, chỉ số, cảnh báo
 
-☐ Không  ☐ Có CSDL (MySQL, PostgreSQL, …)  ☐ Có API  ☐ Không biết
-Nếu có: quyền truy cập để đọc, cho phép không? ☐ Có  ☐ Không  ☐ Cần hỏi thêm
+**Q8. Làm báo cáo bao lâu một lần, mất bao lâu, ai làm?** Thời gian mỗi lần: … giờ.
+_Kiểm chứng:_ G1 (giả định 3–6 giờ/kỳ). **Ghi con số thực tế.**
 
-_Kiểm chứng:_ mức ưu tiên UC10–UC13 (xem O-02).
+**Q9. Hay xem những con số nào? Xếp hạng 3 con số quan trọng nhất.**
+☐ Doanh thu ☐ Lợi nhuận ☐ Số đơn ☐ Giá trị đơn trung bình ☐ Khách quay lại ☐ Sản phẩm bán chạy ☐ So sánh chi nhánh/vùng
+_Kiểm chứng:_ 6 KPI của FR-19.
 
----
+**Q10. Khi nào thì anh/chị coi là "bất thường, cần xử lý ngay"?** (vd. doanh thu giảm bao nhiêu %, biên lãi dưới bao nhiêu %)
+_Kiểm chứng:_ ngưỡng mặc định R1–R5 (BR-20).
 
-## Phần B — Dữ liệu đơn hàng và mã
+## Phần D — Người dùng và quyền
 
-**Q3. Mỗi đơn trong file có mã đơn không? Một đơn nhiều sản phẩm thì file thể hiện thế nào?**
+**Q11. Quản lý mỗi chi nhánh có được xem số liệu của chi nhánh khác không? Ai được nhập dữ liệu?**
 
-☐ Có mã đơn riêng  ☐ Không có mã đơn  ☐ Không chắc
-Một đơn nhiều sản phẩm:
-☐ Nhiều dòng, mỗi dòng một sản phẩm, lặp lại mã đơn
-☐ Một dòng, nhiều sản phẩm gộp trong một ô
-☐ Khác: …
+| Vai trò             | Xem chi nhánh mình | Xem toàn chuỗi | Nhập dữ liệu | Xuất báo cáo |
+| ------------------- | ------------------ | -------------- | ------------ | ------------ |
+| Chủ / giám đốc      | ☐                  | ☐              | ☐            | ☐            |
+| Kế toán / văn phòng | ☐                  | ☐              | ☐            | ☐            |
+| Quản lý chi nhánh   | ☐                  | ☐              | ☐            | ☐            |
 
-_Câu hỏi phụ:_ "Nếu hai kênh cùng có mã `HD0001`, anh/chị có coi đó là hai đơn khác nhau không?" (kiểm chứng O-03)
+_Kiểm chứng:_ 3 vai trò, BR-15, ma trận §5.4.
 
-_Kiểm chứng:_ BR-07, A1, O-03.
+**Q12. Điều gì khiến anh/chị không dùng công cụ này?** ☐ Mất thời gian học ☐ Không tin số liệu tự động ☐ Phải đổi cách ghi sổ ☐ Lộ dữ liệu ☐ Khác: …
+_Kiểm chứng:_ rủi ro chấp nhận, NFR-08.
 
-**Q4. Sản phẩm có mã SKU hoặc mã hàng không? Mã có giống nhau giữa POS và sàn không?**
+## Phần E — Đối chiếu giả định (điền sau buổi hỏi)
 
-☐ Có SKU ổn định  ☐ Có mã nhưng hay đổi  ☐ Không có mã  ☐ Không chắc
-Giống nhau giữa các kênh: ☐ Có  ☐ Không  ☐ Một phần
+| Mã  | Giả định                                           | Kết luận                      | Bằng chứng |
+| --- | -------------------------------------------------- | ----------------------------- | ---------- |
+| A1  | Mỗi đơn có mã duy nhất trong nguồn của nó          | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
+| A2  | SKU ổn định, giống nhau giữa các nguồn             | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
+| A3  | Dữ liệu xuất có giá vốn từng dòng                  | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
+| A4  | Mỗi đơn (kể cả online) gắn với một chi nhánh       | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
+| A5  | Nhập liệu trên máy tính, điện thoại chủ yếu để xem | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
+| G1  | Hiện mất 3–6 giờ mỗi kỳ để tổng hợp                | Thực tế: … giờ/kỳ             |            |
 
-_Kiểm chứng:_ A2, P3.
-
----
-
-## Phần C — Báo cáo và chỉ số
-
-**Q5. Anh/chị làm báo cáo bao lâu một lần? Mất bao lâu? Ai làm?**
-
-- Tần suất: ☐ Mỗi ngày  ☐ Mỗi tuần  ☐ Mỗi tháng  ☐ Khi cần
-- Thời gian mỗi lần: …  giờ/phút
-- Người làm: …
-
-_Kiểm chứng:_ mục tiêu G1 (hiện trạng ước tính 3–6 giờ/kỳ), P2. **Ghi con số thực tế, không ghi con số dự đoán.**
-
-**Q6. Anh/chị hay xem những con số nào nhất?**
-
-☐ Doanh thu  ☐ Số đơn  ☐ Sản phẩm bán chạy  ☐ Doanh thu theo kênh  ☐ Doanh thu theo thời gian
-☐ Khách quay lại  ☐ Tồn kho  ☐ Khác: …
-
-Xếp hạng 3 con số quan trọng nhất: 1) … 2) … 3) …
-
-_Kiểm chứng:_ chọn KPI, FR-30…FR-35.
-
-**Q7. Có tính đơn hủy và đơn hoàn vào doanh thu không? Giảm giá và voucher ghi ở đâu?**
-
-- Đơn hủy: ☐ Không tính  ☐ Tính riêng  ☐ Khác: …
-- Đơn hoàn: ☐ Không tính  ☐ Trừ khỏi doanh thu  ☐ Khác: …
-- Giảm giá sản phẩm: ☐ Ghi trong file  ☐ Không ghi
-- Voucher toàn đơn và phí vận chuyển: ☐ Ghi trong file  ☐ Không ghi  ☐ Tính riêng
-
-_Kiểm chứng:_ BR-01, O-04. Nếu voucher toàn đơn không có trong file, doanh thu hệ thống có thể **cao hơn** tiền thực nhận. Ghi lại để đưa vào phần hạn chế.
-
----
-
-## Phần D — Người dùng, quyền và thiết bị
-
-**Q8. Anh/chị có muốn biết khách nào quay lại mua không? Có lưu SĐT khách không?**
-
-- Quan tâm khách quay lại: ☐ Có  ☐ Không  ☐ Chưa nghĩ tới
-- Có lưu SĐT khách: ☐ Có  ☐ Không
-- Nếu có, sẵn sàng để hệ thống dùng SĐT đã băm (hash) để nhận diện không? ☐ Có  ☐ Không  ☐ Cần hỏi thêm
-
-_Kiểm chứng:_ UC17 (Could), BR-12.
-
-**Q9. Ai trong cửa hàng được xem số liệu? Ai được sửa?**
-
-| Vai trò                  | Được xem | Được sửa | Được nhập file |
-| ------------------------ | -------- | -------- | -------------- |
-| Chủ shop / quản lý       | ☐        | ☐        | ☐              |
-| Nhân viên bán hàng       | ☐        | ☐        | ☐              |
-| Kế toán                  | ☐        | ☐        | ☐              |
-
-_Kiểm chứng:_ 3 vai trò, ma trận phân quyền.
-
-**Q10. Anh/chị hay xem báo cáo trên điện thoại hay máy tính?**
-
-- Xem báo cáo: ☐ Điện thoại  ☐ Máy tính  ☐ Cả hai
-- Nhập liệu: ☐ Máy tính  ☐ Điện thoại  ☐ Cả hai
-
-_Kiểm chứng:_ NFR-12, giả định A4 (màn hình nhập liệu không cần tối ưu cho mobile).
-
----
-
-## Phần E — Rào cản
-
-**Q12. Nếu có công cụ này, điều gì khiến anh/chị không dùng?**
-
-☐ Mất thời gian học  ☐ Không tin số liệu tự động  ☐ Phải thay đổi cách ghi sổ  ☐ Chi phí  ☐ Dữ liệu cá nhân của khách  ☐ Khác: …
-
-Lời người được hỏi (trích nguyên văn nếu có):
-> …
-
-_Kiểm chứng:_ rủi ro chấp nhận, NFR về khả năng sử dụng.
-
----
-
-## Phần F — Đối chiếu giả định (người phỏng vấn điền sau buổi hỏi)
-
-Đánh dấu từng giả định: **Xác nhận** (đúng như giả định), **Bác bỏ** (sai, ghi lại thực tế), hoặc **Chưa rõ** (cần hỏi thêm hoặc xin file).
-
-| Mã  | Giả định                                                                 | Kết luận                              | Bằng chứng (câu trả lời / file) |
-| --- | ------------------------------------------------------------------------ | ------------------------------------- | ------------------------------- |
-| A1  | Mỗi đơn có mã đơn duy nhất trong nguồn của nó                            | ☐ Xác nhận  ☐ Bác bỏ  ☐ Chưa rõ       |                                 |
-| A2  | Mỗi sản phẩm có SKU ổn định                                              | ☐ Xác nhận  ☐ Bác bỏ  ☐ Chưa rõ       |                                 |
-| A3  | Hai nguồn không dùng chung mã đơn cho hai đơn khác nhau                  | ☐ Xác nhận  ☐ Bác bỏ  ☐ Chưa rõ       |                                 |
-| A4  | Người dùng nhập liệu trên máy tính, điện thoại chỉ để xem                | ☐ Xác nhận  ☐ Bác bỏ  ☐ Chưa rõ       |                                 |
-| G1  | Hiện tại mất 3–6 giờ mỗi kỳ để tổng hợp số liệu                          | Thực tế: ………… giờ/kỳ                 |                                 |
-
----
-
-## Phần G — Sau buổi phỏng vấn
-
-- [ ] Điền phần F, đánh dấu câu trả lời **khác giả định** và báo lại để điều chỉnh yêu cầu.
-- [ ] Ghi nhận file mẫu (nếu có) vào `docs/phan-tich/` sau khi đã xoá dữ liệu cá nhân.
-- [ ] Cập nhật bảng O-01 đến O-06 trong `docs/phan-tich/07-truy-vet-va-tu-kiem-tra.md`.
-- [ ] Dán phiếu đã điền (không có thông tin cá nhân) vào phụ lục báo cáo.
+Sau buổi hỏi: giả định nào bị **bác bỏ** → sửa `03-dac-ta-yeu-cau.md` trước, rồi cập nhật O-16 trong `07-…` §5.

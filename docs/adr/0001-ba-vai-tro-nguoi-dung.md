@@ -1,27 +1,12 @@
 # ADR-0001: Dùng 3 vai trò người dùng (admin / analyst / viewer)
 
-- **Trạng thái:** Đã chấp nhận
-- **Ngày:** 2026-10-21
-- **Liên quan:** `ke-hoach.md` §1.2, §5, S2.3; `docs/phan-tich/05-tac-nhan-va-use-case.md` §5.4
+- **Trạng thái:** ~~Đã chấp nhận~~ → **Đã thay thế** bởi [ADR-0002](0002-vai-tro-va-pham-vi-chi-nhanh.md) (21/10/2026)
+- **Ngày:** 21/10/2026
 
-## Bối cảnh
+## Tóm tắt (giữ lại để truy vết)
 
-`ke-hoach.md` ban đầu có 2 vai trò `admin` / `viewer`. Khi phân tích nghiệp vụ cửa hàng nhỏ có nhân viên, xuất hiện 3 nhóm người dùng có nhu cầu và mức tin cậy khác nhau:
+Bản phân tích v1 dùng 3 vai trò có thứ bậc `viewer < analyst < admin`, trong đó `viewer` xem toàn bộ dữ liệu. Lý do chọn 3 vai thay vì 2: tách người thao tác dữ liệu khỏi người cấu hình hệ thống (nguyên tắc đặc quyền tối thiểu).
 
-1. **Chủ cửa hàng**: cấu hình nguồn dữ liệu (chứa mật khẩu CSDL/API key), quản lý tài khoản.
-2. **Nhân viên văn phòng/kế toán**: nhập dữ liệu hằng ngày, sửa khi nhập nhầm, xuất số liệu.
-3. **Quản lý ca/đối tác**: chỉ xem.
+## Vì sao bị thay thế
 
-Với 2 vai trò, nhân viên nhập liệu buộc phải là `admin`, tức là cũng xem/sửa được thông tin đăng nhập CSDL và cấp quyền cho người khác. Điều này vi phạm nguyên tắc **đặc quyền tối thiểu** (least privilege).
-
-## Quyết định
-
-Dùng 3 vai trò có thứ bậc `viewer < analyst < admin` (vai trò cao hơn làm được mọi việc của vai trò thấp hơn), cột `users.role CHECK (role IN ('admin','analyst','viewer'))`, middleware `requireRole(min)` so sánh theo thứ bậc. Các ngoại lệ không theo thứ bậc (analyst chỉ hủy lần nhập của mình; không được còn 0 admin) được kiểm tra trong service.
-
-## Hệ quả
-
-- **Tích cực:** nhân viên nhập liệu không tiếp cận được bí mật nguồn dữ liệu; người xem không xuất được dữ liệu; phân quyền khớp với tổ chức thật của cửa hàng.
-- **Tiêu cực:** thêm khoảng 0,5 h (S2.3) cho phần auth và 5 h (S6.3) cho giao diện quản lý người dùng; thêm test phân quyền theo ma trận.
-- **Phương án đã loại:**
-  - _Giữ 2 vai trò:_ đơn giản nhưng sai nguyên tắc đặc quyền tối thiểu.
-  - _Phân quyền theo từng quyền (permission-based RBAC):_ linh hoạt nhưng quá mức cần thiết cho cửa hàng 1–4 người dùng. Có thể nâng cấp sau mà không đổi API, vì middleware đã tách biệt.
+Khi đối chiếu đề bài ("phân quyền xem báo cáo", "bộ lọc theo chi nhánh"), vai trò `viewer` xem toàn chuỗi không thể hiện được việc **giới hạn báo cáo theo đơn vị**. ADR-0002 giữ nguyên ý tưởng 3 vai có thứ bậc, nhưng đổi vai thấp nhất thành `manager` gắn với một chi nhánh.

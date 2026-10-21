@@ -1,50 +1,49 @@
 # Câu hỏi gửi GVHD — CN-019
 
-> Soạn để gửi GVHD ThS. Dương Văn Đeo (GV001). Mỗi câu có sẵn phương án đề xuất để GVHD chỉ cần chọn A hoặc B. Kết quả ghi lại ở mục 4 của [07-truy-vet-va-tu-kiem-tra.md](07-truy-vet-va-tu-kiem-tra.md#4-vấn-đề-còn-mở--cần-bạn-tự-xử-lý).
+> Gửi GVHD ThS. Dương Văn Đeo (GV001). Em đã chốt sẵn phương án cho từng điểm (cột **A**) để làm ở mức cơ bản nhưng đủ "Kết quả cần đạt" của đề; thầy/cô chỉ cần xác nhận A hoặc chọn B. Kết quả ghi vào [07 §5, O-15](07-truy-vet-va-tu-kiem-tra.md#5-vấn-đề-còn-mở--cần-bạn-tự-xử-lý).
 
-## Câu 1 — Nguồn dữ liệu (O-02)
+## Câu 1 — Nguồn dữ liệu
 
-Đề ghi "kết nối CSDL hoặc đồng bộ qua API". Em hiểu đây là **chọn một trong hai**, còn upload file CSV/Excel là bắt buộc. Thầy/cô xác nhận giúp em:
+Đề ghi "upload CSV/Excel, kết nối CSDL **hoặc** đồng bộ qua API".
 
-- **A.** Đúng: file là bắt buộc; CSDL hoặc API chọn một (em làm API đồng bộ, kiểm tra gia tăng).
-- **B.** Không: cả CSDL và API đều bắt buộc.
+- **A.** Upload CSV/Excel + đồng bộ **REST API** (đồng bộ tăng dần, bấm nút). Kết nối CSDL ngoài để hướng phát triển.
+- **B.** Làm cả CSDL và API.
 
-## Câu 2 — Kỳ so sánh (O-05)
+## Câu 2 — Lợi nhuận
 
-Khi xem "tháng này", so sánh với kỳ nào?
+Dữ liệu bán hàng thường không có giá vốn.
 
-- **A.** Cùng số ngày liền trước (01–21/10 so với 10–30/09). Đây là cách hệ thống đang làm.
-- **B.** Cùng kỳ tháng trước (01–21/10 so với 01–21/09).
+- **A.** File/API có cột **giá vốn** cho từng dòng bán (giá vốn tại thời điểm bán). Lợi nhuận gộp = doanh thu − giá vốn.
+- **B.** Giá vốn khai báo trên danh mục sản phẩm (đơn giản hơn nhưng sai khi giá vốn thay đổi theo thời gian).
 
-## Câu 3 — Lợi nhuận (O-10)
+## Câu 3 — Chi nhánh và vùng miền
 
-Đề yêu cầu KPI lợi nhuận, nhưng dữ liệu bán hàng thường không có giá vốn.
+- **A.** "Chi nhánh" là **cửa hàng thật**; mỗi chi nhánh thuộc một tỉnh, một vùng (Bắc/Trung/Nam). "Sản phẩm bán chạy theo vùng miền" = theo vùng của chi nhánh bán. Kênh bán (tại quầy, website, sàn) là một chiều riêng.
+- **B.** "Chi nhánh" là kênh bán; vùng miền lấy theo địa chỉ khách.
 
-- **A.** Ghi lợi nhuận vào phạm vi ngoài, nêu rõ là hướng phát triển.
-- **B.** Thêm cột giá vốn nhập tay (không bắt buộc). Lợi nhuận gộp chỉ tính khi có giá vốn.
+## Câu 4 — Mô hình OLAP
 
-## Câu 4 — Vùng miền và chi nhánh (O-11)
+- **A.** Kho dữ liệu **hình sao** thật: `fact_sales` (hạt = 1 sản phẩm trong 1 đơn) và 5 bảng chiều ngày, chi nhánh, sản phẩm, khách hàng, kênh.
+- **B.** Schema chuẩn hoá kèm bảng tổng hợp.
 
-- **A.** Thêm trường vùng/tỉnh vào đơn hàng, lấy từ file nếu có. Nếu file không có thì bỏ.
-- **B.** Bỏ phân tích theo vùng miền, ghi vào phạm vi ngoài.
+## Câu 5 — Phân quyền xem báo cáo
 
-Thầy/cô cho em hỏi thêm: "chi nhánh" trong bộ lọc là **kênh bán** (Shopee, TikTok, cửa hàng), hay **cửa hàng thật** (nhiều điểm bán)?
+- **A.** 3 vai trò: **quản trị** (toàn quyền), **nhân viên phân tích** (nhập dữ liệu, xem toàn chuỗi), **quản lý chi nhánh** (chỉ xem và xuất báo cáo của chi nhánh mình).
+- **B.** 2 vai trò quản trị / người xem, không giới hạn theo chi nhánh.
 
-## Câu 5 — Mô hình dữ liệu (O-12)
+## Câu 6 — Cảnh báo chỉ số bất thường
 
-Đề nhắc "Star Schema / OLAP". Thiết kế hiện tại là schema chuẩn hoá, kèm bảng tổng hợp (materialized view) để truy vấn nhanh.
+- **A.** Quy tắc cấu hình được: chỉ số giảm quá X % so với kỳ trước, biên lợi nhuận thấp hơn ngưỡng, ngày có doanh thu lệch quá 2 độ lệch chuẩn so với 28 ngày trước. Không dùng học máy.
+- **B.** Cần dùng mô hình học máy.
 
-- **A.** Giữ schema chuẩn hoá và giải thích bảng tổng hợp là dạng star. Thêm drill-down (tháng → ngày, danh mục → sản phẩm).
-- **B.** Thiết kế lại thành bảng sự kiện và bảng chiều đầy đủ. Tốn thêm khoảng 6–8 giờ.
+## Câu 7 — Kỳ so sánh
 
-## Câu 6 — Cảnh báo chỉ số bất thường (O-13)
+Khi xem "tháng này" (01–21/10), so với kỳ nào?
 
-- **A.** Thêm cảnh báo khi một KPI lệch quá ngưỡng cố định so với kỳ trước (không dùng học máy).
-- **B.** Không làm, ghi vào phạm vi ngoài.
+- **A.** Cùng số ngày liền trước (10–30/09).
+- **B.** Cùng kỳ tháng trước (01–21/09).
 
-## Câu 7 — Định dạng xuất báo cáo (O-14)
+## Câu 8 — Xuất báo cáo
 
-Đề ghi xuất PDF/Excel.
-
-- **A.** Xuất CSV (mở được bằng Excel). PDF để làm sau nếu còn thời gian.
-- **B.** Làm PDF ngay trong phạm vi chính.
+- **A.** Excel tạo ở server (5 sheet). PDF là trang báo cáo bố cục A4, người dùng chọn "Lưu thành PDF" của trình duyệt (giữ được biểu đồ).
+- **B.** PDF phải tạo ở server (file tải về trực tiếp).

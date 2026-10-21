@@ -1,42 +1,51 @@
 @startuml 05-qt-phan-tich
 !include _style.iuml
-title QT-03 (TO-BE): Xem phân tích và ra quyết định
+title QT-03 (TO-BE): Phân tích và ra quyết định
 
-|Người dùng (mọi vai trò)|
+|Người dùng|
 start
-:Mở dashboard (link có sẵn bộ lọc hoặc trang chủ);
+:Mở dashboard (trang chủ
+hoặc link chia sẻ có bộ lọc);
 |Hệ thống|
-if (Có phiên đăng nhập hợp lệ?) then (không)
-  :Chuyển tới /login,
-  đăng nhập xong quay lại đúng link;
-else (có)
+if (Đã đăng nhập?) then (chưa)
+  :Chuyển /login?next=<link>;
+  |Người dùng|
+  :Đăng nhập;
+  |Hệ thống|
+else (rồi)
 endif
-:Đọc bộ lọc từ URL
-(mặc định: 30 ngày gần nhất, mọi kênh, mọi danh mục);
-:Truy vấn song song 5 API phân tích
-(kỳ này + kỳ trước cùng độ dài);
-:Hiển thị 4 KPI + xu hướng + top SP
-+ theo danh mục + theo kênh;
-|Người dùng (mọi vai trò)|
-repeat
-  :Đọc chỉ số, so sánh mũi tên tăng/giảm;
-  :Đổi bộ lọc thời gian / kênh / danh mục
-  hoặc click 1 danh mục để lọc chéo;
-  |Hệ thống|
-  :Cập nhật URL, gọi lại API
-  (cache theo bộ lọc);
-  |Người dùng (mọi vai trò)|
-repeat while (Cần xem góc khác?) is (có)
-->đủ thông tin;
-if (Là analyst / admin và cần gửi số liệu?) then (có)
-  :Bấm "Xuất CSV";
-  |Hệ thống|
-  :Sinh CSV UTF-8 có BOM theo đúng bộ lọc;
-  |Người dùng (mọi vai trò)|
+if (Vai trò manager?) then (có)
+  :Ghi đè bộ lọc chi nhánh
+  bằng chi nhánh của user (BR-15);
 else (không)
 endif
-:Ra quyết định ngoài hệ thống:
-nhập thêm hàng bán chạy, đẩy kênh yếu,
-khuyến mãi khung thời gian thấp điểm;
+:Đọc bộ lọc trên URL, thiếu thì mặc định 30 ngày;
+fork
+  :KPI + kỳ trước;
+fork again
+  :Xu hướng;
+fork again
+  :Top SP, theo vùng,
+  danh mục, kênh;
+fork again
+  :Đánh giá quy tắc cảnh báo;
+end fork
+:Hiển thị cảnh báo, 6 KPI, biểu đồ;
+|Người dùng|
+repeat
+  :Đổi bộ lọc, click để lọc chéo,
+  drill-down (năm → quý → tháng → ngày,
+  vùng → chi nhánh, danh mục → sản phẩm);
+  |Hệ thống|
+  :Cập nhật URL, tải lại các khối;
+  |Người dùng|
+repeat while (Đã tìm ra câu trả lời?) is (chưa)
+->rồi;
+if (Cần báo cáo mang đi họp?) then (có)
+  :Xuất Excel hoặc PDF
+  theo đúng bộ lọc đang xem;
+else (không)
+endif
+:Ra quyết định (ngoài hệ thống);
 stop
 @enduml

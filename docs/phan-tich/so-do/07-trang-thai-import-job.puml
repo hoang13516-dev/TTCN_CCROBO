@@ -2,22 +2,22 @@
 !include _style.iuml
 title Vòng đời trạng thái import_jobs.status
 
-[*] --> pending : tạo job\n(upload / bấm đồng bộ / cron)
-pending --> running : worker bắt đầu xử lý
-running --> success : load OK, error_rows = 0\n(kể cả mọi dòng bị bỏ qua)
-running --> partial : load OK, error_rows > 0
-running --> failed : (ok_rows = 0 và error_rows > 0)\nhoặc lỗi hệ thống / mạng\n(đã ROLLBACK)
-success --> undone : Hủy lần nhập (UC08)
-partial --> undone : Hủy lần nhập (UC08)
-failed --> [*]
-undone --> [*]
+[*] --> running : bấm "Nhập dữ liệu" (file)\nhoặc "Đồng bộ ngay" (API)
+running --> success : Load COMMIT, error_rows = 0
+running --> partial : Load COMMIT,\nok_rows > 0 và error_rows > 0
+running --> failed : ok_rows = 0\nhoặc lỗi hệ thống / mạng (đã ROLLBACK)
 success --> [*]
 partial --> [*]
+failed --> [*]
 
 note right of running
-  Server khởi động lại khi job đang running
-  → job "mồ côi": lúc khởi động, chuyển mọi job
-  running/pending cũ hơn 30 phút sang failed
-  (message = "Gián đoạn do khởi động lại").
+  Server khởi động lại khi lần nhập đang chạy:
+  lúc khởi động, mọi lần nhập running
+  cũ hơn 10 phút → failed
+  ("Gián đoạn do khởi động lại").
+end note
+note bottom of failed
+  success / partial / failed là trạng thái cuối.
+  Muốn sửa dữ liệu: nhập lại file đúng (BR-06).
 end note
 @enduml

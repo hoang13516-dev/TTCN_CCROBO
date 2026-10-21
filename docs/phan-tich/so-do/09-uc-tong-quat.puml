@@ -4,72 +4,66 @@ title Sơ đồ Use Case tổng quát — CN-019
 left to right direction
 skinparam packageStyle rectangle
 
-actor "Người xem\n(viewer)" as V
+actor "Quản lý chi nhánh\n(manager)" as MG
 actor "Nhân viên phân tích\n(analyst)" as AN
 actor "Quản trị viên\n(admin)" as AD
-actor "Bộ lập lịch" as SCH <<hệ thống>>
-actor "Hệ thống nguồn ngoài\n(CSDL / REST API)" as EXT <<hệ thống>>
+actor "Hệ thống nguồn API" as EXT <<hệ thống>>
 
 rectangle "Hệ thống Dashboard phân tích dữ liệu bán hàng CN-019" {
   package "Tài khoản & phân tích" {
     usecase "UC01 Đăng nhập" as UC01
     usecase "UC02 Đăng xuất" as UC02
     usecase "UC03 Đổi mật khẩu" as UC03
-    usecase "UC14 Xem dashboard\ntổng quan" as UC14
-    usecase "UC15 Lọc & so sánh\ndữ liệu" as UC15
-    usecase "UC17 Phân tích khách hàng\n(Could)" as UC17
+    usecase "UC12 Xem dashboard KPI" as UC12
+    usecase "UC13 Lọc đa chiều\n& lọc chéo" as UC13
+    usecase "UC14 Drill-down" as UC14
+    usecase "UC15 Xem cảnh báo\nchỉ số bất thường" as UC15
+    usecase "UC17 Xuất báo cáo\nExcel / PDF" as UC17
   }
-  package "Quản lý dữ liệu" {
-    usecase "UC05 Nhập dữ liệu\ntừ file" as UC05
-    usecase "UC06 Ánh xạ cột" as UC06
-    usecase "UC09 Tải file mẫu" as UC09
-    usecase "UC07 Xem lịch sử\n& lỗi nhập" as UC07
-    usecase "UC08 Hủy lần nhập" as UC08
-    usecase "UC16 Xuất báo cáo CSV" as UC16
-    usecase "UC18 Quản lý danh mục\nsản phẩm (Could)" as UC18
+  package "Quản lý dữ liệu (ETL)" {
+    usecase "UC06 Nhập dữ liệu\ntừ file" as UC06
+    usecase "UC07 Ánh xạ cột" as UC07
+    usecase "UC08 Tải file mẫu" as UC08
+    usecase "UC09 Xem lịch sử\n& lỗi nhập" as UC09
+    usecase "UC11 Đồng bộ dữ liệu\ntừ API" as UC11
   }
-  package "Quản trị & nguồn kết nối" {
+  package "Quản trị" {
     usecase "UC04 Quản lý người dùng" as UC04
-    usecase "UC10 Quản lý nguồn\ndữ liệu kết nối" as UC10
-    usecase "UC11 Kiểm tra kết nối" as UC11
-    usecase "UC12 Đồng bộ ngay" as UC12
-    usecase "UC13 Đồng bộ theo lịch" as UC13
+    usecase "UC05 Quản lý chi nhánh" as UC05
+    usecase "UC10 Quản lý nguồn\ndữ liệu" as UC10
+    usecase "UC16 Cấu hình quy tắc\ncảnh báo" as UC16
   }
 }
 
-V --> UC01
-V --> UC02
-V --> UC03
-V --> UC14
-V --> UC17
-UC15 .[norank].> UC14 : <<extend>>
+MG --> UC01
+MG --> UC02
+MG --> UC03
+MG --> UC12
+UC12 .[norank].> UC15 : <<include>>
+UC13 .[norank].> UC12 : <<extend>>
+UC14 .[norank].> UC12 : <<extend>>
+UC17 .[norank].> UC12 : <<extend>>
 
-AN --> UC05
-AN --> UC07
-AN --> UC08
-AN --> UC16
-AN --> UC18
-AN --> UC12
-UC05 .[norank].> UC06 : <<include>>
-UC09 .[norank].> UC05 : <<extend>>
+AN --> UC06
+AN --> UC09
+AN --> UC11
+UC06 .[norank].> UC07 : <<include>>
+UC08 .[norank].> UC06 : <<extend>>
 
 AD --> UC04
+AD --> UC05
 AD --> UC10
-UC10 .[norank].> UC11 : <<include>>
+AD --> UC16
 
-SCH --> UC13
+UC10 --> EXT
 UC11 --> EXT
-UC12 --> EXT
-UC13 --> EXT
 
-V -[hidden]- AN
+MG -[hidden]- AN
 AN -[hidden]- AD
-AD -[hidden]- SCH
-UC12 -[hidden]- UC13
 
 legend bottom
-  Phân cấp tác nhân (xem sơ đồ 09b): Quản trị viên ⊃ Nhân viên phân tích ⊃ Người xem
-  → tác nhân con được thực hiện MỌI use case của tác nhân cha.
-  UC16 Xuất CSV mở rộng (extend) UC14 nhưng chỉ dành cho analyst/admin.
+  Phân cấp tác nhân (sơ đồ 09b): Quản trị viên ⊃ Nhân viên phân tích ⊃ Quản lý chi nhánh
+  → tác nhân con thực hiện được MỌI use case của tác nhân cha.
+  Phạm vi dữ liệu KHÔNG kế thừa: manager chỉ thấy chi nhánh của mình (BR-15).
 endlegend
 @enduml

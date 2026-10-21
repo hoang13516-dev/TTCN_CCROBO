@@ -12,40 +12,37 @@ title Sơ đồ phân rã chức năng (BFD) — CN-019
 ** F1. Tài khoản &\nphân quyền
 *** F1.1 Đăng nhập
 *** F1.2 Đăng xuất
-*** F1.3 Đổi mật khẩu
-*** F1.4 Quản lý người dùng\n(thêm, đổi vai trò,\nkhoá/mở, đặt lại MK)
-** F2. Nhập dữ liệu\ntừ file
-*** F2.1 Tải file lên\n& xem trước
-*** F2.2 Ánh xạ cột\n& lưu mẫu ánh xạ
-*** F2.3 Chuẩn hoá &\nkiểm tra từng dòng
-*** F2.4 Nạp vào kho dữ liệu\n(transaction, idempotent)
-*** F2.5 Lịch sử nhập\n& tải dòng lỗi
-*** F2.6 Hủy lần nhập
-*** F2.7 Tải file mẫu
-** F3. Nguồn dữ liệu\nkết nối
-*** F3.1 Khai báo nguồn CSDL\n(chỉ đọc)
-*** F3.2 Khai báo nguồn\nREST API
-*** F3.3 Kiểm tra kết nối
-*** F3.4 Đồng bộ ngay
-*** F3.5 Đặt lịch đồng bộ
-*** F3.6 Sửa / tạm dừng /\nxoá nguồn
+*** F1.3 Phân quyền &\nphạm vi chi nhánh
+*** F1.4 Đổi mật khẩu
+*** F1.5 Quản lý người dùng
+** F2. Danh mục &\nnguồn dữ liệu
+*** F2.1 Quản lý chi nhánh\n(tỉnh, vùng)
+*** F2.2 Quản lý nguồn\n(file / REST API)
+*** F2.3 Kiểm tra kết nối API
+** F3. ETL — nhập &\nđồng bộ dữ liệu
+*** F3.1 Tải file & xem trước\n(Extract)
+*** F3.2 Ánh xạ cột
+*** F3.3 Chuẩn hoá & kiểm tra\n(Transform)
+*** F3.4 Nạp vào kho\n(Load, idempotent)
+*** F3.5 Lịch sử & dòng lỗi
+*** F3.6 Tải file mẫu
+*** F3.7 Đồng bộ REST API\ntăng dần
 ** F4. Phân tích &\ntrực quan hoá
-*** F4.1 KPI tổng quan +\nso sánh kỳ trước
-*** F4.2 Xu hướng doanh thu\nngày/tuần/tháng
-*** F4.3 Top sản phẩm
-*** F4.4 Theo danh mục
-*** F4.5 Theo kênh bán
-*** F4.6 Bộ lọc thời gian,\nkênh, danh mục, lọc chéo
-*** F4.7 Khách mới / quay lại,\nRFM (Could)
-** F5. Báo cáo &\nchia sẻ
-*** F5.1 Xuất CSV\ntheo bộ lọc
-*** F5.2 Chia sẻ link\ngiữ bộ lọc (URL)
-** F6. Danh mục\ndữ liệu (Could)
-*** F6.1 Xem DS sản phẩm,\ndanh mục, kênh
-*** F6.2 Sửa tên, gán danh mục\ncho sản phẩm
-** F7. Tác vụ hệ thống\n(chạy nền)
-*** F7.1 Làm mới bảng\ntổng hợp (MV)
-*** F7.2 Chạy đồng bộ\ntheo lịch
-*** F7.3 Kiểm tra sức khoẻ\n(/api/health)
-*** F7.4 Dọn job mồ côi\nkhi khởi động
+*** F4.1 6 KPI +\nso sánh kỳ trước
+*** F4.2 Xu hướng doanh thu\n& lợi nhuận
+*** F4.3 Top sản phẩm\ntheo vùng
+*** F4.4 Theo vùng\n& chi nhánh
+*** F4.5 Theo danh mục\n& kênh
+*** F4.6 Bộ lọc đa chiều\n& lọc chéo
+*** F4.7 Drill-down
+** F5. Cảnh báo\nbất thường
+*** F5.1 Đánh giá &\nhiển thị cảnh báo
+*** F5.2 Phát hiện ngày\nbất thường (z-score)
+*** F5.3 Cấu hình\nquy tắc cảnh báo
+** F6. Báo cáo
+*** F6.1 Xuất Excel
+*** F6.2 Xuất PDF
+** F7. Tác vụ\nhệ thống
+*** F7.1 Kiểm tra sức khoẻ
+*** F7.2 Sinh dữ liệu demo
 @endwbs

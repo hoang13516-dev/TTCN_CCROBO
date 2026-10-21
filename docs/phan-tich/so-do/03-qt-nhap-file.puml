@@ -4,74 +4,62 @@ title QT-01 (TO-BE): Nhập dữ liệu bán hàng từ file CSV/Excel
 
 |Nhân viên phân tích|
 start
-:Xuất file đơn hàng từ nguồn
-(POS / sàn TMĐT) — ngoài hệ thống;
-:Mở trang "Nhập dữ liệu", chọn file;
+:Chuẩn bị file (xuất từ POS
+hoặc điền file mẫu — UC08);
+:Chọn nguồn + chọn file;
 |Hệ thống|
-:Kiểm tra đuôi file (.csv/.xlsx)
-và dung lượng (≤ 10 MB);
+:Kiểm tra đuôi, ≤ 5 MB,
+≤ 10.000 dòng, ≤ 30 cột (BR-14);
 if (Hợp lệ?) then (không)
-  :Báo lỗi 400/413
-  "Chỉ nhận .csv/.xlsx ≤ 10 MB";
+  :Báo lỗi 400 kèm lý do;
   stop
 else (có)
 endif
-:Đọc tên cột + 20 dòng đầu (preview);
-:Gợi ý ánh xạ cột
-(ưu tiên mẫu ánh xạ đã lưu, sau đó đoán theo tên cột);
+:**Extract:** đọc tên cột + 10 dòng đầu;
+:Gợi ý ánh xạ theo từ điển đồng nghĩa;
 |Nhân viên phân tích|
 repeat
-  :Xác nhận / sửa ánh xạ cột;
-  :Chọn định dạng ngày (dd/MM/yyyy...);
-  :Đặt giá trị cố định nếu file thiếu cột
-  (vd: kênh = "shopee");
+  :Xác nhận / sửa ánh xạ;
+  :Xem 10 dòng sau chuẩn hoá;
 |Hệ thống|
-repeat while (Đủ các trường bắt buộc?) is (thiếu → báo tên trường)
+repeat while (Đủ trường bắt buộc?) is (thiếu → nêu tên trường)
 ->đủ;
 |Nhân viên phân tích|
-:Bấm "Nhập dữ liệu"
-(tuỳ chọn: lưu mẫu ánh xạ);
+:Bấm "Nhập dữ liệu";
 |Hệ thống|
-:Tạo import_job (pending → running),
-trả 202 + jobId;
-note right: FE hỏi trạng thái mỗi 1 giây
+:Tạo lần nhập (running);
 repeat
-  :Đọc 1 dòng (stream) → áp ánh xạ
-  → chuẩn hoá ngày/số/trạng thái → validate (Zod);
+  :**Transform:** 1 dòng → áp ánh xạ
+  → chuẩn hoá ngày / số / trạng thái / kênh
+  → kiểm tra (Zod, chi nhánh có sẵn);
   if (Dòng hợp lệ?) then (có)
-    :Ghi staging_rows;
+    :Thêm vào danh sách dòng tốt;
   else (không)
-    :Ghi import_errors
-    (số dòng, cột, lý do, dữ liệu gốc);
+    :Thêm lỗi (số dòng, cột, lý do);
   endif
 repeat while (Còn dòng?) is (có)
 ->hết file;
 :Kiểm tra nhất quán theo đơn (BR-07):
-các dòng cùng mã đơn mâu thuẫn → chuyển cả đơn sang lỗi;
-if (Có ≥ 1 dòng hợp lệ?) then (có)
-  :BEGIN TRANSACTION
-  upsert categories → products → customers
-  → channels → orders → order_items;
+đơn mâu thuẫn → mọi dòng của đơn sang lỗi;
+if (Có ≥ 1 dòng tốt?) then (có)
+  :**Load** — BEGIN
+  upsert dim_product, dim_customer, dim_channel
+  DELETE fact_sales của các đơn trong lô
+  INSERT fact_sales;
   if (Lỗi khi ghi?) then (có)
-    :ROLLBACK
-    job = failed;
+    :ROLLBACK → failed;
   else (không)
-    :COMMIT;
-    :REFRESH MATERIALIZED VIEW
-    CONCURRENTLY mv_daily_sales;
-    :job = success (0 lỗi)
-    hoặc partial (có lỗi);
+    :COMMIT → success / partial;
   endif
 else (không)
-  :job = failed nếu có dòng lỗi,
-  success nếu mọi dòng bị bỏ qua (BR-15);
+  :failed (không ghi gì vào kho);
 endif
-:Hiển thị kết quả: tổng / OK / lỗi / bỏ qua;
+:Hiển thị: tổng, hợp lệ, lỗi,
+đơn mới, đơn cập nhật + bảng lỗi;
 |Nhân viên phân tích|
 if (Có dòng lỗi?) then (có)
-  :Tải danh sách dòng lỗi (CSV);
-  :Sửa trong file gốc rồi nhập lại
-  (an toàn: nhập lại không nhân đôi doanh thu);
+  :Tải CSV dòng lỗi, sửa file gốc,
+  nhập lại cả file (an toàn nhờ BR-06);
 else (không)
 endif
 stop

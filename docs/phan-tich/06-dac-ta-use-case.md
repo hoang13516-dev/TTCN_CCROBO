@@ -1,410 +1,280 @@
 # Chương 6. ĐẶC TẢ USE CASE
 
-> **Mẫu đặc tả:** Mã · Tên · Tác nhân · Mục tiêu · Kích hoạt · Tiền điều kiện · Hậu điều kiện (thành công / thất bại) · Luồng chính · Luồng thay thế (A) · Ngoại lệ (E) · Quy tắc · Giao diện & API · **Tiêu chí chấp nhận (AC)** dạng _Cho trước – Khi – Thì_ (Given–When–Then).
+> **Mẫu đặc tả:** Tác nhân · Mục tiêu · Tiền điều kiện · Hậu điều kiện (thành công ✓ / thất bại ✗) · Luồng chính · Luồng thay thế (A) · Ngoại lệ (E) · Quy tắc · API · **Tiêu chí chấp nhận (AC)** dạng _Cho trước – Khi – Thì_.
 >
-> AC là cầu nối sang kiểm thử: **mỗi AC = ít nhất 1 test case** (Supertest cho API, Testing Library hoặc thao tác tay cho UI). Khi tick một bước trong `ke-hoach.md`, các AC tương ứng phải pass.
+> **Mỗi AC = ít nhất 1 test case** (Supertest cho API, Testing Library hoặc thao tác tay cho UI). Một bước trong `ke-hoach.md` chỉ được tick khi các AC tương ứng pass.
 
-Đặc tả đầy đủ cho 14 use case (UC05+UC06, UC10+UC11, UC12+UC13, UC14+UC15 viết chung mục vì dùng chung luồng); 4 use case đơn giản đặc tả rút gọn ở [6.12](#612-đặc-tả-rút-gọn-uc02-uc09-uc17-uc18).
+Đặc tả đầy đủ cho các use case Must có luồng phức tạp (UC01, UC06+UC07, UC11, UC12+UC13+UC14, UC15, UC17); các use case còn lại đặc tả rút gọn ở [6.7](#67-đặc-tả-rút-gọn).
+
+Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-ví-dụ-file-mẫu-mau-du-lieuxlsx-sheet-donhang--đồng-thời-là-bộ-dữ-liệu-kiểm-thử-chuẩn) và 5 chi nhánh khởi tạo (`ke-hoach.md` §5.2).
 
 ---
 
 ## 6.1 UC01 — Đăng nhập
 
-| Mục             | Nội dung                                                                                       |
-| --------------- | ---------------------------------------------------------------------------------------------- |
-| Tác nhân        | Viewer, Analyst, Admin                                                                         |
-| Mục tiêu        | Vào hệ thống với đúng quyền của mình                                                           |
-| Kích hoạt       | Mở trang `/login`, hoặc truy cập trang cần đăng nhập khi chưa có phiên                         |
-| Tiền điều kiện  | Tài khoản tồn tại và đang hoạt động (`is_active = true`)                                       |
-| Hậu điều kiện ✓ | Cookie `token` (httpOnly) được đặt; `users.last_login_at` cập nhật; chuyển tới `next` hoặc `/` |
-| Hậu điều kiện ✗ | Không có cookie; không lộ thông tin email có tồn tại hay không                                 |
+| Mục             | Nội dung                                                       |
+| --------------- | -------------------------------------------------------------- |
+| Tác nhân        | Manager, Analyst, Admin                                        |
+| Tiền điều kiện  | Tài khoản tồn tại và đang hoạt động                            |
+| Hậu điều kiện ✓ | Cookie `token` (httpOnly) được đặt; chuyển tới `next` hoặc `/` |
+| Hậu điều kiện ✗ | Không có cookie; không lộ thông tin email có tồn tại hay không |
+
+**Luồng chính:** 1) Nhập email, mật khẩu, bấm "Đăng nhập". 2) FE kiểm tra định dạng bằng schema `LoginInput`. 3) `POST /api/auth/login`. 4) BE tìm user theo email (không phân biệt hoa thường), `bcrypt.compare`. 5) BE ký JWT `{ sub }` hạn 8 giờ, đặt cookie, trả `{ id, email, fullName, role, branch }`. 6) FE chuyển tới `next` (chỉ nhận đường dẫn nội bộ bắt đầu bằng `/`) hoặc `/`.
+
+**Ngoại lệ:** E1 sai email/mật khẩu → 401 "Sai email hoặc mật khẩu" (vẫn chạy bcrypt với hash giả khi email không tồn tại, để thời gian phản hồi như nhau). E2 tài khoản bị khoá → 401 "Tài khoản đã bị khoá" (chỉ báo khi mật khẩu đúng). E3 quá 10 lần/phút/IP → 429.
+
+**Quy tắc:** BR-17 · **API:** `POST /api/auth/login`, `GET /api/auth/me`
+
+| AC      | Cho trước                            | Khi                     | Thì                                                                   |
+| ------- | ------------------------------------ | ----------------------- | --------------------------------------------------------------------- |
+| AC-01.1 | user `a@x.vn` / `Matkhau1` hoạt động | đăng nhập đúng          | 200, có `Set-Cookie: token=…; HttpOnly`, body không có `passwordHash` |
+| AC-01.2 | như trên                             | sai mật khẩu            | 401, thông báo chung                                                  |
+| AC-01.3 | không có user `b@x.vn`               | đăng nhập `b@x.vn`      | 401, **cùng** thông báo với AC-01.2                                   |
+| AC-01.4 | user bị khoá                         | đăng nhập đúng mật khẩu | 401 "Tài khoản đã bị khoá"                                            |
+| AC-01.5 | đã đăng nhập                         | F5 trang `/`            | vẫn ở `/`, không về `/login`                                          |
+| AC-01.6 | chưa đăng nhập (analyst)             | mở `/imports`           | chuyển `/login?next=/imports`; đăng nhập xong về `/imports`           |
+| AC-01.7 | —                                    | `next=https://evil.com` | bỏ qua `next`, về `/` (chống open redirect)                           |
+
+---
+
+## 6.2 UC06 — Nhập dữ liệu từ file (gồm UC07 Ánh xạ cột)
+
+| Mục             | Nội dung                                                                                                    |
+| --------------- | ----------------------------------------------------------------------------------------------------------- |
+| Tác nhân        | Analyst (+)                                                                                                 |
+| Mục tiêu        | Đưa đơn hàng từ file vào kho, biết chính xác dòng nào lỗi và vì sao                                         |
+| Tiền điều kiện  | Đăng nhập analyst+; có ít nhất một nguồn loại `file` (dòng có chi nhánh chưa khai báo sẽ bị lỗi theo BR-11) |
+| Hậu điều kiện ✓ | 1 lần nhập `success`/`partial`; dòng hợp lệ đã nằm trong `fact_sales`; dòng lỗi nằm trong `import_errors`   |
+| Hậu điều kiện ✗ | Lần nhập `failed`; kho **không thay đổi** (rollback)                                                        |
+| Quy trình       | QT-01 (Hình H3)                                                                                             |
 
 **Luồng chính**
 
-1. Người dùng nhập email, mật khẩu, bấm "Đăng nhập".
-2. FE kiểm tra định dạng (email hợp lệ, mật khẩu không rỗng) bằng schema `LoginInput`.
-3. Gửi `POST /api/auth/login`.
-4. BE tìm user theo email (không phân biệt hoa thường), so sánh `bcrypt.compare`.
-5. BE ký JWT `{ sub, iat }`, hạn 8 giờ, đặt cookie; trả `{ id, email, fullName, role, mustChangePassword }`.
-6. FE chuyển tới `next` (chỉ chấp nhận đường dẫn nội bộ bắt đầu bằng `/`) hoặc `/`.
+| #   | Tác nhân              | Hệ thống                                                                                                                                             |
+| --- | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Chọn nguồn, chọn file |                                                                                                                                                      |
+| 2   |                       | `POST /api/imports/preview` (multipart): kiểm tra BR-14, đọc tên cột + 10 dòng đầu, trả `{ uploadId, columns, sampleRows, suggestedMapping }`        |
+| 3   |                       | **[UC07]** Bảng ánh xạ: mỗi **trường hệ thống** (14 trường §3.5.1) một hàng, dropdown chọn cột của file hoặc "Không dùng"; trường bắt buộc có dấu \* |
+| 4   | Sửa ánh xạ nếu cần    | Hiển thị 10 dòng xem trước **sau chuẩn hoá** (FE dùng **cùng hàm** chuẩn hoá trong `packages/shared`), ô lỗi tô đỏ                                   |
+| 5   | Bấm "Nhập dữ liệu"    | Nút chỉ bật khi đủ trường bắt buộc                                                                                                                   |
+| 6   |                       | `POST /api/imports { uploadId, sourceId, mapping }` → tạo lần nhập `running` → Transform → kiểm tra nhất quán theo đơn → Load 1 transaction          |
+| 7   |                       | Trả và hiển thị **Tổng / Hợp lệ / Lỗi / Đơn mới / Đơn cập nhật** + bảng lỗi + nút "Tải dòng lỗi", "Xem dashboard"                                    |
 
-**Luồng thay thế**
+**Luồng thay thế:** A1 (bước 2) tên cột trùng nhau → tự đổi thành `Tên (2)` và cảnh báo. A2 (bước 7) có lỗi nhưng cũng có dòng hợp lệ → `partial`, dòng hợp lệ đã nạp.
 
-- A1 (sau bước 5) `mustChangePassword = true` → chuyển tới màn hình đổi mật khẩu (UC03), chặn mọi trang khác tới khi đổi xong.
+**Ngoại lệ:** E1 file rỗng → 400 "File không có dữ liệu". E2 vi phạm BR-14 → 400 kèm lý do. E3 `uploadId` hết hạn (> 30 phút) → 410 "Phiên tải file đã hết hạn, hãy chọn lại file". E4 lỗi CSDL khi Load → rollback, `failed`.
 
-**Ngoại lệ**
+**Quy tắc:** BR-06…BR-14 · **API:** `POST /api/imports/preview`, `POST /api/imports`
 
-- E1 Sai email hoặc mật khẩu → 401 "Sai email hoặc mật khẩu". **Vẫn chạy bcrypt với hash giả** khi email không tồn tại để thời gian phản hồi như nhau (chống dò email qua thời gian phản hồi).
-- E2 Tài khoản bị khoá → 401 "Tài khoản đã bị khoá. Liên hệ quản trị viên." (chỉ khi mật khẩu **đúng**, để không lộ trạng thái cho người đoán mò).
-- E3 Quá 10 lần/phút/IP → 429 "Thử lại sau 1 phút".
-
-**Quy tắc:** BR-20, BR-21 · **API:** `POST /api/auth/login`, `GET /api/auth/me`
-
-| AC      | Cho trước                            | Khi                               | Thì                                                                   |
-| ------- | ------------------------------------ | --------------------------------- | --------------------------------------------------------------------- |
-| AC-01.1 | user `a@x.vn` / `Matkhau1` hoạt động | đăng nhập đúng                    | 200, có `Set-Cookie: token=…; HttpOnly`, body không có `passwordHash` |
-| AC-01.2 | như trên                             | sai mật khẩu                      | 401, thông báo chung                                                  |
-| AC-01.3 | không có user `b@x.vn`               | đăng nhập `b@x.vn`                | 401, **cùng** thông báo với AC-01.2                                   |
-| AC-01.4 | user bị khoá                         | đăng nhập đúng mật khẩu           | 401 "Tài khoản đã bị khoá…"                                           |
-| AC-01.5 | đã đăng nhập                         | F5 trang `/`                      | vẫn ở `/`, không về `/login`                                          |
-| AC-01.6 | chưa đăng nhập                       | mở `/imports`                     | chuyển `/login?next=/imports`; đăng nhập xong về `/imports`           |
-| AC-01.7 | —                                    | `next=https://evil.com`           | bỏ qua `next`, về `/` (chống open redirect)                           |
-| AC-01.8 | —                                    | đăng nhập sai 11 lần trong 1 phút | lần 11 → 429                                                          |
-
----
-
-## 6.2 UC03 — Đổi mật khẩu
-
-| Mục             | Nội dung                                                                                                                                              |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Tác nhân        | Viewer, Analyst, Admin (chính mình)                                                                                                                   |
-| Tiền điều kiện  | Đã đăng nhập                                                                                                                                          |
-| Hậu điều kiện ✓ | `password_hash` mới; `password_changed_at = now()`; `must_change_password = false`; **mọi phiên khác bị vô hiệu**; phiên hiện tại được cấp cookie mới |
-
-**Luồng chính:** 1) Nhập mật khẩu hiện tại, mật khẩu mới, nhập lại. 2) FE kiểm tra BR-20 và 2 ô trùng nhau. 3) `PATCH /api/auth/password`. 4) BE kiểm tra mật khẩu hiện tại, kiểm tra BR-20, mới ≠ cũ. 5) Cập nhật, cấp cookie mới, báo "Đã đổi mật khẩu".
-
-**Ngoại lệ:** E1 mật khẩu hiện tại sai → 400 "Mật khẩu hiện tại không đúng". E2 vi phạm BR-20 → 400 kèm lý do cụ thể. E3 mới = cũ → 400.
-
-| AC      | Cho trước                      | Khi                                   | Thì                                          |
-| ------- | ------------------------------ | ------------------------------------- | -------------------------------------------- |
-| AC-03.1 | đăng nhập ở 2 trình duyệt A, B | đổi mật khẩu ở A                      | A vẫn dùng được; B gọi API bất kỳ → 401      |
-| AC-03.2 | —                              | mật khẩu mới `abcdefgh` (không có số) | 400 "Mật khẩu phải có ít nhất 1 chữ và 1 số" |
-| AC-03.3 | user có `must_change_password` | đổi thành công                        | vào được dashboard                           |
+| AC       | Cho trước                                              | Khi                                            | Thì                                                                                                     |
+| -------- | ------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| AC-06.1  | kho rỗng                                               | nhập file mẫu §3.5.2                           | `success`; tổng 3, hợp lệ 3, lỗi 0, đơn mới 2; kho có 3 dòng `fact_sales`                               |
+| AC-06.2  | đã nhập file mẫu                                       | nhập lại **cùng file**                         | đơn mới 0, đơn cập nhật 2; doanh thu ngày 21/10 vẫn **630.000**, số dòng `fact_sales` vẫn 3             |
+| AC-06.3  | —                                                      | Đơn giá `"1.200.000"`; Số lượng `"2.5"`        | đơn giá = 1200000; dòng số lượng `2.5` lỗi "Số lượng phải là số nguyên ≥ 1"                             |
+| AC-06.4  | —                                                      | dòng có Ngày đặt `21/10/2026 00:30`            | `date_key = 20261021` (không bị lùi về 20/10)                                                           |
+| AC-06.5  | file 3 dòng, 1 dòng có mã chi nhánh `XX01`             | nhập                                           | `partial`; lỗi "Chi nhánh 'XX01' chưa được khai báo" ở đúng số dòng; 2 dòng còn lại đã nạp              |
+| AC-06.6  | đơn DH9 có 2 dòng khác Ngày đặt                        | nhập                                           | cả 2 dòng lỗi "Đơn DH9 không nhất quán giữa các dòng ở cột: Ngày đặt"                                   |
+| AC-06.7  | test giả lập lỗi CSDL khi chèn dòng thứ 500            | nhập file 1.000 dòng hợp lệ                    | `failed`; `count(*) fact_sales` không đổi so với trước khi nhập                                         |
+| AC-06.8  | —                                                      | tải file `.xls`; file 6 MB; file 10.001 dòng   | 400 với thông báo tương ứng; không tạo lần nhập                                                         |
+| AC-06.9  | file hợp lệ 10.000 dòng                                | nhập                                           | hoàn tất < 15 s (NFR-02)                                                                                |
+| AC-06.10 | đăng nhập manager                                      | `POST /api/imports/preview`                    | 403                                                                                                     |
+| AC-07.1  | file có cột `Mã chi nhánh`, `Giá vốn`, `Mã khách hàng` | xem trước                                      | gợi ý: `branch_code`, `cost_price`, `customer_code` (**không** gán `Mã khách hàng` cho `customer_name`) |
+| AC-07.2  | ánh xạ thiếu `cost_price`                              | xem bảng ánh xạ; gọi thẳng `POST /api/imports` | nút "Nhập dữ liệu" bị khoá, hiện "Thiếu trường bắt buộc: Giá vốn"; API trả 400 cùng nội dung            |
 
 ---
 
-## 6.3 UC04 — Quản lý người dùng
+## 6.3 UC11 — Đồng bộ dữ liệu từ REST API
 
-| Mục             | Nội dung                                                                                       |
-| --------------- | ---------------------------------------------------------------------------------------------- |
-| Tác nhân        | Admin                                                                                          |
-| Mục tiêu        | Cấp và thu hồi quyền truy cập cho nhân viên                                                    |
-| Tiền điều kiện  | Đăng nhập với vai trò admin                                                                    |
-| Hậu điều kiện ✓ | Thay đổi được lưu; người bị khoá/đổi vai trò chịu ảnh hưởng **ngay ở request kế tiếp** (BR-21) |
+| Mục             | Nội dung                                                                                                        |
+| --------------- | --------------------------------------------------------------------------------------------------------------- |
+| Tác nhân        | Analyst (+); tác nhân phụ: Hệ thống nguồn API                                                                   |
+| Tiền điều kiện  | Nguồn loại `api` đang hoạt động, đã kiểm tra kết nối (UC10)                                                     |
+| Hậu điều kiện ✓ | Đơn mới/sửa từ API nằm trong kho; `last_synced_at` = thời điểm bắt đầu lần đồng bộ; có 1 lần nhập trong lịch sử |
+| Hậu điều kiện ✗ | Lần nhập `failed`; kho và `last_synced_at` **không đổi**                                                        |
+| Quy trình       | QT-02 (Hình H4)                                                                                                 |
 
-**Luồng chính (xem danh sách — luôn chạy, include UC04.1):** 1) Mở "Người dùng". 2) `GET /api/users` → bảng: email, họ tên, vai trò, trạng thái, đăng nhập lần cuối.
+**Luồng chính:** 1) Trên trang "Nguồn dữ liệu", bấm "Đồng bộ ngay" ở một nguồn API. 2) `POST /api/sources/:id/sync`. 3) Hệ thống lấy khoá `pg_try_advisory_lock(source_id)`. 4) Ghi `startedAt`, tạo lần nhập `running` (`trigger = 'sync'`). 5) Gọi `GET {api_url}/orders?updated_since={last_synced_at}&page=1` với header `x-api-key`; lặp tới khi `next_page = null`. 6) Mỗi trang đi qua Transform/Load **chung** với UC06 (không cần ánh xạ vì API trả đúng tên trường §3.5.1). 7) Thành công → `last_synced_at = startedAt`, nhả khoá, trả kết quả như UC06 bước 7.
 
-**Luồng con (extend):**
+**Ngoại lệ:** E1 không lấy được khoá → 409 "Nguồn đang đồng bộ". E2 API trả 401 → `failed` "API key không hợp lệ". E3 mất mạng/timeout/5xx → `failed` "Không kết nối được nguồn API". Mọi ngoại lệ đều nhả khoá và giữ nguyên `last_synced_at`.
 
-- **UC04.2 Thêm:** nhập email, họ tên, vai trò, mật khẩu tạm (hoặc bấm "Tạo ngẫu nhiên") → `POST /api/users` → user mới với `must_change_password = true` → hiển thị mật khẩu tạm **một lần** để admin gửi cho nhân viên.
-- **UC04.3 Đổi vai trò:** chọn vai trò mới → `PATCH /api/users/:id { role }`.
-- **UC04.4 Khoá/Mở khoá:** `PATCH /api/users/:id { isActive }` sau hộp xác nhận.
-- **UC04.5 Đặt lại mật khẩu:** `POST /api/users/:id/reset-password` → mật khẩu tạm mới, `must_change_password = true`, `password_changed_at = now()` (phiên cũ của người đó mất hiệu lực).
+**Quy tắc:** BR-06…BR-13, BR-16 · **API:** `POST /api/sources/:id/sync`
 
-**Ngoại lệ:** E1 email đã tồn tại → 409 "Email đã được sử dụng". E2 admin tự khoá/hạ quyền mình → 400 "Không thể thay đổi vai trò/trạng thái của chính bạn". E3 thao tác làm số admin hoạt động = 0 → 400 (BR-23). E4 mật khẩu tạm vi phạm BR-20 → 400.
-
-> **Vì sao không có "Xoá người dùng"?** `import_jobs.created_by` tham chiếu user. Xoá cứng thì hoặc lỗi FK, hoặc mất dấu vết "ai đã nhập dữ liệu này". Khoá tài khoản (soft disable) đạt cùng mục tiêu "thu hồi quyền" mà giữ được lịch sử.
-
-| AC      | Cho trước                | Khi                                  | Thì                                                                         |
-| ------- | ------------------------ | ------------------------------------ | --------------------------------------------------------------------------- |
-| AC-04.1 | đăng nhập analyst        | `GET /api/users`                     | 403                                                                         |
-| AC-04.2 | admin                    | thêm user email trùng                | 409                                                                         |
-| AC-04.3 | analyst X đang đăng nhập | admin khoá X                         | request kế tiếp của X → 401                                                 |
-| AC-04.4 | chỉ có 1 admin           | admin đó tự đổi vai trò thành viewer | 400, vai trò không đổi                                                      |
-| AC-04.5 | admin                    | đổi viewer Y thành analyst           | Y (không cần đăng nhập lại) gọi `POST /api/imports/preview` → không còn 403 |
+| AC      | Cho trước                                 | Khi                        | Thì                                                           |
+| ------- | ----------------------------------------- | -------------------------- | ------------------------------------------------------------- |
+| AC-11.1 | mock API có 50 đơn, `last_synced_at` rỗng | đồng bộ                    | `success`, 50 đơn mới; `last_synced_at` = thời điểm bắt đầu   |
+| AC-11.2 | sau AC-11.1, mock API thêm 3 đơn mới      | đồng bộ lần 2              | request gửi `updated_since`; 3 đơn mới, 0 đơn cập nhật        |
+| AC-11.3 | tắt mock API giữa chừng (sau trang 1)     | đồng bộ                    | `failed`; `last_synced_at` và `count(*) fact_sales` không đổi |
+| AC-11.4 | một lần đồng bộ đang chạy                 | bấm "Đồng bộ ngay" lần nữa | 409 "Nguồn đang đồng bộ"; không tạo lần nhập thứ hai          |
 
 ---
 
-## 6.4 UC05 — Nhập dữ liệu từ file (gồm UC06 Ánh xạ cột)
+## 6.4 UC12 — Xem dashboard KPI (gồm UC13 Lọc đa chiều & lọc chéo, UC14 Drill-down)
 
-| Mục             | Nội dung                                                                                                                               |
-| --------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| Tác nhân        | Analyst (+)                                                                                                                            |
-| Mục tiêu        | Đưa đơn hàng từ file vào hệ thống, biết chính xác dòng nào lỗi và vì sao                                                               |
-| Kích hoạt       | Bấm "Nhập dữ liệu"                                                                                                                     |
-| Tiền điều kiện  | Đăng nhập analyst+; có file `.csv`/`.xlsx`                                                                                             |
-| Hậu điều kiện ✓ | 1 `import_jobs` trạng thái `success`/`partial`; dữ liệu hợp lệ nằm trong bảng chính; MV đã làm mới; dòng lỗi lưu trong `import_errors` |
-| Hậu điều kiện ✗ | Job `failed`; bảng chính **không thay đổi** (rollback)                                                                                 |
-| Quy trình       | QT-01 (Hình H3)                                                                                                                        |
+| Mục             | Nội dung                                                                                              |
+| --------------- | ----------------------------------------------------------------------------------------------------- |
+| Tác nhân        | Manager (+)                                                                                           |
+| Tiền điều kiện  | Đã đăng nhập                                                                                          |
+| Hậu điều kiện ✓ | Người dùng thấy cảnh báo, 6 KPI, 5 biểu đồ đúng bộ lọc và đúng phạm vi chi nhánh; URL phản ánh bộ lọc |
+| Quy trình       | QT-03 (Hình H5)                                                                                       |
 
-**Luồng chính**
-
-| #   | Tác nhân                                                  | Hệ thống                                                                                                                                                                                                                                                           |
-| --- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| 1   | Chọn file (kéo thả hoặc bấm chọn)                         |                                                                                                                                                                                                                                                                    |
-| 2   |                                                           | `POST /api/imports/preview` (multipart): kiểm tra BR-16, đọc tên cột + 20 dòng đầu, trả `{ previewId, columns, sampleRows, totalRowsEstimate, suggestedMapping, matchedTemplateId? }`. File tạm giữ 30 phút theo `previewId`                                       |
-| 3   |                                                           | **[UC06]** Hiển thị bảng ánh xạ: mỗi **trường hệ thống** (13 trường §3.5.1) một hàng, dropdown chọn cột của file / "Giá trị cố định" / "Không dùng". Trường bắt buộc có dấu \*. Cạnh bảng: 20 dòng xem trước **sau khi chuẩn hoá** để người dùng thấy ngay kết quả |
-| 4   | Sửa ánh xạ, chọn định dạng ngày, đặt kênh cố định nếu cần | Cập nhật bản xem trước theo thời gian thực (chuẩn hoá chạy ở FE bằng **cùng hàm** trong `packages/shared`)                                                                                                                                                         |
-| 5   | (Tuỳ chọn) tích "Lưu mẫu ánh xạ", đặt tên                 |                                                                                                                                                                                                                                                                    |
-| 6   | Bấm "Nhập dữ liệu"                                        | Kiểm tra đủ trường bắt buộc                                                                                                                                                                                                                                        |
-| 7   |                                                           | `POST /api/imports { previewId, mapping, saveTemplate? }` → tạo job `pending` → **202 `{ jobId }`**                                                                                                                                                                |
-| 8   |                                                           | Worker: `running` → đọc stream từng dòng → chuẩn hoá/validate → staging / errors → kiểm tra nhất quán theo đơn (BR-07) → load 1 transaction → refresh MV → `success`/`partial`                                                                                     |
-| 9   | Màn hình tiến độ                                          | FE gọi `GET /api/imports/:jobId` mỗi 1 s: `{ status, processedRows, totalRows }`                                                                                                                                                                                   |
-| 10  |                                                           | Khi xong: hiển thị **Tổng / Hợp lệ / Lỗi / Bỏ qua / Đơn mới / Đơn cập nhật** + nút "Tải dòng lỗi" (nếu có) + "Xem dashboard"                                                                                                                                       |
-
-**Luồng thay thế**
-
-- A1 (bước 2) Tập tên cột khớp một mẫu đã lưu → áp dụng mẫu, hiện thông báo "Đã áp dụng mẫu 'Shopee – xuất đơn'".
-- A2 (bước 3) Định dạng ngày "Tự động" không phân định được → hiện cảnh báo vàng "Không chắc ngày dạng dd/MM hay MM/dd, đang hiểu là dd/MM. Hãy kiểm tra cột Ngày ở bản xem trước".
-- A3 (bước 8) Mọi dòng là đơn trạng thái trung gian → job `success`, 0 đơn, thông báo "Không có đơn hoàn tất để nhập" (BR-08, BR-15).
-- A4 (bước 10) Người dùng rời trang khi job đang chạy → job **vẫn chạy**; xem kết quả sau ở UC07.
-
-**Ngoại lệ**
-
-- E1 Sai đuôi / quá 10 MB / `.xls` → 400 / 413 với hướng dẫn (BR-16).
-- E2 File rỗng, quá 50.000 dòng, quá 50 cột → 400 (không tạo job).
-- E3 Thiếu trường bắt buộc khi bấm Nhập → nút bị vô hiệu, liệt kê trường thiếu.
-- E4 `previewId` hết hạn (> 30 phút) → 410 "Phiên xem trước đã hết hạn, hãy chọn lại file".
-- E5 Lỗi CSDL khi load → rollback, job `failed`, thông báo chung "Không thể lưu dữ liệu, chưa có thay đổi nào được ghi. Vui lòng thử lại."
-
-**Quy tắc:** BR-06…BR-16, BR-19 · **API:** `POST /api/imports/preview`, `POST /api/imports`, `GET /api/imports/:id`, `GET/POST /api/mapping-templates`
-
-| AC       | Cho trước                                               | Khi                                        | Thì                                                                                              |
-| -------- | ------------------------------------------------------- | ------------------------------------------ | ------------------------------------------------------------------------------------------------ |
-| AC-05.1  | file mẫu §3.5.2 (3 dòng)                                | nhập                                       | job `success`; 2 đơn, 3 dòng đơn; doanh thu ngày 21/10/2026 = **630.000**                        |
-| AC-05.2  | đã nhập AC-05.1                                         | nhập lại **cùng file**                     | job `success`; 0 đơn mới, 2 đơn cập nhật; doanh thu vẫn **630.000**                              |
-| AC-05.3  | file 10 dòng, dòng 4 thiếu SKU, dòng 7 số lượng `2.5`   | nhập                                       | `partial`; lỗi ở **dòng 4** và **dòng 7** (đếm cả dòng tiêu đề là dòng 1), đúng tên cột và lý do |
-| AC-05.4  | 2 dòng cùng mã đơn, khác ngày đặt                       | nhập                                       | cả 2 dòng vào lỗi với lý do "không nhất quán… cột: Ngày đặt"                                     |
-| AC-05.5  | CSV lưu từ Excel "CSV UTF-8" (có BOM), cột đầu "Mã đơn" | preview                                    | tên cột đầu là `Mã đơn` (không phải `﻿Mã đơn`)                                                   |
-| AC-05.6  | ô Excel kiểu ngày `21/10/2026 00:30`                    | nhập                                       | đơn thuộc **ngày 21/10** trên dashboard (không bị lùi về 20/10 do UTC)                           |
-| AC-05.7  | ô chữ `"1.200.000"`, `"150.000 ₫"`, `"12,5"`            | chuẩn hoá đơn giá                          | 1200000; 150000; 13                                                                              |
-| AC-05.8  | file `.pdf` / file 11 MB                                | preview                                    | 400 / 413                                                                                        |
-| AC-05.9  | giả lập lỗi ở bước chèn `order_items`                   | nhập                                       | `failed`; `SELECT count(*) FROM orders` không đổi                                                |
-| AC-05.10 | file 10.000 dòng                                        | nhập                                       | xong < 15 s; trong lúc chạy `/api/health` < 500 ms                                               |
-| AC-05.11 | dòng trạng thái `Đang giao`                             | nhập                                       | dòng đếm vào **Bỏ qua**, không vào lỗi                                                           |
-| AC-05.12 | đã lưu mẫu "Shopee"                                     | preview file có cùng tập cột (khác thứ tự) | tự áp dụng mẫu "Shopee"                                                                          |
-| AC-05.13 | viewer                                                  | `POST /api/imports/preview`                | 403                                                                                              |
-
----
-
-## 6.5 UC07 — Xem lịch sử & lỗi nhập
-
-| Mục            | Nội dung                         |
-| -------------- | -------------------------------- |
-| Tác nhân       | Analyst (+)                      |
-| Tiền điều kiện | Đăng nhập analyst+               |
-| Hậu điều kiện  | Không thay đổi dữ liệu (chỉ đọc) |
-
-**Luồng chính:** 1) Mở "Lịch sử nhập". 2) `GET /api/imports?status=&page=` → bảng mới nhất trước: thời gian bắt đầu, nguồn (tên file hoặc tên nguồn), người thực hiện / "Lịch tự động", trạng thái (nhãn màu), Tổng/OK/Lỗi/Bỏ qua, thời lượng. 3) Bấm một dòng → chi tiết + 50 lỗi đầu (`GET /api/imports/:id/errors?page=`).
-
-**Luồng con:** UC07.1 "Tải dòng lỗi" → `GET /api/imports/:id/errors?format=csv` → file `loi-nhap-<id>.csv` (UTF-8 BOM) gồm **các cột gốc** + cột `Dòng` + `Lý do lỗi`. UC08 "Hủy lần nhập" từ màn hình chi tiết.
-
-| AC      | Cho trước                                                  | Khi                        | Thì                                                  |
-| ------- | ---------------------------------------------------------- | -------------------------- | ---------------------------------------------------- |
-| AC-07.1 | job có 3 dòng lỗi                                          | tải CSV lỗi, mở bằng Excel | 3 dòng, tiếng Việt hiển thị đúng, có cột "Lý do lỗi" |
-| AC-07.2 | job do Bộ lập lịch tạo                                     | xem lịch sử                | cột người thực hiện hiển thị "Lịch tự động"          |
-| AC-07.3 | sửa 3 dòng trong file lỗi rồi nhập lại **file lỗi đã sửa** | nhập                       | 3 dòng vào thành công, không ảnh hưởng đơn khác      |
-
----
-
-## 6.6 UC08 — Hủy lần nhập
-
-| Mục             | Nội dung                                                                                  |
-| --------------- | ----------------------------------------------------------------------------------------- |
-| Tác nhân        | Analyst (job của mình), Admin (mọi job)                                                   |
-| Mục tiêu        | Gỡ dữ liệu của một lần nhập nhầm mà không làm hỏng dữ liệu khác                           |
-| Tiền điều kiện  | Job ở trạng thái `success`/`partial`                                                      |
-| Hậu điều kiện ✓ | Đơn thuộc nhóm A bị xoá (dòng đơn xoá theo `ON DELETE CASCADE`); job `undone`; MV làm mới |
-| Quy trình       | QT-04 (Hình H6)                                                                           |
-
-**Luồng chính:** 1) Ở chi tiết job, bấm "Hủy lần nhập". 2) `GET /api/imports/:id/undo-preview` → `{ deletable: A, keptModifiedLater: B, keptPreExisting: C }`. 3) Hộp xác nhận: "Sẽ xoá **A** đơn do lần nhập này tạo. **B** đơn đã được lần nhập sau cập nhật và **C** đơn đã có từ trước sẽ được giữ nguyên. Thao tác không thể hoàn tác." 4) Xác nhận → `POST /api/imports/:id/undo`. 5) BE: kiểm tra lại quyền và trạng thái, lấy khoá ghi (BR-19), xoá A trong 1 transaction, đặt `undone`, commit, refresh MV. 6) Báo "Đã hủy: xoá A đơn".
-
-**Truy vấn cốt lõi:**
-
-```sql
--- preview
-SELECT
-  count(*) FILTER (WHERE created_job_id = $1 AND last_job_id = $1)  AS deletable,
-  count(*) FILTER (WHERE created_job_id = $1 AND last_job_id <> $1) AS kept_modified_later,
-  count(*) FILTER (WHERE created_job_id <> $1 AND last_job_id = $1) AS kept_pre_existing
-FROM orders WHERE created_job_id = $1 OR last_job_id = $1;
--- thực hiện (trong transaction, sau pg_advisory_xact_lock)
-DELETE FROM orders WHERE created_job_id = $1 AND last_job_id = $1;
-```
-
-> Lưu ý: nhóm C chỉ đếm được đơn mà **J là job ghi gần nhất**. Đơn bị J cập nhật rồi lại bị job sau cập nhật tiếp thì không còn dấu vết về J. Điều này không ảnh hưởng kết quả (đơn đó vẫn được giữ), chỉ làm con số C trong thông báo có thể nhỏ hơn thực tế. Ghi vào hạn chế.
-
-**Ngoại lệ:** E1 analyst hủy job của người khác → 403. E2 job `failed`/`undone`/`running` → 409 "Lần nhập này không thể hủy (trạng thái: …)". E3 A = 0 → vẫn cho hủy (đánh dấu `undone`), thông báo "Không có đơn nào bị xoá".
-
-| AC      | Cho trước                    | Khi     | Thì                                                        |
-| ------- | ---------------------------- | ------- | ---------------------------------------------------------- |
-| AC-08.1 | job J1 tạo đơn D1, D2        | hủy J1  | D1, D2 bị xoá; doanh thu giảm đúng phần D1+D2; J1 `undone` |
-| AC-08.2 | J1 tạo D1; J2 cập nhật D1    | hủy J1  | D1 **còn**; preview `keptModifiedLater = 1`                |
-| AC-08.3 | D1 có từ J0; J1 cập nhật D1  | hủy J1  | D1 còn; preview `keptPreExisting = 1`                      |
-| AC-08.4 | analyst X, job của analyst Y | X hủy   | 403                                                        |
-| AC-08.5 | J1 đã `undone`               | hủy lại | 409                                                        |
-
----
-
-## 6.7 UC10 — Quản lý nguồn dữ liệu kết nối (gồm UC11 Kiểm tra kết nối)
-
-| Mục             | Nội dung                                                                                                                                         |
-| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Tác nhân        | Admin (chính); Hệ thống nguồn ngoài (phụ, ở UC11)                                                                                                |
-| Tiền điều kiện  | Đăng nhập admin; biến môi trường `ENCRYPTION_KEY` hợp lệ (32 byte)                                                                               |
-| Hậu điều kiện ✓ | `data_sources` có bản ghi với `config_encrypted`, `column_mapping`, `schedule_cron`; lịch được đăng ký lại ngay (không cần khởi động lại server) |
-| Quy trình       | QT-02 phần (a) (Hình H4)                                                                                                                         |
-
-**Luồng chính (UC10.1 Thêm nguồn CSDL):**
-
-1. Bấm "Thêm nguồn" → chọn "CSDL".
-2. Nhập: tên nguồn, loại CSDL, host, port, database, user, password, SSL (bật/tắt), câu `SELECT`, cột mốc thời gian (tuỳ chọn).
-3. **[UC11]** Bấm "Kiểm tra kết nối" → `POST /api/sources/test` (cấu hình chưa lưu) → BE kết nối (timeout 10 s), chạy câu lệnh trong transaction chỉ đọc với `LIMIT 20` → trả `{ columns, sampleRows }`.
-4. **[UC06]** Ánh xạ cột trên 20 bản ghi mẫu.
-5. Chọn lịch: "Không tự động" / "Mỗi giờ" / "Mỗi ngày lúc HH:mm" / "Nâng cao (cron)".
-6. Bấm "Lưu" (chỉ bật khi bước 3 thành công **với đúng cấu hình hiện tại**; sửa bất kỳ ô kết nối nào → phải kiểm tra lại).
-7. BE: validate, mã hoá cấu hình (AES-256-GCM, IV ngẫu nhiên mỗi lần), lưu, đăng ký lại lịch.
-
-**Luồng con:** UC10.2 Thêm nguồn REST API (như trên với: base URL, tên + giá trị header xác thực, đường dẫn tới mảng dữ liệu, kiểu phân trang, tên tham số mốc thời gian). UC10.3 Sửa (ô bí mật hiển thị `••••`; để trống = giữ nguyên). UC10.4 Tạm dừng/kích hoạt (`is_active`; tạm dừng → huỷ đăng ký lịch). UC10.5 Xoá (hộp xác nhận; dữ liệu đã nhập **giữ nguyên**, `import_jobs.source_id` → `NULL`). UC10.6 Đặt lịch.
-
-**Ngoại lệ (UC11):** E1 sai host/port/timeout → "Không kết nối được tới máy chủ (hết thời gian chờ 10 giây)". E2 sai user/password → "Sai tên đăng nhập hoặc mật khẩu CSDL". E3 câu lệnh không bắt đầu bằng `SELECT`/`WITH` → 400 trước khi kết nối. E4 câu lệnh lỗi cú pháp → hiện thông báo lỗi của CSDL (đã lọc bỏ thông tin kết nối). E5 REST trả 401/403 → "API từ chối xác thực, kiểm tra header". E6 đường dẫn mảng dữ liệu không tồn tại trong JSON → "Không tìm thấy mảng dữ liệu tại 'data'". E7 cron sai cú pháp → 400.
-
-| AC      | Cho trước             | Khi                               | Thì                                                                                                   |
-| ------- | --------------------- | --------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| AC-10.1 | admin                 | lưu nguồn có password `Secret!23` | `SELECT config_encrypted` không chứa chuỗi `Secret!23`; `GET /api/sources/:id` không chứa `Secret!23` |
-| AC-10.2 | nguồn đã lưu          | sửa tên, để trống password        | kiểm tra kết nối vẫn thành công (password cũ được giữ)                                                |
-| AC-10.3 | —                     | câu lệnh `DELETE FROM orders`     | 400, không kết nối tới nguồn                                                                          |
-| AC-10.4 | analyst               | `POST /api/sources`               | 403                                                                                                   |
-| AC-10.5 | nguồn lịch mỗi 2 phút | tạm dừng nguồn                    | không có job mới sau 5 phút                                                                           |
-
----
-
-## 6.8 UC12 — Đồng bộ ngay · UC13 — Đồng bộ theo lịch
-
-Hai use case dùng **chung luồng xử lý**, khác tác nhân kích hoạt và cách phản ứng khi nguồn đang bận.
-
-| Mục                                  | UC12 Đồng bộ ngay                           | UC13 Đồng bộ theo lịch                            |
-| ------------------------------------ | ------------------------------------------- | ------------------------------------------------- |
-| Tác nhân chính                       | Analyst (+)                                 | Bộ lập lịch                                       |
-| Tác nhân phụ                         | Hệ thống nguồn ngoài                        | Hệ thống nguồn ngoài                              |
-| Kích hoạt                            | Bấm "Đồng bộ ngay" ở danh sách nguồn        | Đến thời điểm theo `schedule_cron` (giờ Việt Nam) |
-| Tiền điều kiện                       | Nguồn tồn tại, `is_active = true`           | Như trái + có `schedule_cron`                     |
-| Nguồn đang đồng bộ                   | 409 "Nguồn đang được đồng bộ, vui lòng chờ" | Bỏ qua lần này, ghi log mức info                  |
-| `import_jobs.trigger` / `created_by` | `manual` / id người bấm                     | `schedule` / `NULL`                               |
-
-**Luồng chính (chung):** 1) Lấy khoá `pg_try_advisory_lock(source_id)`. 2) Tạo job `pending` (UC12 trả 202 `{ jobId }`). 3) Giải mã cấu hình trong bộ nhớ. 4) Extract tăng dần từ `last_synced_at` (BR-18): CSDL đọc theo lô 1.000 bản ghi bằng cursor; REST gọi từng trang tới khi hết `next_page`. 5) Mỗi lô → Map (mẫu ánh xạ đã lưu) → chuẩn hoá/validate → staging/errors. 6) Load 1 transaction (như UC05) → refresh MV. 7) Thành công: `last_synced_at = started_at`. 8) Mở khoá (trong `finally`, kể cả khi lỗi).
-
-**Ngoại lệ:** E1 mất kết nối/timeout/429/5xx → retry 3 lần (1 s, 2 s, 4 s) → vẫn lỗi: job `failed`, **giữ** `last_synced_at`. E2 401/403/404 → `failed` ngay, không retry. E3 vượt 200.000 bản ghi/lần → dừng, `failed` "Vượt giới hạn, hãy thêm điều kiện lọc hoặc cột mốc thời gian". E4 nguồn đổi cấu trúc cột (thiếu cột đã ánh xạ) → `failed` "Cột 'X' không còn tồn tại ở nguồn, hãy cập nhật ánh xạ".
-
-| AC      | Cho trước                        | Khi                  | Thì                                                          |
-| ------- | -------------------------------- | -------------------- | ------------------------------------------------------------ |
-| AC-12.1 | mock API có 120 đơn              | đồng bộ lần 1        | 120 đơn vào hệ thống                                         |
-| AC-12.2 | sau AC-12.1, mock thêm 5 đơn mới | đồng bộ lần 2        | job chỉ đọc 5 bản ghi (log), tổng 125 đơn                    |
-| AC-12.3 | tắt mock API giữa chừng          | đồng bộ              | job `failed`; `last_synced_at` không đổi; lần sau lấy lại đủ |
-| AC-12.4 | job đồng bộ nguồn S đang chạy    | bấm "Đồng bộ ngay" S | 409; không có job thứ 2                                      |
-| AC-13.1 | lịch mỗi 2 phút                  | chờ 5 phút           | xuất hiện 2 job `trigger = schedule`                         |
-
----
-
-## 6.9 UC14 — Xem dashboard tổng quan (gồm UC15 Lọc & so sánh)
-
-| Mục            | Nội dung                                                             |
-| -------------- | -------------------------------------------------------------------- |
-| Tác nhân       | Viewer (+)                                                           |
-| Mục tiêu       | Nắm tình hình kinh doanh trong một khoảng thời gian, so với kỳ trước |
-| Kích hoạt      | Mở `/` hoặc một link chia sẻ có tham số lọc                          |
-| Tiền điều kiện | Đã đăng nhập                                                         |
-| Hậu điều kiện  | Không thay đổi dữ liệu; URL phản ánh bộ lọc hiện tại                 |
-| Quy trình      | QT-03 (Hình H5)                                                      |
-
-**Luồng chính**
-
-1. FE đọc tham số URL; thiếu → mặc định BR-22 (30 ngày, mọi kênh, mọi danh mục, độ chi tiết tự động).
-2. FE gọi **song song** 5 API với cùng bộ lọc (TanStack Query, khoá cache = bộ lọc).
-3. Hiển thị bố cục:
+**Bố cục** (≥ 1280 px; ở 375 px các khối xếp dọc, KPI lưới 2 cột):
 
 ```
-┌───────────────────────────────────────────────────────────────────────┐
-│ [Thời gian ▾ 30 ngày gần nhất]  [Kênh ▾ Tất cả]  [Danh mục ▾ Tất cả]  │
-│                                   [Xoá lọc]  [Xuất CSV ▾] (analyst+)  │
-├────────────────┬────────────────┬────────────────┬────────────────────┤
-│ Doanh thu      │ Số đơn         │ Giá trị TB/đơn │ Khách hàng ⓘ       │
-│ 125.400.000 ₫  │ 812            │ 154.433 ₫      │ 530                │
-│ ▲ +12,5 %      │ ▲ +8,1 %       │ ▲ +4,1 %       │ ▼ −2,0 %           │
-├────────────────┴────────────────┴────────────────┴────────────────────┤
-│ Xu hướng doanh thu                       [Ngày | Tuần | Tháng]        │
-│ (biểu đồ đường)                                                       │
-├───────────────────────────────────┬───────────────────────────────────┤
-│ Top 10 sản phẩm [Doanh thu|SL]    │ Theo danh mục (donut)             │
-├───────────────────────────────────┴───────────────────────────────────┤
-│ Theo kênh (cột: doanh thu + số đơn)                                   │
-├───────────────────────────────────────────────────────────────────────┤
-│ Dữ liệu cập nhật lúc 08:42 21/10/2026                                 │
-└───────────────────────────────────────────────────────────────────────┘
-  Màn hình 375 px: các khối xếp dọc, KPI thành lưới 2×2.
+┌ Bộ lọc: [30 ngày ▾] [Chi nhánh ▾] [Danh mục ▾] [Kênh ▾]   [Xoá lọc]  [Xuất Excel] [Xuất PDF] ┐
+├ ⚠ Cảnh báo (UC15) ───────────────────────────────────────────────────────────────────────────┤
+├ Doanh thu │ Lợi nhuận gộp │ Biên lợi nhuận │ Số đơn │ AOV │ Tỷ lệ giữ chân   (mỗi thẻ có delta) ┤
+├ Xu hướng doanh thu & lợi nhuận   Năm 2026 › Quý 4 › Tháng 10   (click điểm để drill) ──────────┤
+├ Theo vùng (click → chi nhánh)            │ Top 10 sản phẩm   vùng: [Tất cả ▾]                 ┤
+├ Theo danh mục (donut, click → sản phẩm)  │ Theo kênh (cột)                                    ┤
+└ Dữ liệu đến hết ngày 21/10/2026 ─────────────────────────────────────────────────────────────┘
 ```
 
-**Luồng mở rộng UC15:**
+**Luồng chính (UC12):** 1) Mở `/`. 2) FE đọc bộ lọc từ URL, thiếu thì dùng mặc định (BR-18). 3) Gọi song song: `summary`, `trend`, `top-products`, `by-region`, `by-category`, `by-channel`, `alerts`. 4) Server: `requireAuth` → `applyBranchScope` → validate → SQL trên `fact_sales` JOIN `dim_*`. 5) Hiển thị; mỗi khối tự xử lý trạng thái tải/rỗng/lỗi.
 
-- UC15.1 Chọn preset hoặc khoảng tuỳ chọn → URL cập nhật `from`, `to` → gọi lại API.
-- UC15.2 Chọn nhiều kênh/danh mục (danh sách từ `GET /api/catalog/channels|categories`) → `channel=shopee,store`.
-- UC15.3 Click một lát donut / một cột kênh → thêm giá trị đó vào bộ lọc tương ứng.
-- UC14.6 Đổi độ chi tiết ngày/tuần/tháng → chỉ gọi lại API xu hướng.
+**UC13 (extend):** đổi bộ lọc → URL cập nhật (`?from=&to=&branch=&category=&channel=&level=`) → mọi khối tải lại. Click một vùng/danh mục/kênh trên biểu đồ → thêm vào bộ lọc tương ứng (lọc chéo). "Xoá lọc" → về mặc định.
 
-**Hợp đồng API (tóm tắt, chi tiết ở `docs/api.md` – S4.1):**
+**UC14 (extend):** click một điểm trên xu hướng ở cấp `month` → bộ lọc thời gian = tháng đó, cấp = `day`; breadcrumb "Năm › Quý › Tháng" để quay lên. Click một vùng → biểu đồ chuyển sang các chi nhánh của vùng đó. Click một danh mục → bảng các sản phẩm của danh mục đó.
 
-| API             | Tham số ngoài bộ lọc chung                | Trả về                                                                                                        |
-| --------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
-| `summary`       | —                                         | `{ revenue, orders, aov, customers, previous: {…}, delta: { revenue, orders, aov, customers }, refreshedAt }` |
-| `revenue-trend` | `granularity=day\|week\|month`            | `[{ period: "2026-10-01", revenue, orders }]`, **đủ mọi kỳ** (kỳ trống = 0)                                   |
-| `top-products`  | `limit=5\|10\|20`, `by=revenue\|quantity` | `[{ sku, name, quantity, revenue, share }]`                                                                   |
-| `by-category`   | —                                         | `[{ categoryId, name, revenue, share }]`                                                                      |
-| `by-channel`    | —                                         | `[{ channelCode, name, revenue, orders }]`                                                                    |
+**Ngoại lệ:** E1 tham số sai (BR-18, cấp không thuộc whitelist) → 400 với thông báo; FE hiển thị lỗi và giữ bộ lọc cũ.
 
-Bộ lọc chung: `from`, `to` (bắt buộc), `channel`, `category` (danh sách phân tách bằng dấu phẩy, tuỳ chọn).
+**Quy tắc:** BR-01…BR-05, BR-15, BR-18, BR-19, BR-21 · **API:** `GET /api/analytics/*`, `GET /api/branches`, `GET /api/catalog/*`
 
-**Ngoại lệ:** E1 `from > to`, sai định dạng, khoảng > 3 năm, `granularity=day` với khoảng > 400 ngày → 400, FE hiện lỗi dưới bộ chọn ngày. E2 không có dữ liệu → mọi KPI = 0, AOV "—", delta "—", biểu đồ hiện "Chưa có dữ liệu trong khoảng này" (**không** lỗi 500). E3 một API lỗi → chỉ khối đó hiện "Không tải được – Thử lại", các khối khác vẫn hiển thị. E4 tham số URL rác (`channel=<script>`) → bỏ qua giá trị không có trong danh sách kênh.
-
-| AC       | Cho trước                               | Khi                                          | Thì                                                                                           |
-| -------- | --------------------------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| AC-14.1  | dữ liệu AC-05.1                         | xem 21/10/2026–21/10/2026                    | Doanh thu 630.000; Số đơn 1; AOV 630.000; Khách 1                                             |
-| AC-14.2  | không có đơn trong tháng 01/2020        | xem tháng 01/2020                            | 200; KPI 0; AOV `null` → "—"                                                                  |
-| AC-14.3  | đơn ngày 01/10 và 03/10, không có 02/10 | xu hướng theo ngày 01–03/10                  | 3 điểm, điểm 02/10 = 0                                                                        |
-| AC-14.4  | kỳ trước doanh thu 0, kỳ này 100.000    | xem                                          | delta `null`, hiển thị "Mới"                                                                  |
-| AC-14.5  | —                                       | `from=2026-10-10&to=2026-10-01`              | 400                                                                                           |
-| AC-14.6  | —                                       | `granularity=day;DROP TABLE orders`          | 400 (whitelist), không lỗi SQL                                                                |
-| AC-14.7  | đang lọc kênh `shopee`                  | copy URL, mở ở trình duyệt khác đã đăng nhập | thấy đúng bộ lọc `shopee`                                                                     |
-| AC-14.8  | chọn kênh `shopee`                      | xem                                          | mọi KPI/biểu đồ khớp câu SQL đối chiếu chỉ lấy kênh shopee                                    |
-| AC-14.9  | màn hình 375 px                         | xem                                          | không cuộn ngang; KPI lưới 2×2                                                                |
-| AC-14.10 | đơn A gồm 2 sản phẩm                    | xem số đơn                                   | đếm **1** (không phải 2), xem cảnh báo "Bẫy MV" ở §3.3.1                                      |
-| AC-14.11 | đang xem mọi danh mục                   | click lát "Áo" trên donut                    | URL thêm `category=<id Áo>`; mọi KPI/biểu đồ chỉ còn danh mục Áo; nút "Xoá lọc" đưa về như cũ |
+| AC      | Cho trước                                                   | Khi                                                  | Thì                                                                                                     |
+| ------- | ----------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| AC-12.1 | kho chỉ có file mẫu §3.5.2                                  | xem 21/10/2026–21/10/2026                            | Doanh thu 630.000; Lợi nhuận 250.000; Biên 39,7 %; Số đơn 1; AOV 630.000                                |
+| AC-12.2 | không có đơn trong tháng 01/2020                            | xem tháng 01/2020                                    | 200; Doanh thu 0; Biên, AOV, Tỷ lệ giữ chân hiển thị "—"; khối biểu đồ hiện "Chưa có dữ liệu…"          |
+| AC-12.3 | kỳ trước khách {A, B, C}, kỳ này {A, B, D} + 1 đơn khách lẻ | xem                                                  | Tỷ lệ giữ chân **66,7 %**                                                                               |
+| AC-12.4 | kỳ trước doanh thu 0, kỳ này 100.000                        | xem                                                  | delta Doanh thu hiển thị "Mới"                                                                          |
+| AC-12.5 | màn hình 375 px                                             | xem                                                  | không cuộn ngang; KPI lưới 2 cột                                                                        |
+| AC-12.6 | đơn A gồm 2 sản phẩm                                        | xem số đơn                                           | đếm **1**, không phải 2                                                                                 |
+| AC-13.1 | —                                                           | `from=2026-10-10&to=2026-10-01`                      | 400                                                                                                     |
+| AC-13.2 | đang lọc chi nhánh `HN01`, danh mục `Áo`                    | copy URL, mở ở trình duyệt khác đã đăng nhập (admin) | thấy đúng bộ lọc và đúng số liệu                                                                        |
+| AC-13.3 | đang xem mọi vùng                                           | click cột "Miền Nam" trên biểu đồ theo vùng          | URL thêm bộ lọc chi nhánh Miền Nam; mọi KPI/biểu đồ chỉ còn Miền Nam; "Xoá lọc" đưa về như cũ           |
+| AC-13.4 | manager của `DN01`                                          | gọi `GET /api/analytics/summary?branch=HCM01`        | 200, số liệu **của DN01** (tham số bị ghi đè); bằng đúng kết quả của admin lọc `branch=DN01`            |
+| AC-14.1 | xem năm 2026, cấp `month`                                   | click điểm tháng 10                                  | cấp `day`, 31 điểm, ngày không có đơn = 0; breadcrumb "2026 › Tháng 10"; click "2026" quay về cấp tháng |
+| AC-14.2 | —                                                           | `level=hour` hoặc `level=day;DROP TABLE fact_sales`  | 400 (whitelist), không lỗi SQL                                                                          |
+| AC-14.3 | đang xem mọi danh mục                                       | click lát "Áo" trên donut                            | hiện bảng sản phẩm thuộc "Áo"; tổng doanh thu bảng = doanh thu lát "Áo"                                 |
 
 ---
 
-## 6.10 UC16 — Xuất báo cáo CSV
+## 6.5 UC15 — Xem cảnh báo chỉ số bất thường
 
-| Mục            | Nội dung                                     |
-| -------------- | -------------------------------------------- |
-| Tác nhân       | Analyst (+)                                  |
-| Tiền điều kiện | Đang xem dashboard với một bộ lọc            |
-| Hậu điều kiện  | Tải về file `bao-cao-<loai>-<from>_<to>.csv` |
+| Mục             | Nội dung                                                                                   |
+| --------------- | ------------------------------------------------------------------------------------------ |
+| Tác nhân        | Manager (+) — luôn được gọi khi xem dashboard (UC12 include UC15)                          |
+| Hậu điều kiện ✓ | Danh sách cảnh báo khớp đúng bộ lọc và phạm vi chi nhánh; không có cảnh báo → khối được ẩn |
 
-**Luồng chính:** 1) Bấm "Xuất CSV" → chọn loại: Doanh thu theo ngày / Top sản phẩm / Theo danh mục / Theo kênh. 2) `GET /api/export/csv?report=…&from=…&to=…&channel=…&category=…`. 3) BE dùng **cùng hàm truy vấn** với API analytics tương ứng (đảm bảo số khớp), ghi BOM `﻿` + tiêu đề tiếng Việt + dữ liệu; tiền là số nguyên không định dạng (để Excel tính toán được). 4) Trình duyệt tải file.
+**Luồng chính:** 1) FE gọi `GET /api/alerts?<bộ lọc>`. 2) Server áp phạm vi chi nhánh, đọc các quy tắc đang bật. 3) Với quy tắc `drop_vs_previous`/`below_threshold`: dùng lại kết quả tính KPI kỳ này + kỳ trước (cùng hàm với `summary`). 4) Với quy tắc `daily_zscore`: tính z-score cho từng ngày trong khoảng lọc. 5) Trả danh sách `{ ruleCode, severity, metric, value, previous?, threshold, message }`, sắp `critical` trước. 6) FE hiển thị, ví dụ: 🔴 "Biên lợi nhuận 12,4 % thấp hơn ngưỡng 15 %"; 🟡 "Doanh thu giảm 25,0 % so với kỳ trước (ngưỡng 20 %)"; 🟡 "Ngày 14/10/2026 doanh thu bất thường (z = −2,6)".
 
-**Ngoại lệ:** E1 viewer gọi → 403 (nút cũng bị ẩn). E2 bộ lọc không hợp lệ → 400 như UC14.
+**Quy tắc:** BR-05, BR-15, BR-20 · **API:** `GET /api/alerts`
 
-| AC      | Cho trước       | Khi                             | Thì                                                                       |
-| ------- | --------------- | ------------------------------- | ------------------------------------------------------------------------- |
-| AC-16.1 | bộ lọc tháng 10 | xuất "Theo kênh", mở bằng Excel | tiếng Việt đúng; tổng doanh thu trong file = KPI Doanh thu trên dashboard |
-| AC-16.2 | —               | xuất "Top sản phẩm"             | file **không** chứa tên/SĐT khách (NFR-18)                                |
-
----
-
-## 6.11 UC06 — Ánh xạ cột (đặc tả riêng các điểm dùng chung)
-
-UC06 được include bởi UC05 (file) và UC10 (nguồn kết nối). Hành vi đã mô tả ở UC05 bước 3–5; các điểm **bắt buộc thống nhất**:
-
-| #   | Quy định                                                                                                                                      |
-| --- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Danh sách trường và quy tắc lấy từ **một nguồn duy nhất**: `packages/shared/src/schemas/import.ts` (FE hiển thị, BE validate cùng một schema) |
-| 2   | Một cột của file có thể được ánh xạ cho **tối đa một** trường (chọn trùng → cảnh báo)                                                         |
-| 3   | Mỗi trường: đúng một trong `column` / `constant` / không dùng; trường bắt buộc không được "không dùng"                                        |
-| 4   | Gợi ý (FR-12) chỉ là **đề xuất**; người dùng luôn xác nhận trước khi nhập                                                                     |
-| 5   | Mẫu ánh xạ lưu theo §3.5.4; tên mẫu duy nhất                                                                                                  |
-
-| AC      | Cho trước                                          | Khi                              | Thì                                               |
-| ------- | -------------------------------------------------- | -------------------------------- | ------------------------------------------------- |
-| AC-06.1 | file có cột "Mã đơn hàng", "SL", "Đơn giá"         | preview                          | gợi ý đúng `order_code`, `quantity`, `unit_price` |
-| AC-06.2 | file Shopee không có cột kênh                      | đặt `channel` = cố định "shopee" | mọi đơn nhập vào có kênh `shopee`                 |
-| AC-06.3 | chọn cùng cột "Giá" cho `unit_price` và `discount` | —                                | cảnh báo chọn trùng                               |
+| AC      | Cho trước                                          | Khi                        | Thì                                                                  |
+| ------- | -------------------------------------------------- | -------------------------- | -------------------------------------------------------------------- |
+| AC-15.1 | R1 bật (ngưỡng 20 %); doanh thu kỳ trước 1.000.000 | kỳ này 750.000 (−25 %)     | có cảnh báo R1 mức warning; kỳ này 850.000 (−15 %) → **không** có R1 |
+| AC-15.2 | R3 bật (ngưỡng 15 %)                               | biên lợi nhuận kỳ này 10 % | có cảnh báo R3 mức critical, đứng đầu danh sách                      |
+| AC-15.3 | R1 bị tắt                                          | doanh thu giảm 50 %        | không có cảnh báo R1                                                 |
+| AC-15.4 | chỉ chi nhánh HCM01 sụt giảm; manager của HN01     | xem dashboard              | không thấy cảnh báo sụt giảm của HCM01                               |
 
 ---
 
-## 6.12 Đặc tả rút gọn: UC02, UC09, UC17, UC18
+## 6.6 UC17 — Xuất báo cáo Excel/PDF
 
-| UC                                    | Tác nhân    | Luồng chính                                                                                                                               | Ngoại lệ / quy tắc                                   | AC chính                                                                                         |
-| ------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| **UC02** Đăng xuất                    | Viewer (+)  | Bấm "Đăng xuất" → `POST /api/auth/logout` → xoá cookie (`Max-Age=0`) → về `/login`                                                        | Gọi khi đã hết phiên → vẫn 204                       | Sau đăng xuất, nút Back của trình duyệt không xem được dữ liệu (API trả 401, FE chuyển `/login`) |
-| **UC09** Tải file mẫu                 | Analyst (+) | Ở trang nhập, bấm "Tải file mẫu" → `GET /api/imports/template` → `mau-du-lieu.xlsx` (§3.5.2 + sheet hướng dẫn)                            | —                                                    | Nhập **ngay** file mẫu vừa tải (không sửa) → `success`                                           |
-| **UC17** Phân tích khách hàng (Could) | Viewer (+)  | Tab "Khách hàng": số khách mới (đơn `completed` đầu tiên rơi vào kỳ) vs quay lại, theo tháng; bảng phân nhóm RFM 3×3×3 (theo tam phân vị) | Bỏ qua khách lẻ (BR-05); không hiển thị SĐT (NFR-18) | Khách có đơn đầu tiên ở tháng 9 và đơn tiếp ở tháng 10 → tháng 10 tính là "quay lại"             |
-| **UC18** Quản lý danh mục SP (Could)  | Analyst (+) | Danh sách sản phẩm (tìm theo SKU/tên) → sửa tên, chọn danh mục; danh sách kênh → sửa tên hiển thị                                         | Sửa xong phải refresh MV (danh mục nằm trong MV)     | Đổi danh mục SP X từ "Chưa phân loại" sang "Áo" → biểu đồ danh mục cập nhật                      |
+| Mục             | Nội dung                                                                             |
+| --------------- | ------------------------------------------------------------------------------------ |
+| Tác nhân        | Manager (+)                                                                          |
+| Tiền điều kiện  | Đang xem dashboard với một bộ lọc                                                    |
+| Hậu điều kiện ✓ | Người dùng có file `.xlsx` hoặc `.pdf` mà số liệu **khớp** dashboard với cùng bộ lọc |
+
+**Luồng chính — Excel:** 1) Bấm "Xuất Excel". 2) `GET /api/reports/excel?<bộ lọc>` (đã áp phạm vi chi nhánh). 3) Server gọi lại các hàm phân tích, ghi 5 sheet bằng exceljs (tiền định dạng `#,##0`), trả file `bao-cao_<from>_<to>.xlsx`.
+
+**Luồng chính — PDF:** 1) Bấm "Xuất PDF" → mở `/report?<bộ lọc>` (trang báo cáo bố cục A4, không có thanh điều hướng). 2) Trang tải dữ liệu từ cùng các API, hiện tiêu đề, bộ lọc đang áp dụng, thời điểm xuất, cảnh báo, KPI, biểu đồ, bảng top sản phẩm. 3) Khi tải xong, gọi `window.print()`; người dùng chọn "Lưu thành PDF".
+
+**Quy tắc:** BR-15, BR-21; dữ liệu xuất **chỉ** là số liệu tổng hợp, không có tên/mã khách.
+
+| AC      | Cho trước            | Khi                       | Thì                                                                                       |
+| ------- | -------------------- | ------------------------- | ----------------------------------------------------------------------------------------- |
+| AC-17.1 | bộ lọc tháng 10/2026 | xuất Excel, mở bằng Excel | 5 sheet, tiếng Việt đúng; tổng doanh thu sheet "Tổng quan" = KPI Doanh thu trên dashboard |
+| AC-17.2 | manager của DN01     | xuất Excel                | mọi sheet chỉ có số liệu DN01                                                             |
+| AC-17.3 | —                    | xuất PDF trên Chrome      | 1–2 trang A4, không mất biểu đồ, có tiêu đề, bộ lọc, thời điểm xuất                       |
+| AC-17.4 | —                    | xuất Excel                | không sheet nào chứa tên hoặc mã khách                                                    |
+
+---
+
+## 6.7 Đặc tả rút gọn
+
+### UC02 — Đăng xuất
+
+`POST /api/auth/logout` → xoá cookie → FE về `/login`.
+
+| AC      | Cho trước    | Khi       | Thì                                     |
+| ------- | ------------ | --------- | --------------------------------------- |
+| AC-02.1 | đã đăng nhập | đăng xuất | cookie bị xoá; `GET /api/auth/me` → 401 |
+
+### UC03 — Đổi mật khẩu
+
+Nhập mật khẩu hiện tại, mật khẩu mới, nhập lại → `PATCH /api/auth/password` → kiểm tra mật khẩu hiện tại và BR-17 → cập nhật.
+
+| AC      | Cho trước | Khi                                   | Thì                                          |
+| ------- | --------- | ------------------------------------- | -------------------------------------------- |
+| AC-03.1 | —         | mật khẩu hiện tại sai                 | 400 "Mật khẩu hiện tại không đúng"           |
+| AC-03.2 | —         | mật khẩu mới `abcdefgh` (không có số) | 400 "Mật khẩu phải có ít nhất 1 chữ và 1 số" |
+
+### UC04 — Quản lý người dùng
+
+Danh sách (email, họ tên, vai trò, chi nhánh, trạng thái) → thêm / đổi vai trò, chi nhánh / khoá-mở / đặt lại mật khẩu tạm. Không có "xoá" (giữ lịch sử ai đã nhập dữ liệu).
+
+| AC      | Cho trước                | Khi                                           | Thì                                                 |
+| ------- | ------------------------ | --------------------------------------------- | --------------------------------------------------- |
+| AC-04.1 | đăng nhập analyst        | `GET /api/users`                              | 403                                                 |
+| AC-04.2 | admin                    | tạo user vai trò `manager` không có chi nhánh | 400 "Quản lý chi nhánh phải được gán một chi nhánh" |
+| AC-04.3 | manager X đang đăng nhập | admin khoá X                                  | request kế tiếp của X → 401                         |
+| AC-04.4 | chỉ có 1 admin           | admin đó tự đổi vai trò hoặc tự khoá          | 400, không thay đổi                                 |
+
+### UC05 — Quản lý chi nhánh
+
+Danh sách → thêm/sửa (mã, tên, tỉnh, vùng), ngừng hoạt động. Không xoá chi nhánh đã có dữ liệu.
+
+| AC      | Cho trước    | Khi                        | Thì                     |
+| ------- | ------------ | -------------------------- | ----------------------- |
+| AC-05.1 | đã có `HN01` | thêm chi nhánh mã `hn01`   | 409 (mã viết hoa trùng) |
+| AC-05.2 | —            | thêm chi nhánh vùng `east` | 400                     |
+
+### UC08 — Tải file mẫu
+
+`GET /api/imports/template` → `mau-du-lieu.xlsx` (sheet `DonHang` có tiêu đề chuẩn + 3 dòng §3.5.2; sheet `HuongDan` giải thích 14 cột).
+
+| AC      | Cho trước | Khi                                          | Thì                            |
+| ------- | --------- | -------------------------------------------- | ------------------------------ |
+| AC-08.1 | kho rỗng  | tải file mẫu rồi nhập ngay, không sửa ánh xạ | `success`; kết quả như AC-06.1 |
+
+### UC09 — Xem lịch sử & lỗi nhập
+
+Bảng lần nhập (mới nhất trước): thời gian, nguồn, tên file, người thực hiện, trạng thái, Tổng/Hợp lệ/Lỗi/Đơn mới/Đơn cập nhật; lọc theo trạng thái; nút "Tải dòng lỗi".
+
+| AC      | Cho trước              | Khi                         | Thì                                                           |
+| ------- | ---------------------- | --------------------------- | ------------------------------------------------------------- |
+| AC-09.1 | đã có 2 lần nhập       | mở "Lịch sử nhập"           | 2 dòng, đúng thống kê và người thực hiện                      |
+| AC-09.2 | lần nhập có 1 dòng lỗi | tải dòng lỗi, mở bằng Excel | tiếng Việt đúng (UTF-8 BOM); có các cột gốc + cột "Lý do lỗi" |
+
+### UC10 — Quản lý nguồn dữ liệu
+
+Danh sách nguồn (loại, tên, trạng thái, lần đồng bộ cuối) → thêm/sửa nguồn `file` (tên) hoặc `api` (tên, URL, API key) → "Kiểm tra kết nối" cho nguồn API.
+
+| AC      | Cho trước               | Khi                          | Thì                                                       |
+| ------- | ----------------------- | ---------------------------- | --------------------------------------------------------- |
+| AC-10.1 | nguồn API có key `demo` | `GET /api/sources` (admin)   | response **không** chứa chuỗi `demo`; key hiển thị `••••` |
+| AC-10.2 | như trên                | sửa tên, để trống ô API key  | key trong CSDL vẫn là `demo`                              |
+| AC-10.3 | —                       | kiểm tra kết nối với key sai | thông báo "API key không hợp lệ (401)"; không lộ key      |
+
+### UC16 — Cấu hình quy tắc cảnh báo
+
+Bảng 5 quy tắc (BR-20): bật/tắt, ngưỡng, mức → `PATCH /api/alert-rules/:id`.
+
+| AC      | Cho trước                           | Khi                                   | Thì                   |
+| ------- | ----------------------------------- | ------------------------------------- | --------------------- |
+| AC-16.1 | đăng nhập analyst                   | `PATCH /api/alert-rules/1`            | 403                   |
+| AC-16.2 | doanh thu giảm 15 %, R1 ngưỡng 20 % | admin đổi R1 thành 10 %, F5 dashboard | cảnh báo R1 xuất hiện |
+
+---
+
+**Thống kê:** 61 AC — UC01 7 · UC02 1 · UC03 2 · UC04 4 · UC05 2 · UC06 10 · UC07 2 · UC08 1 · UC09 2 · UC10 3 · UC11 4 · UC12 6 · UC13 4 · UC14 3 · UC15 4 · UC16 2 · UC17 4.
