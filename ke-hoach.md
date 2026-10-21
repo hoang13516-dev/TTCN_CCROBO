@@ -189,8 +189,8 @@ channels(id, code UNIQUE, display_name)
 
 orders(id, external_code, channel_id FK, customer_id FK NULL,
        ordered_at TIMESTAMPTZ, status CHECK IN ('completed','cancelled','returned'),
-       source_id FK NULL, created_job_id FK NULL, last_job_id FK NULL, updated_at,
-       UNIQUE(channel_id, external_code))        -- phương án (b) của O-03; chốt ở S1.1
+       source_id FK NOT NULL, created_job_id FK NULL, last_job_id FK NULL, updated_at,
+       UNIQUE(source_id, external_code))         -- O-03 đã chốt: theo nguồn (NOT NULL vì UNIQUE bỏ qua NULL)
 order_items(id, order_id FK ON DELETE CASCADE, product_id FK,
             quantity INT CHECK > 0, unit_price BIGINT CHECK >= 0, discount BIGINT DEFAULT 0 CHECK >= 0)
 
