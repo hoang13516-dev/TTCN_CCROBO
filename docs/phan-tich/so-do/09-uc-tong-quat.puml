@@ -1,0 +1,75 @@
+@startuml 09-uc-tong-quat
+!include _style.iuml
+title Sơ đồ Use Case tổng quát — CN-019
+left to right direction
+skinparam packageStyle rectangle
+
+actor "Người xem\n(viewer)" as V
+actor "Nhân viên phân tích\n(analyst)" as AN
+actor "Quản trị viên\n(admin)" as AD
+actor "Bộ lập lịch" as SCH <<hệ thống>>
+actor "Hệ thống nguồn ngoài\n(CSDL / REST API)" as EXT <<hệ thống>>
+
+rectangle "Hệ thống Dashboard phân tích dữ liệu bán hàng CN-019" {
+  package "Tài khoản & phân tích" {
+    usecase "UC01 Đăng nhập" as UC01
+    usecase "UC02 Đăng xuất" as UC02
+    usecase "UC03 Đổi mật khẩu" as UC03
+    usecase "UC14 Xem dashboard\ntổng quan" as UC14
+    usecase "UC15 Lọc & so sánh\ndữ liệu" as UC15
+    usecase "UC17 Phân tích khách hàng\n(Could)" as UC17
+  }
+  package "Quản lý dữ liệu" {
+    usecase "UC05 Nhập dữ liệu\ntừ file" as UC05
+    usecase "UC06 Ánh xạ cột" as UC06
+    usecase "UC09 Tải file mẫu" as UC09
+    usecase "UC07 Xem lịch sử\n& lỗi nhập" as UC07
+    usecase "UC08 Hủy lần nhập" as UC08
+    usecase "UC16 Xuất báo cáo CSV" as UC16
+    usecase "UC18 Quản lý danh mục\nsản phẩm (Could)" as UC18
+  }
+  package "Quản trị & nguồn kết nối" {
+    usecase "UC04 Quản lý người dùng" as UC04
+    usecase "UC10 Quản lý nguồn\ndữ liệu kết nối" as UC10
+    usecase "UC11 Kiểm tra kết nối" as UC11
+    usecase "UC12 Đồng bộ ngay" as UC12
+    usecase "UC13 Đồng bộ theo lịch" as UC13
+  }
+}
+
+V --> UC01
+V --> UC02
+V --> UC03
+V --> UC14
+V --> UC17
+UC15 .[norank].> UC14 : <<extend>>
+
+AN --> UC05
+AN --> UC07
+AN --> UC08
+AN --> UC16
+AN --> UC18
+AN --> UC12
+UC05 .[norank].> UC06 : <<include>>
+UC09 .[norank].> UC05 : <<extend>>
+
+AD --> UC04
+AD --> UC10
+UC10 .[norank].> UC11 : <<include>>
+
+SCH --> UC13
+UC11 --> EXT
+UC12 --> EXT
+UC13 --> EXT
+
+V -[hidden]- AN
+AN -[hidden]- AD
+AD -[hidden]- SCH
+UC12 -[hidden]- UC13
+
+legend bottom
+  Phân cấp tác nhân (xem sơ đồ 09b): Quản trị viên ⊃ Nhân viên phân tích ⊃ Người xem
+  → tác nhân con được thực hiện MỌI use case của tác nhân cha.
+  UC16 Xuất CSV mở rộng (extend) UC14 nhưng chỉ dành cho analyst/admin.
+endlegend
+@enduml

@@ -1,0 +1,20 @@
+' Style dùng chung cho mọi sơ đồ (include bằng !include _style.iuml)
+skinparam defaultFontName "DejaVu Sans"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam roundCorner 8
+skinparam ArrowColor #334155
+skinparam ActorBorderColor #1e293b
+skinparam UsecaseBackgroundColor #eff6ff
+skinparam UsecaseBorderColor #2563eb
+skinparam RectangleBorderColor #64748b
+skinparam PackageBorderColor #64748b
+skinparam NoteBackgroundColor #fefce8
+skinparam NoteBorderColor #ca8a04
+skinparam ActivityBackgroundColor #eff6ff
+skinparam ActivityBorderColor #2563eb
+skinparam ActivityDiamondBackgroundColor #fff7ed
+skinparam ActivityDiamondBorderColor #ea580c
+skinparam SwimlaneTitleFontStyle bold
+skinparam StateBackgroundColor #eff6ff
+skinparam StateBorderColor #2563eb

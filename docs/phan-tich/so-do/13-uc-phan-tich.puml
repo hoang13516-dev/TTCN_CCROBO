@@ -1,0 +1,39 @@
+@startuml 13-uc-phan-tich
+!include _style.iuml
+title Phân rã Use Case: Phân tích & báo cáo
+left to right direction
+
+actor "Người xem\n(viewer)" as V
+actor "Nhân viên phân tích\n(analyst)" as AN
+V <|-- AN
+
+rectangle "Phân tích & báo cáo" {
+  usecase "UC14 Xem dashboard tổng quan" as UC14
+  usecase "UC14.1 Xem KPI\n+ so sánh kỳ trước" as UC141
+  usecase "UC14.2 Xem xu hướng\ndoanh thu" as UC142
+  usecase "UC14.3 Xem top sản phẩm" as UC143
+  usecase "UC14.4 Xem theo danh mục" as UC144
+  usecase "UC14.5 Xem theo kênh" as UC145
+  usecase "UC15 Lọc & so sánh dữ liệu" as UC15
+  usecase "UC15.1 Chọn khoảng thời gian\n(preset / tuỳ chọn)" as UC151
+  usecase "UC15.2 Lọc theo kênh,\ndanh mục" as UC152
+  usecase "UC15.3 Lọc chéo bằng click\ntrên biểu đồ" as UC153
+  usecase "UC14.6 Đổi độ chi tiết\nngày / tuần / tháng" as UC146
+  usecase "UC16 Xuất báo cáo CSV" as UC16
+  usecase "UC17 Phân tích khách hàng\n(Could)" as UC17
+}
+V --> UC14
+V --> UC17
+UC14 ..> UC141 : <<include>>
+UC14 ..> UC142 : <<include>>
+UC14 ..> UC143 : <<include>>
+UC14 ..> UC144 : <<include>>
+UC14 ..> UC145 : <<include>>
+UC146 ..> UC142 : <<extend>>
+UC15 ..> UC14 : <<extend>>
+UC151 ..> UC15 : <<extend>>
+UC152 ..> UC15 : <<extend>>
+UC153 ..> UC15 : <<extend>>
+UC16 ..> UC14 : <<extend>>
+AN --> UC16
+@enduml

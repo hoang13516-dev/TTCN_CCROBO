@@ -1,0 +1,16 @@
+@startuml 09b-phan-cap-tac-nhan
+!include _style.iuml
+title Phân cấp tác nhân (actor generalization)
+actor "Người xem\n(viewer)" as V
+actor "Nhân viên phân tích\n(analyst)" as AN
+actor "Quản trị viên\n(admin)" as AD
+actor "Bộ lập lịch" as SCH <<hệ thống>>
+actor "Hệ thống nguồn ngoài" as EXT <<hệ thống>>
+V <|-- AN
+AN <|-- AD
+note right of V : Chỉ đọc: xem dashboard,\nlọc, đổi mật khẩu của mình
+note right of AN : + nhập dữ liệu, hủy lần nhập của mình,\nđồng bộ ngay, xuất CSV
+note right of AD : + quản lý người dùng,\nquản lý nguồn kết nối, hủy mọi lần nhập
+note bottom of SCH : Tác nhân thời gian:\nkích hoạt UC13 theo cron
+note bottom of EXT : Tác nhân phụ (supporting):\ncung cấp dữ liệu, không đăng nhập
+@enduml

@@ -1,0 +1,42 @@
+@startuml 05-qt-phan-tich
+!include _style.iuml
+title QT-03 (TO-BE): Xem phân tích và ra quyết định
+
+|Người dùng (mọi vai trò)|
+start
+:Mở dashboard (link có sẵn bộ lọc hoặc trang chủ);
+|Hệ thống|
+if (Có phiên đăng nhập hợp lệ?) then (không)
+  :Chuyển tới /login,
+  đăng nhập xong quay lại đúng link;
+else (có)
+endif
+:Đọc bộ lọc từ URL
+(mặc định: 30 ngày gần nhất, mọi kênh, mọi danh mục);
+:Truy vấn song song 5 API phân tích
+(kỳ này + kỳ trước cùng độ dài);
+:Hiển thị 4 KPI + xu hướng + top SP
++ theo danh mục + theo kênh;
+|Người dùng (mọi vai trò)|
+repeat
+  :Đọc chỉ số, so sánh mũi tên tăng/giảm;
+  :Đổi bộ lọc thời gian / kênh / danh mục
+  hoặc click 1 danh mục để lọc chéo;
+  |Hệ thống|
+  :Cập nhật URL, gọi lại API
+  (cache theo bộ lọc);
+  |Người dùng (mọi vai trò)|
+repeat while (Cần xem góc khác?) is (có)
+->đủ thông tin;
+if (Là analyst / admin và cần gửi số liệu?) then (có)
+  :Bấm "Xuất CSV";
+  |Hệ thống|
+  :Sinh CSV UTF-8 có BOM theo đúng bộ lọc;
+  |Người dùng (mọi vai trò)|
+else (không)
+endif
+:Ra quyết định ngoài hệ thống:
+nhập thêm hàng bán chạy, đẩy kênh yếu,
+khuyến mãi khung thời gian thấp điểm;
+stop
+@enduml

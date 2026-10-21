@@ -1,0 +1,35 @@
+@startuml 06-qt-huy-nhap
+!include _style.iuml
+title QT-04 (TO-BE): Hủy một lần nhập bị nhầm
+
+|Nhân viên phân tích|
+start
+:Mở "Lịch sử nhập", chọn lần nhập;
+:Bấm "Hủy lần nhập";
+|Hệ thống|
+if (Là admin, hoặc là người tạo job?) then (không)
+  :403 "Bạn không có quyền hủy lần nhập này";
+  stop
+else (có)
+endif
+if (status ∈ {success, partial}?) then (không)
+  :Báo "Lần nhập này không thể hủy"
+  (failed: không có gì để hủy; undone: đã hủy);
+  stop
+else (có)
+endif
+:Tính trước (preview):
+- A = số đơn do job TẠO và chưa bị job sau sửa → sẽ XOÁ
+- B = số đơn do job tạo nhưng đã bị job sau cập nhật → GIỮ
+- C = số đơn job chỉ cập nhật (đã có từ trước) → GIỮ;
+|Nhân viên phân tích|
+:Đọc cảnh báo, xác nhận;
+|Hệ thống|
+:BEGIN; DELETE orders nhóm A
+(order_items xoá theo CASCADE);
+:import_job.status = undone,
+ghi undone_by, undone_at; COMMIT;
+:REFRESH mv_daily_sales;
+:Báo kết quả: đã xoá A đơn, giữ B + C đơn;
+stop
+@enduml

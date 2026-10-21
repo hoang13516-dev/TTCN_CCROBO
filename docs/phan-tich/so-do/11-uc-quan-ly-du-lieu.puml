@@ -1,0 +1,40 @@
+@startuml 11-uc-quan-ly-du-lieu
+!include _style.iuml
+title Phân rã Use Case: Quản lý dữ liệu (nhập file)
+left to right direction
+
+actor "Nhân viên phân tích\n(analyst)" as AN
+actor "Quản trị viên\n(admin)" as AD
+AN <|-- AD
+
+rectangle "Quản lý dữ liệu" {
+  usecase "UC05 Nhập dữ liệu từ file" as UC05
+  usecase "UC05.1 Tải file lên\n& xem trước" as UC051
+  usecase "UC06 Ánh xạ cột" as UC06
+  usecase "UC06.1 Áp dụng mẫu\nánh xạ đã lưu" as UC061
+  usecase "UC06.2 Lưu mẫu ánh xạ" as UC062
+  usecase "UC05.2 Xem kết quả nhập" as UC052
+  usecase "UC09 Tải file mẫu" as UC09
+  usecase "UC07 Xem lịch sử & lỗi nhập" as UC07
+  usecase "UC07.1 Tải danh sách\ndòng lỗi (CSV)" as UC071
+  usecase "UC08 Hủy lần nhập" as UC08
+  usecase "UC18 Quản lý danh mục\nsản phẩm (Could)" as UC18
+}
+AN --> UC05
+AN --> UC07
+AN --> UC08
+AN --> UC18
+UC05 ..> UC051 : <<include>>
+UC05 ..> UC06 : <<include>>
+UC05 ..> UC052 : <<include>>
+UC061 ..> UC06 : <<extend>>
+UC062 ..> UC06 : <<extend>>
+UC09 ..> UC05 : <<extend>>
+UC071 ..> UC07 : <<extend>>
+UC08 ..> UC07 : <<extend>>
+
+note bottom of UC08
+  analyst: chỉ hủy job do mình tạo
+  admin: hủy mọi job (BR-17)
+end note
+@enduml

@@ -1,0 +1,38 @@
+@startuml 10-uc-tai-khoan
+!include _style.iuml
+title Phân rã Use Case: Tài khoản & phân quyền
+left to right direction
+
+actor "Người xem\n(viewer)" as V
+actor "Nhân viên phân tích\n(analyst)" as AN
+actor "Quản trị viên\n(admin)" as AD
+V <|-- AN
+AN <|-- AD
+
+rectangle "Tài khoản & phân quyền" {
+  usecase "UC01 Đăng nhập" as UC01
+  usecase "UC02 Đăng xuất" as UC02
+  usecase "UC03 Đổi mật khẩu" as UC03
+  usecase "UC04 Quản lý người dùng" as UC04
+  usecase "UC04.1 Xem danh sách\nngười dùng" as UC041
+  usecase "UC04.2 Thêm người dùng" as UC042
+  usecase "UC04.3 Đổi vai trò" as UC043
+  usecase "UC04.4 Khoá / mở khoá\ntài khoản" as UC044
+  usecase "UC04.5 Đặt lại mật khẩu" as UC045
+}
+V --> UC01
+V --> UC02
+V --> UC03
+AD --> UC04
+UC04 ..> UC041 : <<include>>
+UC042 ..> UC04 : <<extend>>
+UC043 ..> UC04 : <<extend>>
+UC044 ..> UC04 : <<extend>>
+UC045 ..> UC04 : <<extend>>
+
+note right of UC044
+  Không được khoá chính mình
+  và không được làm hệ thống
+  còn 0 admin đang hoạt động (BR-23)
+end note
+@enduml

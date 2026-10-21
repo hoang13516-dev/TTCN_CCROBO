@@ -1,0 +1,23 @@
+@startuml 07-trang-thai-import-job
+!include _style.iuml
+title Vòng đời trạng thái import_jobs.status
+
+[*] --> pending : tạo job\n(upload / bấm đồng bộ / cron)
+pending --> running : worker bắt đầu xử lý
+running --> success : load OK, error_rows = 0\n(kể cả mọi dòng bị bỏ qua)
+running --> partial : load OK, error_rows > 0
+running --> failed : (ok_rows = 0 và error_rows > 0)\nhoặc lỗi hệ thống / mạng\n(đã ROLLBACK)
+success --> undone : Hủy lần nhập (UC08)
+partial --> undone : Hủy lần nhập (UC08)
+failed --> [*]
+undone --> [*]
+success --> [*]
+partial --> [*]
+
+note right of running
+  Server khởi động lại khi job đang running
+  → job "mồ côi": lúc khởi động, chuyển mọi job
+  running/pending cũ hơn 30 phút sang failed
+  (message = "Gián đoạn do khởi động lại").
+end note
+@enduml
