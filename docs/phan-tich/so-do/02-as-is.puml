@@ -2,57 +2,55 @@
 !include _style.iuml
 title Quy trình hiện tại (AS-IS): tổng hợp báo cáo bán hàng thủ công
 
-|Nhân viên|
+|Quản lý chi nhánh|
 start
-:Cuối tuần / cuối tháng: bắt đầu làm báo cáo;
-:Xuất file đơn hàng từ phần mềm POS;
-:Xuất file đơn hàng từ Seller Center (Shopee...);
-:Chép tay đơn Facebook/Zalo từ tin nhắn, sổ ghi;
+:Cuối tuần / cuối tháng: xuất file POS
+của chi nhánh mình;
+:Gửi file qua Zalo / email về văn phòng;
 note right
-  **P1** Dữ liệu phân tán 3–4 nơi,
-  mỗi nơi một định dạng cột khác nhau
+  **P1** Mỗi chi nhánh một file, mỗi phần mềm
+  một mẫu cột; đơn online nằm ở website
+  **P8** File đi qua nhiều người, ai cũng xem được
 end note
-|Excel|
+|Nhân viên văn phòng|
+:Tải thêm đơn từ website / sàn;
 :Dán tất cả vào một file Excel tổng;
-:Chuẩn hoá tay: đổi tên cột, định dạng ngày,
-bỏ dấu chấm ở số tiền, gộp tên sản phẩm;
+:Chuẩn hoá tay: tên cột, định dạng ngày,
+bỏ dấu chấm ở số tiền;
 note right
   **P2** Tốn 3–6 giờ mỗi kỳ, dễ sai
-  **P3** Tên sản phẩm khác nhau giữa các kênh
-  (cùng 1 SKU nhưng 2 tên) → đếm sai top SP
 end note
-if (Có kiểm tra đơn trùng / đơn hủy?) then (thường bỏ qua)
-  :Đơn hủy, đơn nhập 2 lần
-  vẫn được cộng vào doanh thu;
+if (Có lọc đơn hủy, đơn trùng
+và ghép giá vốn?) then (thường bỏ qua)
+  :Đơn hủy, đơn trùng vẫn được cộng;
+  :Không có lợi nhuận, chỉ có doanh thu;
   note right
-    **P4** Doanh thu bị thổi phồng,
-    không ai biết sai ở đâu
+    **P3** Doanh thu bị thổi phồng
+    **P4** Không thấy lãi / lỗ
   end note
 else (có, nếu kịp)
-  :Lọc tay bằng Filter;
+  :Lọc tay, VLOOKUP giá vốn từ file kho;
 endif
-:Tạo PivotTable + biểu đồ;
-|Nhân viên|
-:Chụp ảnh / gửi file qua Zalo cho chủ;
-|Chủ cửa hàng|
-:Xem báo cáo;
-if (Muốn xem theo góc khác
-(kênh khác, tháng trước...)?) then (có)
-  :Nhắn nhân viên làm lại;
+:Tạo PivotTable theo chi nhánh;
+:Gửi file tổng cho giám đốc và các chi nhánh;
+|Giám đốc|
+:Xem báo cáo cuối tháng;
+note right
+  **P6** Biết sụt giảm quá muộn
+  **P7** Không biết khách cũ có quay lại
+end note
+if (Muốn xem góc khác
+(theo vùng, theo sản phẩm...)?) then (có)
+  :Nhờ văn phòng làm lại;
   note right
-    **P5** Không tự xem được,
-    phải chờ, phản hồi chậm 1–2 ngày
+    **P5** Phản hồi chậm 1–2 ngày
   end note
-  |Nhân viên|
-  :Làm lại pivot theo yêu cầu;
-  |Chủ cửa hàng|
+  |Nhân viên văn phòng|
+  :Làm lại pivot;
+  |Giám đốc|
 else (không)
 endif
-:Ra quyết định (nhập hàng, khuyến mãi)
-dựa trên số liệu có thể sai/cũ;
-note right
-  **P6** Không so sánh được với kỳ trước
-  một cách nhất quán; không có lịch sử
-end note
+:Ra quyết định dựa trên số liệu
+có thể sai / cũ;
 stop
 @enduml

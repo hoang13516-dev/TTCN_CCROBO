@@ -1,66 +1,51 @@
 @startuml 04-qt-dong-bo
 !include _style.iuml
-title QT-02 (TO-BE): Kết nối và đồng bộ từ nguồn CSDL / REST API
+title QT-02 (TO-BE): Khai báo nguồn và đồng bộ từ REST API
 
 |Quản trị viên|
 start
-:Khai báo nguồn: loại (CSDL / REST API),
-thông tin kết nối, câu SELECT hoặc URL;
+:(a) Khai báo nguồn — UC10:
+nhập tên, URL, API key;
 :Bấm "Kiểm tra kết nối";
 |Hệ thống|
-:Thử kết nối (timeout 10 s),
-lấy 20 bản ghi mẫu;
-|Nguồn ngoài|
-:Trả kết quả / lỗi xác thực / timeout;
-|Hệ thống|
+:Gọi trang đầu (timeout 10 s);
 if (Kết nối được?) then (không)
-  :Báo lỗi theo loại (sai host, sai mật khẩu,
-  timeout, câu lệnh lỗi) — UC11 E1–E7
-  (không lộ stack trace, không lộ mật khẩu);
+  :Báo lỗi tiếng Việt
+  (sai URL, sai key, hết thời gian);
   stop
 else (có)
 endif
-|Quản trị viên|
-:Ánh xạ cột (như QT-01), đặt lịch
-(vd: mỗi ngày 23:00) hoặc để trống;
-:Lưu nguồn;
-|Hệ thống|
-:Mã hoá cấu hình bằng AES-256-GCM, lưu data_sources;
-:Đăng ký lịch với node-cron (nếu có);
-detach
-
-|Bộ lập lịch|
+:Lưu nguồn
+(API key không bao giờ trả ra);
+stop
+|Nhân viên phân tích|
 start
-:Đến giờ theo cron
-(hoặc nhân viên bấm "Đồng bộ ngay");
+:(b) Đồng bộ — UC11:
+bấm "Đồng bộ ngay";
 |Hệ thống|
-if (pg_try_advisory_lock(source_id)?) then (đang có job chạy)
-  :Bỏ qua lần chạy này
-  (thủ công: báo "Đang đồng bộ");
+if (pg_try_advisory_lock(source_id)?) then (không lấy được)
+  :409 "Nguồn đang đồng bộ";
   stop
-else (lấy được khoá)
+else (lấy được)
 endif
-:Tạo import_job (trigger = schedule | manual);
-:Giải mã cấu hình;
+:startedAt = now()
+tạo lần nhập (running, trigger = sync);
 repeat
-  :Gọi nguồn: lấy bản ghi có
-  updated_at > last_synced_at (theo trang/lô);
-  |Nguồn ngoài|
-  :Trả 1 trang dữ liệu;
+  |API nguồn|
+  :GET /orders?updated_since=last_synced_at&page=n;
   |Hệ thống|
-  :Map → chuẩn hoá → validate → staging / errors;
-repeat while (Còn trang tiếp?) is (có)
-->hết;
-if (Có lỗi mạng / 429 / 5xx?) then (có, đã retry 3 lần)
-  :job = failed;
-  :GIỮ NGUYÊN last_synced_at
-  (lần sau lấy lại từ mốc cũ);
-else (không)
-  :Load trong 1 transaction (như QT-01);
-  :REFRESH mv_daily_sales;
-  :Cập nhật last_synced_at = thời điểm bắt đầu job;
-  :job = success / partial;
-endif
-:Giải phóng khoá;
+  if (Lỗi mạng / HTTP?) then (có)
+    :Lần nhập failed, giữ nguyên last_synced_at,
+    nhả khoá;
+    stop
+  else (không)
+  endif
+  :**Transform** các dòng của trang
+  (dùng chung QT-01);
+repeat while (next_page ≠ null?) is (còn trang)
+->hết trang;
+:**Load** 1 transaction (dùng chung QT-01);
+:last_synced_at = startedAt
+nhả khoá, trả kết quả;
 stop
 @enduml

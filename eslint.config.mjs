@@ -15,4 +15,9 @@ export default tseslint.config(
       eqeqeq: ["error", "always"],
     },
   },
+  {
+    // Script công cụ chạy bằng Node (không qua TypeScript) → khai báo biến toàn cục của Node
+    files: ["scripts/**/*.mjs"],
+    languageOptions: { globals: { console: "readonly", process: "readonly" } },
+  },
 );
