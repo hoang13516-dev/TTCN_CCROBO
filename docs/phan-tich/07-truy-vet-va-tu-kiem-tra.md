@@ -23,52 +23,52 @@ Mỗi FR → use case → bước trong kế hoạch → bằng chứng kiểm c
 
 | FR    | Ưu tiên | UC         | Bước KH                  | Kiểm chứng bằng                          |
 | ----- | ------- | ---------- | ------------------------ | ---------------------------------------- |
-| FR-01 | Must    | UC01       | B2.2, B2.3               | AC-01.1…01.4, 01.8                       |
-| FR-02 | Must    | UC02       | B2.2, B2.3               | UC02 (§6.12)                             |
-| FR-03 | Must    | UC01       | B2.3                     | AC-01.5…01.7                             |
-| FR-04 | Should  | UC03       | B4.8 🆕                  | AC-03.1, 03.2                            |
-| FR-05 | Should  | UC04       | B4.8 🆕                  | AC-04.1                                  |
-| FR-06 | Should  | UC04       | B4.8 🆕                  | AC-04.2                                  |
-| FR-07 | Should  | UC04       | B4.8 🆕                  | AC-04.3…04.5                             |
-| FR-08 | Should  | UC04, UC03 | B4.8 🆕                  | AC-03.3                                  |
-| FR-09 | Must    | tất cả     | B2.2 (+ mọi bước có API) | AC-04.1, 05.13, 08.4, 10.4 + bảng §5.4.2 |
-| FR-10 | Must    | UC05       | B2.4                     | AC-05.8                                  |
-| FR-11 | Must    | UC05       | B2.4                     | AC-05.5                                  |
-| FR-12 | Must    | UC06       | B2.5, B2.7               | AC-06.1, 05.12                           |
-| FR-13 | Must    | UC06       | B2.5, B2.7               | AC-06.2, 06.3                            |
-| FR-14 | Must    | UC06       | B2.7                     | AC-05.12                                 |
-| FR-15 | Must    | UC05       | B2.5                     | AC-05.3, 05.4, 05.6, 05.7, 05.11         |
-| FR-16 | Must    | UC05, UC07 | B2.5                     | AC-05.3, 07.1                            |
-| FR-17 | Must    | UC05       | B2.6                     | AC-05.2, 05.9                            |
-| FR-18 | Must    | UC05       | B2.6, B2.7               | AC-05.10                                 |
-| FR-19 | Must    | UC05       | B2.7                     | AC-05.1, 05.2                            |
-| FR-20 | Must    | UC07       | B2.7                     | AC-07.2                                  |
-| FR-21 | Must    | UC07       | B2.7                     | AC-07.1, 07.3                            |
-| FR-22 | Should  | UC08       | B3.7 🆕                  | AC-08.1…08.5                             |
-| FR-23 | Should  | UC09       | B2.7                     | UC09 (§6.12)                             |
-| FR-24 | Should  | UC10       | B4.1, B4.2               | AC-10.1, 10.3                            |
-| FR-25 | Should  | UC10       | B4.4                     | AC-12.1, 12.2, 12.3                      |
-| FR-26 | Should  | UC11       | B4.2                     | AC-10.3                                  |
-| FR-27 | Should  | UC12       | B4.2, B4.4               | AC-12.4                                  |
-| FR-28 | Should  | UC10, UC13 | B4.5                     | AC-10.5, 13.1                            |
-| FR-29 | Should  | UC10       | B4.1                     | AC-10.1, 10.2                            |
-| FR-30 | Must    | UC14       | B3.2, B3.3               | AC-14.1, 14.2, 14.4, 14.10               |
-| FR-31 | Must    | UC14       | B3.2, B3.4               | AC-14.3, 14.6                            |
-| FR-32 | Must    | UC14       | B3.2, B3.4               | AC-14.8                                  |
-| FR-33 | Must    | UC14       | B3.2, B3.4               | AC-14.8                                  |
-| FR-34 | Must    | UC14       | B3.2, B3.4               | AC-14.8                                  |
-| FR-35 | Must    | UC15       | B3.3                     | AC-14.5                                  |
-| FR-36 | Must    | UC15       | B3.5                     | AC-14.8                                  |
-| FR-37 | Should  | UC15       | B3.5                     | AC-14.11                                 |
-| FR-38 | Must    | UC15       | B3.3                     | AC-14.7                                  |
-| FR-39 | Must    | UC14       | B3.4                     | AC-14.2, 14.9                            |
-| FR-43 | Must    | UC15       | B3.5                     | AC-14.8                                  |
-| FR-40 | Should  | UC16       | B4.6                     | AC-16.1, 16.2                            |
+| FR-01 | Must    | UC01       | S2.3, S2.4               | AC-01.1…01.4, 01.8                       |
+| FR-02 | Must    | UC02       | S2.3, S2.4               | UC02 (§6.12)                             |
+| FR-03 | Must    | UC01       | S2.4                     | AC-01.5…01.7                             |
+| FR-04 | Should  | UC03       | S6.3 🆕                  | AC-03.1, 03.2                            |
+| FR-05 | Should  | UC04       | S6.3 🆕                  | AC-04.1                                  |
+| FR-06 | Should  | UC04       | S6.3 🆕                  | AC-04.2                                  |
+| FR-07 | Should  | UC04       | S6.3 🆕                  | AC-04.3…04.5                             |
+| FR-08 | Should  | UC04, UC03 | S6.3 🆕                  | AC-03.3                                  |
+| FR-09 | Must    | tất cả     | S2.3 (+ mọi bước có API) | AC-04.1, 05.13, 08.4, 10.4 + bảng §5.4.2 |
+| FR-10 | Must    | UC05       | S2.5                     | AC-05.8                                  |
+| FR-11 | Must    | UC05       | S2.5                     | AC-05.5                                  |
+| FR-12 | Must    | UC06       | S3.1, S3.3               | AC-06.1, 05.12                           |
+| FR-13 | Must    | UC06       | S3.1, S3.3               | AC-06.2, 06.3                            |
+| FR-14 | Must    | UC06       | S3.3                     | AC-05.12                                 |
+| FR-15 | Must    | UC05       | S3.1                     | AC-05.3, 05.4, 05.6, 05.7, 05.11         |
+| FR-16 | Must    | UC05, UC07 | S3.1                     | AC-05.3, 07.1                            |
+| FR-17 | Must    | UC05       | S3.2                     | AC-05.2, 05.9                            |
+| FR-18 | Must    | UC05       | S3.2, S3.3               | AC-05.10                                 |
+| FR-19 | Must    | UC05       | S3.3                     | AC-05.1, 05.2                            |
+| FR-20 | Must    | UC07       | S3.3                     | AC-07.2                                  |
+| FR-21 | Must    | UC07       | S3.3                     | AC-07.1, 07.3                            |
+| FR-22 | Should  | UC08       | S5.1 🆕                  | AC-08.1…08.5                             |
+| FR-23 | Should  | UC09       | S3.3                     | UC09 (§6.12)                             |
+| FR-24 | Should  | UC10       | S5.2, S5.3               | AC-10.1, 10.3                            |
+| FR-25 | Should  | UC10       | S6.1                     | AC-12.1, 12.2, 12.3                      |
+| FR-26 | Should  | UC11       | S5.3                     | AC-10.3                                  |
+| FR-27 | Should  | UC12       | S5.3, S6.1               | AC-12.4                                  |
+| FR-28 | Should  | UC10, UC13 | S6.2                     | AC-10.5, 13.1                            |
+| FR-29 | Should  | UC10       | S5.2                     | AC-10.1, 10.2                            |
+| FR-30 | Must    | UC14       | S4.1, S4.2               | AC-14.1, 14.2, 14.4, 14.10               |
+| FR-31 | Must    | UC14       | S4.1, S4.3               | AC-14.3, 14.6                            |
+| FR-32 | Must    | UC14       | S4.1, S4.3               | AC-14.8                                  |
+| FR-33 | Must    | UC14       | S4.1, S4.3               | AC-14.8                                  |
+| FR-34 | Must    | UC14       | S4.1, S4.3               | AC-14.8                                  |
+| FR-35 | Must    | UC15       | S4.2                     | AC-14.5                                  |
+| FR-36 | Must    | UC15       | S4.4                     | AC-14.8                                  |
+| FR-37 | Should  | UC15       | S4.4                     | AC-14.11                                 |
+| FR-38 | Must    | UC15       | S4.2                     | AC-14.7                                  |
+| FR-39 | Must    | UC14       | S4.3                     | AC-14.2, 14.9                            |
+| FR-43 | Must    | UC15       | S4.4                     | AC-14.8                                  |
+| FR-40 | Should  | UC16       | S5.5                     | AC-16.1, 16.2                            |
 | FR-41 | Could   | UC17       | Vùng đệm                 | UC17 (§6.12)                             |
 | FR-42 | Could   | UC18       | Vùng đệm                 | UC18 (§6.12)                             |
-| FR-44 | Must    | —          | B1.4                     | DoD B1.4                                 |
-| FR-45 | Must    | —          | B2.6                     | E6 §2.2 (thêm test vào B2.6)             |
-| FR-46 | Must    | —          | B3.1                     | AC-05.1 + NFR-17                         |
+| FR-44 | Must    | —          | S1.2                     | DoD S1.2                                 |
+| FR-45 | Must    | —          | S3.2                     | E6 §2.2 (thêm test vào S3.2)             |
+| FR-46 | Must    | —          | S3.4                     | AC-05.1 + NFR-17                         |
 
 **Yêu cầu phi chức năng:** cột "Bước KH" và "Cách đo" ở bảng [3.2](03-dac-ta-yeu-cau.md#32-yêu-cầu-phi-chức-năng-non-functional-requirements) đóng vai trò ma trận truy vết cho NFR-01…NFR-19.
 
@@ -85,7 +85,7 @@ Mỗi FR → use case → bước trong kế hoạch → bằng chứng kiểm c
 
 ## 3. Tác động lên kế hoạch và mô hình dữ liệu
 
-### 3.1 Thay đổi mô hình dữ liệu (so với `ke-hoach.md` §5) — nên đưa vào migration B1.5
+### 3.1 Thay đổi mô hình dữ liệu (so với `ke-hoach.md` §5) — nên đưa vào migration S1.3
 
 ```sql
 -- users: 3 vai trò + quản lý vòng đời tài khoản (UC03, UC04, BR-21, BR-23)
@@ -124,41 +124,41 @@ import_errors(id, import_job_id FK, row_number, column_name TEXT NULL, message, 
 data_sources(..., name UNIQUE, is_active BOOLEAN NOT NULL DEFAULT true, created_by FK users NULL)  -- mới
 ```
 
-### 3.2 Phát hiện về `mv_daily_sales` (cần ghi vào ADR khi làm B3.1)
+### 3.2 Phát hiện về `mv_daily_sales` (cần ghi vào ADR khi làm S3.4)
 
 `mv_daily_sales` gộp theo `(day, product_id, channel_id)`. **Cộng dồn** các dòng MV cho kết quả đúng với **Doanh thu** và **Số lượng bán** (cộng được), nhưng **sai** với:
 
 - **Số đơn**: một đơn có 2 sản phẩm nằm ở 2 dòng MV → bị đếm 2 lần.
 - **Số khách**: không cộng được qua nhiều ngày (một khách mua 3 ngày bị đếm 3 lần).
 
-**Đề xuất:** API `summary` tính Số đơn, Số khách từ bảng `orders` (+ `EXISTS` sang `order_items` khi lọc danh mục), dùng index `orders(ordered_at)`; các biểu đồ doanh thu vẫn đọc MV. Với 40.000 đơn, truy vấn này dự kiến < 50 ms (kiểm chứng bằng `EXPLAIN ANALYZE` ở B1.7). Cột `order_count` của MV chỉ dùng được khi **không** cộng qua nhiều sản phẩm.
+**Đề xuất:** API `summary` tính Số đơn, Số khách từ bảng `orders` (+ `EXISTS` sang `order_items` khi lọc danh mục), dùng index `orders(ordered_at)`; các biểu đồ doanh thu vẫn đọc MV. Với 40.000 đơn, truy vấn này dự kiến < 50 ms (kiểm chứng bằng `EXPLAIN ANALYZE` ở S2.1). Cột `order_count` của MV chỉ dùng được khi **không** cộng qua nhiều sản phẩm.
 
-### 3.3 Bước mới và điều chỉnh ước lượng
+### 3.3 Công việc phát sinh từ phân tích (so với kế hoạch 10 tuần ban đầu)
 
 | Bước        | Nội dung                              | Thay đổi                                                                       | Giờ                            |
 | ----------- | ------------------------------------- | ------------------------------------------------------------------------------ | ------------------------------ | ------ |
-| B1.5        | Migration schema                      | Thêm các cột ở 3.1                                                             | +0,5 h                         |
-| B2.2        | API auth                              | 3 vai trò; đọc lại user mỗi request (BR-21)                                    | +0,5 h                         |
-| B2.5        | Mapping + validate + staging          | Xử lý nền (202 + polling), `skipped_rows`, kiểm tra nhất quán theo đơn (BR-07) | +1 h                           |
-| B2.7        | UI nhập 3 bước                        | File mẫu (UC09), `/api/mapping-templates`                                      | +1 h                           |
-| B3.5        | Lọc chéo                              | API `catalog/channels                                                          | categories`, lọc nhiều giá trị | +0,5 h |
-| **B3.7 🆕** | **Hủy lần nhập**                      | UC08: preview, undo, test 5 AC                                                 | **3 h**                        |
-| **B4.8 🆕** | **Quản lý người dùng + đổi mật khẩu** | UC03, UC04: API + UI + test                                                    | **5 h**                        |
+| S1.3        | Migration schema                      | Thêm các cột ở 3.1                                                             | +0,5 h                         |
+| S2.3        | API auth                              | 3 vai trò; đọc lại user mỗi request (BR-21)                                    | +0,5 h                         |
+| S3.1        | Mapping + validate + staging          | Xử lý nền (202 + polling), `skipped_rows`, kiểm tra nhất quán theo đơn (BR-07) | +1 h                           |
+| S3.3        | UI nhập 3 bước                        | File mẫu (UC09), `/api/mapping-templates`                                      | +1 h                           |
+| S4.4        | Lọc chéo                              | API `catalog/channels                                                          | categories`, lọc nhiều giá trị | +0,5 h |
+| **S5.1 🆕** | **Hủy lần nhập**                      | UC08: preview, undo, test 5 AC                                                 | **3 h**                        |
+| **S6.3 🆕** | **Quản lý người dùng + đổi mật khẩu** | UC03, UC04: API + UI + test                                                    | **5 h**                        |
 |             | **Tổng tăng thêm**                    |                                                                                | **+11,5 h**                    |
 
-**Kiểm tra ngân sách thời gian:** 114 h + 11,5 h = **125,5 h / 10 tuần ≈ 12,6 h/tuần**, vẫn trong khoảng 10–15 h/tuần. Sprint 3: 22 → 26 h, Sprint 4: 21 → 26 h. Nếu trễ, thứ tự cắt (từ cắt trước): UC17, UC18 (Could) → B3.7 Hủy lần nhập (thay bằng hướng dẫn "sửa file rồi nhập lại") → UI của B4.8 (giữ script tạo user bằng dòng lệnh). **Không cắt** phần Must.
+**Kiểm tra ngân sách thời gian:** kế hoạch đã được lập lại theo kết quả phân tích: **50 ngày (21/10 → 09/12/2026), 7 sprint theo tuần, 131 giờ ≈ 18,5 giờ/tuần**, phạm vi Must + Should. Lịch theo ngày, mốc và thứ tự cắt khi trễ: `ke-hoach.md` §6–§8. **Không cắt** phần Must.
 
-`ke-hoach.md` đã được cập nhật tương ứng (MoSCoW §1.2, mô hình dữ liệu §5, bước B2.2, bảng tiến độ §9) và có [ADR-0001](../adr/0001-ba-vai-tro-nguoi-dung.md) cho quyết định 3 vai trò.
+Các công việc trên đã nằm trong `ke-hoach.md` mới (phạm vi §1.2, mô hình dữ liệu §5, chi tiết từng bước §7, bảng tiến độ §10); quyết định 3 vai trò ghi ở [ADR-0001](../adr/0001-ba-vai-tro-nguoi-dung.md).
 
 ## 4. Vấn đề còn mở — cần bạn tự xử lý
 
 | Mã       | Vấn đề                                                                                                                                                 | Vì sao AI không tự giải quyết được                                   | Việc bạn cần làm                                                                                                                                                                                                      | Hạn              |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| **O-01** | Tên cột thật của file xuất từ Shopee, TikTok Shop, KiotViet, Sapo…                                                                                     | Không truy cập được tài khoản/file thật; mẫu xuất đổi theo phiên bản | Xin 1–2 file xuất thật (đã xoá tên/SĐT khách), đối chiếu & bổ sung từ điển §3.5.3, BR-08 (nhãn trạng thái)                                                                                                            | Trước B2.5       |
+| **O-01** | Tên cột thật của file xuất từ Shopee, TikTok Shop, KiotViet, Sapo…                                                                                     | Không truy cập được tài khoản/file thật; mẫu xuất đổi theo phiên bản | Xin 1–2 file xuất thật (đã xoá tên/SĐT khách), đối chiếu & bổ sung từ điển §3.5.3, BR-08 (nhãn trạng thái)                                                                                                            | Trước S3.1       |
 | **O-02** | Đề có **bắt buộc** cả 3 loại nguồn (file, CSDL, API) không? `ke-hoach.md` B4 ghi "theo yêu cầu đề" nhưng MoSCoW xếp CSDL/API là **Should** → mâu thuẫn | Không có văn bản đề gốc trong repo                                   | Hỏi GVHD. Nếu bắt buộc: nâng UC10–UC13 lên Must (không đổi sprint, chỉ đổi nguyên tắc "không được cắt khi trễ")                                                                                                       | Buổi báo cáo tới |
-| **O-03** | Mã đơn trùng giữa các nguồn (giả định A3). Ví dụ POS và một file khác cùng có `HD0001` cho 2 đơn khác nhau → đơn sau ghi đè đơn trước                  | Là quyết định nghiệp vụ, cần bạn chọn                                | Chọn 1: **(a)** `UNIQUE(external_code)` toàn cục (hiện tại, đơn giản); **(b)** `UNIQUE(channel_id, external_code)`. Đề xuất **(b)**: an toàn hơn, chi phí ≈ 0, nhưng đổi kênh của một đơn khi nhập lại sẽ tạo đơn mới | **Trước B1.5**   |
-| **O-04** | Giảm giá cấp đơn (voucher toàn đơn), phí vận chuyển                                                                                                    | Phụ thuộc file thật và cách chủ shop tính doanh thu                  | Hỏi Q7 trong phiếu khảo sát. Tạm thời: ánh xạ "Giá ưu đãi" (đã trừ khuyến mãi sản phẩm) vào `unit_price`; voucher toàn đơn bị bỏ qua → doanh thu có thể **cao hơn** tiền thực nhận. Ghi vào hạn chế                   | Trước B2.5       |
-| **O-05** | "Kỳ trước" của preset tháng: hiện là _cùng số ngày liền trước_ (01–21/10 ↔ 10–30/09). Nhiều người kỳ vọng _cùng kỳ tháng trước_ (01–21/09)             | Lựa chọn trình bày, cần người dùng/GVHD xác nhận                     | Hỏi GVHD. Nếu đổi: chỉ sửa 1 hàm `previousRange()` + AC-14.4                                                                                                                                                          | Trước B3.2       |
+| **O-03** | Mã đơn trùng giữa các nguồn (giả định A3). Ví dụ POS và một file khác cùng có `HD0001` cho 2 đơn khác nhau → đơn sau ghi đè đơn trước                  | Là quyết định nghiệp vụ, cần bạn chọn                                | Chọn 1: **(a)** `UNIQUE(external_code)` toàn cục (hiện tại, đơn giản); **(b)** `UNIQUE(channel_id, external_code)`. Đề xuất **(b)**: an toàn hơn, chi phí ≈ 0, nhưng đổi kênh của một đơn khi nhập lại sẽ tạo đơn mới | **Trước S1.3**   |
+| **O-04** | Giảm giá cấp đơn (voucher toàn đơn), phí vận chuyển                                                                                                    | Phụ thuộc file thật và cách chủ shop tính doanh thu                  | Hỏi Q7 trong phiếu khảo sát. Tạm thời: ánh xạ "Giá ưu đãi" (đã trừ khuyến mãi sản phẩm) vào `unit_price`; voucher toàn đơn bị bỏ qua → doanh thu có thể **cao hơn** tiền thực nhận. Ghi vào hạn chế                   | Trước S3.1       |
+| **O-05** | "Kỳ trước" của preset tháng: hiện là _cùng số ngày liền trước_ (01–21/10 ↔ 10–30/09). Nhiều người kỳ vọng _cùng kỳ tháng trước_ (01–21/09)             | Lựa chọn trình bày, cần người dùng/GVHD xác nhận                     | Hỏi GVHD. Nếu đổi: chỉ sửa 1 hàm `previousRange()` + AC-14.4                                                                                                                                                          | Trước S4.1       |
 | **O-06** | File dùng nhãn trạng thái lạ ngoài từ điển BR-08                                                                                                       | Chưa có file thật                                                    | Nếu O-01 phát hiện nhiều nhãn lạ: thêm bước "ánh xạ giá trị trạng thái" vào UC06 (~2 h)                                                                                                                               | Sau O-01         |
 | **O-07** | Hiện trạng (mục 1.3) đang là **giả định**                                                                                                              | Cần người thật trả lời                                               | Phỏng vấn 1–2 người theo phiếu §1.7, lưu vào phụ lục                                                                                                                                                                  | Trong tuần này   |
 | **O-08** | Báo cáo nộp theo mẫu Word của trường (font, đánh số hình/bảng, bìa)                                                                                    | Không có mẫu của trường                                              | Chuyển nội dung sang Word; ảnh PNG có sẵn trong `so-do/out/`                                                                                                                                                          | Khi nộp          |
@@ -198,26 +198,18 @@ data_sources(..., name UNIQUE, is_active BOOLEAN NOT NULL DEFAULT true, created_
 
 ### 5.3 Mức độ sẵn sàng triển khai — đánh giá trung thực
 
-| Hạng mục                            | Mức sẵn sàng | Còn thiếu gì                                                                  | Làm ở đâu                           |
-| ----------------------------------- | ------------ | ----------------------------------------------------------------------------- | ----------------------------------- |
-| Phạm vi, chức năng, quyền           | ~100 %       | —                                                                             | —                                   |
-| Quy tắc nghiệp vụ & dữ liệu đầu vào | ~90 %        | Xác nhận bằng file thật (O-01, O-04, O-06)                                    | Trước B2.5                          |
-| Quy trình & trạng thái              | ~100 %       | —                                                                             | —                                   |
-| Tiêu chí kiểm thử                   | ~90 %        | Bảng decision table chi tiết cho import                                       | B5.2 (`docs/test-cases.md`)         |
-| Thiết kế CSDL                       | ~80 %        | ERD vẽ chính thức, kiểu dữ liệu từng cột, index cuối cùng                     | B1.5 (`docs/erd.md`)                |
-| Đặc tả API                          | ~75 %        | Schema request/response đầy đủ, mã lỗi                                        | B3.2 (`docs/api.md`)                |
-| Thiết kế giao diện                  | ~50 %        | Chỉ có bố cục dashboard dạng ASCII; chưa có wireframe màn nhập liệu, quản trị | Có thể làm wireframe trước Sprint 2 |
+| Hạng mục                            | Mức sẵn sàng | Còn thiếu gì                                                                  | Làm ở đâu                                  |
+| ----------------------------------- | ------------ | ----------------------------------------------------------------------------- | ------------------------------------------ |
+| Phạm vi, chức năng, quyền           | ~100 %       | —                                                                             | —                                          |
+| Quy tắc nghiệp vụ & dữ liệu đầu vào | ~90 %        | Xác nhận bằng file thật (O-01, O-04, O-06)                                    | Trước S3.1                                 |
+| Quy trình & trạng thái              | ~100 %       | —                                                                             | —                                          |
+| Tiêu chí kiểm thử                   | ~90 %        | Bảng decision table chi tiết cho import                                       | S7.1 (`docs/test-cases.md`)                |
+| Thiết kế CSDL                       | ~80 %        | ERD vẽ chính thức, kiểu dữ liệu từng cột, index cuối cùng                     | S1.3 (`docs/erd.md`)                       |
+| Đặc tả API                          | ~75 %        | Schema request/response đầy đủ, mã lỗi                                        | S4.1 (`docs/api.md`)                       |
+| Thiết kế giao diện                  | ~50 %        | Chỉ có bố cục dashboard dạng ASCII; chưa có wireframe màn nhập liệu, quản trị | Có thể làm wireframe trước Sprint 3 (S3.3) |
 
 > **Kết luận:** phần **phân tích** (hệ thống làm _gì_, cho _ai_, theo _quy tắc nào_, _khi nào coi là xong_) đã đủ để bắt đầu code. Các phần còn lại thuộc giai đoạn **thiết kế** (làm _thế nào_: ERD, API chi tiết, giao diện). Chúng đã được gắn vào bước tương ứng trong kế hoạch, không bị bỏ sót.
 
-## 6. Kế hoạch hoàn thiện trong 1 tuần
+## 6. Kế hoạch hoàn thiện
 
-| Ngày | Việc                                                            | Đầu ra                       | Liên quan              |
-| ---- | --------------------------------------------------------------- | ---------------------------- | ---------------------- |
-| 1    | Đọc toàn bộ ch.1–7, làm bộ câu hỏi ch.8; đánh dấu chỗ chưa hiểu | Ghi chú câu hỏi              | —                      |
-| 2    | Đối chiếu đề gốc (O-09); chuẩn bị câu hỏi cho GVHD (O-02, O-05) | Danh sách câu hỏi            | O-02, O-05, O-09       |
-| 3    | Phỏng vấn 1–2 người dùng theo phiếu §1.7; xin file xuất thật    | Biên bản phỏng vấn, file mẫu | O-01, O-07             |
-| 4    | Cập nhật từ điển §3.5.3, BR-08, O-04 theo file thật; chốt O-03  | Ch.3 bản v1.1                | O-01, O-03, O-04, O-06 |
-| 5    | Chuyển sang Word theo mẫu trường, chèn hình H1–H13              | Báo cáo Word                 | O-08                   |
-| 6    | Tự trình bày thử 10 phút (BFD → UC → 1 đặc tả UC05)             | Slide/ghi chú                | Ch.8                   |
-| 7    | Nộp/báo cáo GVHD; ghi nhận góp ý vào ch.7 mục 4                 | Báo cáo đã nộp               | —                      |
+Việc hoàn thiện bản phân tích (phỏng vấn, file thật, chốt O-01…O-09) là bước **S1.1** trong Sprint 1 của `ke-hoach.md` (21/10 → 27/10/2026), xem lịch theo ngày ở `ke-hoach.md` §7. Bản phân tích v1.1 phải xong **trước S1.3** (migration schema), vì O-03 quyết định ràng buộc mã đơn.

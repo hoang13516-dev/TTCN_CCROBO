@@ -108,30 +108,30 @@ Quy ước: `public` = không cần đăng nhập; `viewer+` = đăng nhập v�
 
 | Method & đường dẫn                                                                                          | Quyền tối thiểu                               | UC         | Bước KH |
 | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------- | ---------- | ------- |
-| `GET /api/health`                                                                                           | public                                        | —          | B1.4    |
-| `POST /api/auth/login`                                                                                      | public                                        | UC01       | B2.2    |
-| `POST /api/auth/logout`                                                                                     | viewer+                                       | UC02       | B2.2    |
-| `GET /api/auth/me`                                                                                          | viewer+                                       | UC01       | B2.2    |
-| `PATCH /api/auth/password`                                                                                  | viewer+                                       | UC03       | B4.8 🆕 |
-| `GET /api/users` · `POST /api/users`                                                                        | admin                                         | UC04       | B4.8 🆕 |
-| `PATCH /api/users/:id` (họ tên, vai trò, khoá/mở)                                                           | admin                                         | UC04       | B4.8 🆕 |
-| `POST /api/users/:id/reset-password`                                                                        | admin                                         | UC04       | B4.8 🆕 |
-| `GET /api/imports/template`                                                                                 | analyst+                                      | UC09       | B2.7    |
-| `POST /api/imports/preview`                                                                                 | analyst+                                      | UC05       | B2.4    |
-| `POST /api/imports` → `202 { jobId }`                                                                       | analyst+                                      | UC05       | B2.5    |
-| `GET /api/imports` · `GET /api/imports/:id`                                                                 | analyst+                                      | UC05, UC07 | B2.7    |
-| `GET /api/imports/:id/errors[?format=csv]`                                                                  | analyst+                                      | UC07       | B2.7    |
-| `GET /api/imports/:id/undo-preview` · `POST /api/imports/:id/undo`                                          | analyst+ **và** (là người tạo **hoặc** admin) | UC08       | B3.7 🆕 |
-| `GET/POST /api/mapping-templates` · `PUT/DELETE /api/mapping-templates/:id`                                 | analyst+                                      | UC06       | B2.7    |
-| `GET /api/sources` · `GET /api/sources/:id` (không có bí mật)                                               | analyst+                                      | UC10, UC12 | B4.1    |
-| `POST /api/sources` · `PATCH/DELETE /api/sources/:id`                                                       | admin                                         | UC10       | B4.1    |
-| `POST /api/sources/test` (chưa lưu) · `POST /api/sources/:id/test`                                          | admin                                         | UC11       | B4.2    |
-| `POST /api/sources/:id/sync` → `202` / `409 đang đồng bộ`                                                   | analyst+                                      | UC12       | B4.2    |
-| `GET /api/analytics/summary\|revenue-trend\|top-products\|by-category\|by-channel`                          | viewer+                                       | UC14, UC15 | B3.2    |
+| `GET /api/health`                                                                                           | public                                        | —          | S1.2    |
+| `POST /api/auth/login`                                                                                      | public                                        | UC01       | S2.3    |
+| `POST /api/auth/logout`                                                                                     | viewer+                                       | UC02       | S2.3    |
+| `GET /api/auth/me`                                                                                          | viewer+                                       | UC01       | S2.3    |
+| `PATCH /api/auth/password`                                                                                  | viewer+                                       | UC03       | S6.3 🆕 |
+| `GET /api/users` · `POST /api/users`                                                                        | admin                                         | UC04       | S6.3 🆕 |
+| `PATCH /api/users/:id` (họ tên, vai trò, khoá/mở)                                                           | admin                                         | UC04       | S6.3 🆕 |
+| `POST /api/users/:id/reset-password`                                                                        | admin                                         | UC04       | S6.3 🆕 |
+| `GET /api/imports/template`                                                                                 | analyst+                                      | UC09       | S3.3    |
+| `POST /api/imports/preview`                                                                                 | analyst+                                      | UC05       | S2.5    |
+| `POST /api/imports` → `202 { jobId }`                                                                       | analyst+                                      | UC05       | S3.1    |
+| `GET /api/imports` · `GET /api/imports/:id`                                                                 | analyst+                                      | UC05, UC07 | S3.3    |
+| `GET /api/imports/:id/errors[?format=csv]`                                                                  | analyst+                                      | UC07       | S3.3    |
+| `GET /api/imports/:id/undo-preview` · `POST /api/imports/:id/undo`                                          | analyst+ **và** (là người tạo **hoặc** admin) | UC08       | S5.1 🆕 |
+| `GET/POST /api/mapping-templates` · `PUT/DELETE /api/mapping-templates/:id`                                 | analyst+                                      | UC06       | S3.3    |
+| `GET /api/sources` · `GET /api/sources/:id` (không có bí mật)                                               | analyst+                                      | UC10, UC12 | S5.2    |
+| `POST /api/sources` · `PATCH/DELETE /api/sources/:id`                                                       | admin                                         | UC10       | S5.2    |
+| `POST /api/sources/test` (chưa lưu) · `POST /api/sources/:id/test`                                          | admin                                         | UC11       | S5.3    |
+| `POST /api/sources/:id/sync` → `202` / `409 đang đồng bộ`                                                   | analyst+                                      | UC12       | S5.3    |
+| `GET /api/analytics/summary\|revenue-trend\|top-products\|by-category\|by-channel`                          | viewer+                                       | UC14, UC15 | S4.1    |
 | `GET /api/analytics/customers` (Could)                                                                      | viewer+                                       | UC17       | —       |
-| `GET /api/catalog/channels` · `GET /api/catalog/categories`                                                 | viewer+                                       | UC15       | B3.5    |
+| `GET /api/catalog/channels` · `GET /api/catalog/categories`                                                 | viewer+                                       | UC15       | S4.4    |
 | `GET /api/catalog/products` · `PATCH /api/catalog/products/:id` · `PATCH /api/catalog/channels/:id` (Could) | analyst+                                      | UC18       | —       |
-| `GET /api/export/csv?report=daily\|products\|categories\|channels&…`                                        | analyst+                                      | UC16       | B4.6    |
+| `GET /api/export/csv?report=daily\|products\|categories\|channels&…`                                        | analyst+                                      | UC16       | S5.5    |
 
 > **Lưu ý thiết kế:** mẫu ánh xạ của file được lưu trong `data_sources` (`type IN ('csv','excel')`) như `ke-hoach.md` đã định, nhưng đi qua endpoint riêng `/api/mapping-templates` (analyst+) để tách quyền với nguồn kết nối `type IN ('database','api')` (admin). Nếu dùng chung `/api/sources` thì hoặc analyst sửa được nguồn CSDL (sai quyền), hoặc analyst không lưu được mẫu (sai nghiệp vụ).
 
