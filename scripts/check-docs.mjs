@@ -21,7 +21,8 @@ const exists = (rel) => fs.existsSync(path.join(ROOT, rel));
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(path.join(ROOT, dir), { withFileTypes: true })) {
     if ([".git", "node_modules", "dist", "coverage"].includes(e.name)) continue;
-    const rel = path.join(dir, e.name);
+    // Dùng path.posix để đường dẫn luôn có "/", kể cả trên Windows (path.join trả về "\")
+    const rel = path.posix.join(dir, e.name);
     if (e.isDirectory()) walk(rel, out);
     else out.push(rel);
   }
@@ -290,7 +291,7 @@ for (const f of mdFiles) {
     const link = m[1];
     if (/^(https?:|mailto:)/.test(link)) continue;
     const [p, anchor] = link.split("#");
-    const target = p ? path.normalize(path.join(path.dirname(f), p)) : f;
+    const target = p ? path.posix.normalize(path.posix.join(path.posix.dirname(f), p)) : f;
     if (p && !exists(target)) {
       err(`${f}: link chết ${link}`);
       continue;
