@@ -6,7 +6,7 @@ dist/
 build/
 coverage/
 
-# environment — KHÔNG commit secret
+# environment - KHÔNG commit secret
 .env
 .env.*
 !.env.example
@@ -19,3 +19,6 @@ Thumbs.db
 # editor
 .vscode/
 .idea/
+
+# công cụ xuất sơ đồ (tải riêng, ~30 MB)
+docs/phan-tich/so-do/plantuml.jar

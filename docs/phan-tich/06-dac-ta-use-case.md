@@ -1,16 +1,16 @@
 # Chương 6. ĐẶC TẢ USE CASE
 
-> **Mẫu đặc tả:** Tác nhân · Mục tiêu · Tiền điều kiện · Hậu điều kiện (thành công ✓ / thất bại ✗) · Luồng chính · Luồng thay thế (A) · Ngoại lệ (E) · Quy tắc · API · **Tiêu chí chấp nhận (AC)** dạng _Cho trước – Khi – Thì_.
+> **Mẫu đặc tả:** Tác nhân · Mục tiêu · Tiền điều kiện · Hậu điều kiện (thành công ✓ / thất bại ✗) · Luồng chính · Luồng thay thế (A) · Ngoại lệ (E) · Quy tắc · API · **Tiêu chí chấp nhận (AC)** dạng _Cho trước - Khi - Thì_.
 >
 > **Mỗi AC = ít nhất 1 test case** (Supertest cho API, Testing Library hoặc thao tác tay cho UI). Một bước trong kế hoạch chỉ được coi là xong khi các AC nó trỏ tới đã pass.
 
 Đặc tả đầy đủ cho các use case Must có luồng phức tạp (UC01, UC06+UC07, UC11, UC12+UC13+UC14, UC15, UC17); các use case còn lại đặc tả rút gọn ở [6.7](#67-đặc-tả-rút-gọn).
 
-Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-ví-dụ-file-mẫu-mau-du-lieuxlsx-sheet-donhang--đồng-thời-là-bộ-dữ-liệu-kiểm-thử-chuẩn) và 5 chi nhánh khởi tạo ([§8.4.2](08-kien-truc-va-dinh-huong.md#842-bảng-vận-hành)).
+Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-ví-dụ-file-mẫu-mau-du-lieuxlsx-sheet-donhang---đồng-thời-là-bộ-dữ-liệu-kiểm-thử-chuẩn) và 5 chi nhánh khởi tạo ([§8.4.2](08-kien-truc-va-dinh-huong.md#842-bảng-vận-hành)).
 
 ---
 
-## 6.1 UC01 — Đăng nhập
+## 6.1 UC01 - Đăng nhập
 
 | Mục             | Nội dung                                                       |
 | --------------- | -------------------------------------------------------------- |
@@ -33,11 +33,11 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 | AC-01.4 | user bị khoá                         | đăng nhập đúng mật khẩu | 401 "Tài khoản đã bị khoá"                                            |
 | AC-01.5 | đã đăng nhập                         | F5 trang `/`            | vẫn ở `/`, không về `/login`                                          |
 | AC-01.6 | chưa đăng nhập (analyst)             | mở `/imports`           | chuyển `/login?next=/imports`; đăng nhập xong về `/imports`           |
-| AC-01.7 | —                                    | `next=https://evil.com` | bỏ qua `next`, về `/` (chống open redirect)                           |
+| AC-01.7 | -                                    | `next=https://evil.com` | bỏ qua `next`, về `/` (chống open redirect)                           |
 
 ---
 
-## 6.2 UC06 — Nhập dữ liệu từ file (gồm UC07 Ánh xạ cột)
+## 6.2 UC06 - Nhập dữ liệu từ file (gồm UC07 Ánh xạ cột)
 
 | Mục             | Nội dung                                                                                                    |
 | --------------- | ----------------------------------------------------------------------------------------------------------- |
@@ -70,12 +70,12 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 | -------- | ------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | AC-06.1  | kho rỗng                                               | nhập file mẫu §3.5.2                           | `success`; tổng 3, hợp lệ 3, lỗi 0, đơn mới 2; kho có 3 dòng `fact_sales`                               |
 | AC-06.2  | đã nhập file mẫu                                       | nhập lại **cùng file**                         | đơn mới 0, đơn cập nhật 2; doanh thu ngày 21/10 vẫn **630.000**, số dòng `fact_sales` vẫn 3             |
-| AC-06.3  | —                                                      | Đơn giá `"1.200.000"`; Số lượng `"2.5"`        | đơn giá = 1200000; dòng số lượng `2.5` lỗi "Số lượng phải là số nguyên ≥ 1"                             |
-| AC-06.4  | —                                                      | dòng có Ngày đặt `21/10/2026 00:30`            | `date_key = 20261021` (không bị lùi về 20/10)                                                           |
+| AC-06.3  | -                                                      | Đơn giá `"1.200.000"`; Số lượng `"2.5"`        | đơn giá = 1200000; dòng số lượng `2.5` lỗi "Số lượng phải là số nguyên ≥ 1"                             |
+| AC-06.4  | -                                                      | dòng có Ngày đặt `21/10/2026 00:30`            | `date_key = 20261021` (không bị lùi về 20/10)                                                           |
 | AC-06.5  | file 3 dòng, 1 dòng có mã chi nhánh `XX01`             | nhập                                           | `partial`; lỗi "Chi nhánh 'XX01' chưa được khai báo" ở đúng số dòng; 2 dòng còn lại đã nạp              |
 | AC-06.6  | đơn DH9 có 2 dòng khác Ngày đặt                        | nhập                                           | cả 2 dòng lỗi "Đơn DH9 không nhất quán giữa các dòng ở cột: Ngày đặt"                                   |
 | AC-06.7  | test giả lập lỗi CSDL khi chèn dòng thứ 500            | nhập file 1.000 dòng hợp lệ                    | `failed`; `count(*) fact_sales` không đổi so với trước khi nhập                                         |
-| AC-06.8  | —                                                      | tải file `.xls`; file 6 MB; file 10.001 dòng   | 400 với thông báo tương ứng; không tạo lần nhập                                                         |
+| AC-06.8  | -                                                      | tải file `.xls`; file 6 MB; file 10.001 dòng   | 400 với thông báo tương ứng; không tạo lần nhập                                                         |
 | AC-06.9  | file hợp lệ 10.000 dòng                                | nhập                                           | hoàn tất < 15 s (NFR-02)                                                                                |
 | AC-06.10 | đăng nhập manager                                      | `POST /api/imports/preview`                    | 403                                                                                                     |
 | AC-07.1  | file có cột `Mã chi nhánh`, `Giá vốn`, `Mã khách hàng` | xem trước                                      | gợi ý: `branch_code`, `cost_price`, `customer_code` (**không** gán `Mã khách hàng` cho `customer_name`) |
@@ -83,7 +83,7 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ---
 
-## 6.3 UC11 — Đồng bộ dữ liệu từ REST API
+## 6.3 UC11 - Đồng bộ dữ liệu từ REST API
 
 | Mục             | Nội dung                                                                                                        |
 | --------------- | --------------------------------------------------------------------------------------------------------------- |
@@ -108,7 +108,7 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ---
 
-## 6.4 UC12 — Xem dashboard KPI (gồm UC13 Lọc đa chiều & lọc chéo, UC14 Drill-down)
+## 6.4 UC12 - Xem dashboard KPI (gồm UC13 Lọc đa chiều & lọc chéo, UC14 Drill-down)
 
 | Mục             | Nội dung                                                                                              |
 | --------------- | ----------------------------------------------------------------------------------------------------- |
@@ -141,27 +141,27 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 | AC      | Cho trước                                                   | Khi                                                  | Thì                                                                                                     |
 | ------- | ----------------------------------------------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| AC-12.1 | kho chỉ có file mẫu §3.5.2                                  | xem 21/10/2026–21/10/2026                            | Doanh thu 630.000; Lợi nhuận 250.000; Biên 39,7 %; Số đơn 1; AOV 630.000                                |
-| AC-12.2 | không có đơn trong tháng 01/2020                            | xem tháng 01/2020                                    | 200; Doanh thu 0; Biên, AOV, Tỷ lệ giữ chân hiển thị "—"; khối biểu đồ hiện "Chưa có dữ liệu…"          |
+| AC-12.1 | kho chỉ có file mẫu §3.5.2                                  | xem 21/10/2026-21/10/2026                            | Doanh thu 630.000; Lợi nhuận 250.000; Biên 39,7 %; Số đơn 1; AOV 630.000                                |
+| AC-12.2 | không có đơn trong tháng 01/2020                            | xem tháng 01/2020                                    | 200; Doanh thu 0; Biên, AOV, Tỷ lệ giữ chân hiển thị "-"; khối biểu đồ hiện "Chưa có dữ liệu…"          |
 | AC-12.3 | kỳ trước khách {A, B, C}, kỳ này {A, B, D} + 1 đơn khách lẻ | xem                                                  | Tỷ lệ giữ chân **66,7 %**                                                                               |
 | AC-12.4 | kỳ trước doanh thu 0, kỳ này 100.000                        | xem                                                  | delta Doanh thu hiển thị "Mới"                                                                          |
 | AC-12.5 | màn hình 375 px                                             | xem                                                  | không cuộn ngang; KPI lưới 2 cột                                                                        |
 | AC-12.6 | đơn A gồm 2 sản phẩm                                        | xem số đơn                                           | đếm **1**, không phải 2                                                                                 |
-| AC-13.1 | —                                                           | `from=2026-10-10&to=2026-10-01`                      | 400                                                                                                     |
+| AC-13.1 | -                                                           | `from=2026-10-10&to=2026-10-01`                      | 400                                                                                                     |
 | AC-13.2 | đang lọc chi nhánh `HN01`, danh mục `Áo`                    | copy URL, mở ở trình duyệt khác đã đăng nhập (admin) | thấy đúng bộ lọc và đúng số liệu                                                                        |
 | AC-13.3 | đang xem mọi vùng                                           | click cột "Miền Nam" trên biểu đồ theo vùng          | URL thêm bộ lọc chi nhánh Miền Nam; mọi KPI/biểu đồ chỉ còn Miền Nam; "Xoá lọc" đưa về như cũ           |
 | AC-13.4 | manager của `DN01`                                          | gọi `GET /api/analytics/summary?branch=HCM01`        | 200, số liệu **của DN01** (tham số bị ghi đè); bằng đúng kết quả của admin lọc `branch=DN01`            |
 | AC-14.1 | xem năm 2026, cấp `month`                                   | click điểm tháng 10                                  | cấp `day`, 31 điểm, ngày không có đơn = 0; breadcrumb "2026 › Tháng 10"; click "2026" quay về cấp tháng |
-| AC-14.2 | —                                                           | `level=hour` hoặc `level=day;DROP TABLE fact_sales`  | 400 (whitelist), không lỗi SQL                                                                          |
+| AC-14.2 | -                                                           | `level=hour` hoặc `level=day;DROP TABLE fact_sales`  | 400 (whitelist), không lỗi SQL                                                                          |
 | AC-14.3 | đang xem mọi danh mục                                       | click lát "Áo" trên donut                            | hiện bảng sản phẩm thuộc "Áo"; tổng doanh thu bảng = doanh thu lát "Áo"                                 |
 
 ---
 
-## 6.5 UC15 — Xem cảnh báo chỉ số bất thường
+## 6.5 UC15 - Xem cảnh báo chỉ số bất thường
 
 | Mục             | Nội dung                                                                                   |
 | --------------- | ------------------------------------------------------------------------------------------ |
-| Tác nhân        | Manager (+) — luôn được gọi khi xem dashboard (UC12 include UC15)                          |
+| Tác nhân        | Manager (+) - luôn được gọi khi xem dashboard (UC12 include UC15)                          |
 | Hậu điều kiện ✓ | Danh sách cảnh báo khớp đúng bộ lọc và phạm vi chi nhánh; không có cảnh báo → khối được ẩn |
 
 **Luồng chính:** 1) FE gọi `GET /api/alerts?<bộ lọc>`. 2) Server áp phạm vi chi nhánh, đọc các quy tắc đang bật. 3) Với quy tắc `drop_vs_previous`/`below_threshold`: dùng lại kết quả tính KPI kỳ này + kỳ trước (cùng hàm với `summary`). 4) Với quy tắc `daily_zscore`: tính z-score cho từng ngày trong khoảng lọc. 5) Trả danh sách `{ ruleCode, severity, metric, value, previous?, threshold, message }`, sắp `critical` trước. 6) FE hiển thị, ví dụ: 🔴 "Biên lợi nhuận 12,4 % thấp hơn ngưỡng 15 %"; 🟡 "Doanh thu giảm 25,0 % so với kỳ trước (ngưỡng 20 %)"; 🟡 "Ngày 14/10/2026 doanh thu bất thường (z = −2,6)".
@@ -178,7 +178,7 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ---
 
-## 6.6 UC17 — Xuất báo cáo Excel/PDF
+## 6.6 UC17 - Xuất báo cáo Excel/PDF
 
 | Mục             | Nội dung                                                                             |
 | --------------- | ------------------------------------------------------------------------------------ |
@@ -186,9 +186,9 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 | Tiền điều kiện  | Đang xem dashboard với một bộ lọc                                                    |
 | Hậu điều kiện ✓ | Người dùng có file `.xlsx` hoặc `.pdf` mà số liệu **khớp** dashboard với cùng bộ lọc |
 
-**Luồng chính — Excel:** 1) Bấm "Xuất Excel". 2) `GET /api/reports/excel?<bộ lọc>` (đã áp phạm vi chi nhánh). 3) Server gọi lại các hàm phân tích, ghi 5 sheet bằng exceljs (tiền định dạng `#,##0`), trả file `bao-cao_<from>_<to>.xlsx`.
+**Luồng chính - Excel:** 1) Bấm "Xuất Excel". 2) `GET /api/reports/excel?<bộ lọc>` (đã áp phạm vi chi nhánh). 3) Server gọi lại các hàm phân tích, ghi 5 sheet bằng exceljs (tiền định dạng `#,##0`), trả file `bao-cao_<from>_<to>.xlsx`.
 
-**Luồng chính — PDF:** 1) Bấm "Xuất PDF" → mở `/report?<bộ lọc>` (trang báo cáo bố cục A4, không có thanh điều hướng). 2) Trang tải dữ liệu từ cùng các API, hiện tiêu đề, bộ lọc đang áp dụng, thời điểm xuất, cảnh báo, KPI, biểu đồ, bảng top sản phẩm. 3) Khi tải xong, gọi `window.print()`; người dùng chọn "Lưu thành PDF".
+**Luồng chính - PDF:** 1) Bấm "Xuất PDF" → mở `/report?<bộ lọc>` (trang báo cáo bố cục A4, không có thanh điều hướng). 2) Trang tải dữ liệu từ cùng các API, hiện tiêu đề, bộ lọc đang áp dụng, thời điểm xuất, cảnh báo, KPI, biểu đồ, bảng top sản phẩm. 3) Khi tải xong, gọi `window.print()`; người dùng chọn "Lưu thành PDF".
 
 **Quy tắc:** BR-15, BR-21; dữ liệu xuất **chỉ** là số liệu tổng hợp, không có tên/mã khách.
 
@@ -196,14 +196,14 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 | ------- | -------------------- | ------------------------- | ----------------------------------------------------------------------------------------- |
 | AC-17.1 | bộ lọc tháng 10/2026 | xuất Excel, mở bằng Excel | 5 sheet, tiếng Việt đúng; tổng doanh thu sheet "Tổng quan" = KPI Doanh thu trên dashboard |
 | AC-17.2 | manager của DN01     | xuất Excel                | mọi sheet chỉ có số liệu DN01                                                             |
-| AC-17.3 | —                    | xuất PDF trên Chrome      | 1–2 trang A4, không mất biểu đồ, có tiêu đề, bộ lọc, thời điểm xuất                       |
-| AC-17.4 | —                    | xuất Excel                | không sheet nào chứa tên hoặc mã khách                                                    |
+| AC-17.3 | -                    | xuất PDF trên Chrome      | 1-2 trang A4, không mất biểu đồ, có tiêu đề, bộ lọc, thời điểm xuất                       |
+| AC-17.4 | -                    | xuất Excel                | không sheet nào chứa tên hoặc mã khách                                                    |
 
 ---
 
 ## 6.7 Đặc tả rút gọn
 
-### UC02 — Đăng xuất
+### UC02 - Đăng xuất
 
 `POST /api/auth/logout` → xoá cookie → FE về `/login`.
 
@@ -211,16 +211,16 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 | ------- | ------------ | --------- | --------------------------------------- |
 | AC-02.1 | đã đăng nhập | đăng xuất | cookie bị xoá; `GET /api/auth/me` → 401 |
 
-### UC03 — Đổi mật khẩu
+### UC03 - Đổi mật khẩu
 
 Nhập mật khẩu hiện tại, mật khẩu mới, nhập lại → `PATCH /api/auth/password` → kiểm tra mật khẩu hiện tại và BR-17 → cập nhật.
 
 | AC      | Cho trước | Khi                                   | Thì                                          |
 | ------- | --------- | ------------------------------------- | -------------------------------------------- |
-| AC-03.1 | —         | mật khẩu hiện tại sai                 | 400 "Mật khẩu hiện tại không đúng"           |
-| AC-03.2 | —         | mật khẩu mới `abcdefgh` (không có số) | 400 "Mật khẩu phải có ít nhất 1 chữ và 1 số" |
+| AC-03.1 | -         | mật khẩu hiện tại sai                 | 400 "Mật khẩu hiện tại không đúng"           |
+| AC-03.2 | -         | mật khẩu mới `abcdefgh` (không có số) | 400 "Mật khẩu phải có ít nhất 1 chữ và 1 số" |
 
-### UC04 — Quản lý người dùng
+### UC04 - Quản lý người dùng
 
 Danh sách (email, họ tên, vai trò, chi nhánh, trạng thái) → thêm / đổi vai trò, chi nhánh / khoá-mở / đặt lại mật khẩu tạm. Không có "xoá" (giữ lịch sử ai đã nhập dữ liệu).
 
@@ -231,16 +231,16 @@ Danh sách (email, họ tên, vai trò, chi nhánh, trạng thái) → thêm / �
 | AC-04.3 | manager X đang đăng nhập | admin khoá X                                  | request kế tiếp của X → 401                         |
 | AC-04.4 | chỉ có 1 admin           | admin đó tự đổi vai trò hoặc tự khoá          | 400, không thay đổi                                 |
 
-### UC05 — Quản lý chi nhánh
+### UC05 - Quản lý chi nhánh
 
 Danh sách → thêm/sửa (mã, tên, tỉnh, vùng), ngừng hoạt động. Không xoá chi nhánh đã có dữ liệu.
 
 | AC      | Cho trước    | Khi                        | Thì                     |
 | ------- | ------------ | -------------------------- | ----------------------- |
 | AC-05.1 | đã có `HN01` | thêm chi nhánh mã `hn01`   | 409 (mã viết hoa trùng) |
-| AC-05.2 | —            | thêm chi nhánh vùng `east` | 400                     |
+| AC-05.2 | -            | thêm chi nhánh vùng `east` | 400                     |
 
-### UC08 — Tải file mẫu
+### UC08 - Tải file mẫu
 
 `GET /api/imports/template` → `mau-du-lieu.xlsx` (sheet `DonHang` có tiêu đề chuẩn + 3 dòng §3.5.2; sheet `HuongDan` giải thích 14 cột).
 
@@ -248,7 +248,7 @@ Danh sách → thêm/sửa (mã, tên, tỉnh, vùng), ngừng hoạt động. K
 | ------- | --------- | -------------------------------------------- | ------------------------------ |
 | AC-08.1 | kho rỗng  | tải file mẫu rồi nhập ngay, không sửa ánh xạ | `success`; kết quả như AC-06.1 |
 
-### UC09 — Xem lịch sử & lỗi nhập
+### UC09 - Xem lịch sử & lỗi nhập
 
 Bảng lần nhập (mới nhất trước): thời gian, nguồn, tên file, người thực hiện, trạng thái, Tổng/Hợp lệ/Lỗi/Đơn mới/Đơn cập nhật; lọc theo trạng thái; nút "Tải dòng lỗi".
 
@@ -257,7 +257,7 @@ Bảng lần nhập (mới nhất trước): thời gian, nguồn, tên file, ng
 | AC-09.1 | đã có 2 lần nhập       | mở "Lịch sử nhập"           | 2 dòng, đúng thống kê và người thực hiện                      |
 | AC-09.2 | lần nhập có 1 dòng lỗi | tải dòng lỗi, mở bằng Excel | tiếng Việt đúng (UTF-8 BOM); có các cột gốc + cột "Lý do lỗi" |
 
-### UC10 — Quản lý nguồn dữ liệu
+### UC10 - Quản lý nguồn dữ liệu
 
 Danh sách nguồn (loại, tên, trạng thái, lần đồng bộ cuối) → thêm/sửa nguồn `file` (tên) hoặc `api` (tên, URL, API key) → "Kiểm tra kết nối" cho nguồn API.
 
@@ -265,9 +265,9 @@ Danh sách nguồn (loại, tên, trạng thái, lần đồng bộ cuối) → 
 | ------- | ----------------------- | ---------------------------- | --------------------------------------------------------- |
 | AC-10.1 | nguồn API có key `demo` | `GET /api/sources` (admin)   | response **không** chứa chuỗi `demo`; key hiển thị `••••` |
 | AC-10.2 | như trên                | sửa tên, để trống ô API key  | key trong CSDL vẫn là `demo`                              |
-| AC-10.3 | —                       | kiểm tra kết nối với key sai | thông báo "API key không hợp lệ (401)"; không lộ key      |
+| AC-10.3 | -                       | kiểm tra kết nối với key sai | thông báo "API key không hợp lệ (401)"; không lộ key      |
 
-### UC16 — Cấu hình quy tắc cảnh báo
+### UC16 - Cấu hình quy tắc cảnh báo
 
 Bảng 5 quy tắc (BR-20): bật/tắt, ngưỡng, mức → `PATCH /api/alert-rules/:id`.
 
@@ -278,4 +278,4 @@ Bảng 5 quy tắc (BR-20): bật/tắt, ngưỡng, mức → `PATCH /api/alert-
 
 ---
 
-**Thống kê:** 62 AC — UC01 7 · UC02 1 · UC03 2 · UC04 4 · UC05 2 · UC06 10 · UC07 2 · UC08 1 · UC09 2 · UC10 3 · UC11 4 · UC12 6 · UC13 4 · UC14 3 · UC15 5 · UC16 2 · UC17 4.
+**Thống kê:** 62 AC - UC01 7 · UC02 1 · UC03 2 · UC04 4 · UC05 2 · UC06 10 · UC07 2 · UC08 1 · UC09 2 · UC10 3 · UC11 4 · UC12 6 · UC13 4 · UC14 3 · UC15 5 · UC16 2 · UC17 4.

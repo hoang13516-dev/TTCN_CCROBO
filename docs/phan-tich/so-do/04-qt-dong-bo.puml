@@ -4,7 +4,7 @@ title QT-02 (TO-BE): Khai báo nguồn và đồng bộ từ REST API
 
 |Quản trị viên|
 start
-:(a) Khai báo nguồn — UC10:
+:(a) Khai báo nguồn - UC10:
 nhập tên, URL, API key;
 :Bấm "Kiểm tra kết nối";
 |Hệ thống|
@@ -20,7 +20,7 @@ endif
 stop
 |Nhân viên phân tích|
 start
-:(b) Đồng bộ — UC11:
+:(b) Đồng bộ - UC11:
 bấm "Đồng bộ ngay";
 |Hệ thống|
 if (pg_try_advisory_lock(source_id)?) then (không lấy được)

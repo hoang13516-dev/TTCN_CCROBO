@@ -1,6 +1,6 @@
 @startuml 06-star-schema
 !include _style.iuml
-title Kho dữ liệu hình sao — grain: 1 sản phẩm trong 1 đơn
+title Kho dữ liệu hình sao - grain: 1 sản phẩm trong 1 đơn
 hide circle
 hide methods
 skinparam linetype ortho

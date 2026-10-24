@@ -17,7 +17,7 @@ Chưa có: CSDL, đăng nhập, ETL, dashboard thật. Tiến độ theo bước
 
 | Tài liệu                                      | Nội dung                                                              |
 | --------------------------------------------- | --------------------------------------------------------------------- |
-| [`docs/phan-tich/`](docs/phan-tich/README.md) | Phân tích yêu cầu (ch.1–7) và kiến trúc, công nghệ, định hướng (ch.8) |
+| [`docs/phan-tich/`](docs/phan-tich/README.md) | Phân tích yêu cầu (ch.1-7) và kiến trúc, công nghệ, định hướng (ch.8) |
 | [`docs/adr/`](docs/adr/)                      | Lý do các quyết định kiến trúc                                        |
 | [`ke-hoach.md`](ke-hoach.md)                  | Lịch sprint, các bước, giờ, bảng tiến độ                              |
 | [`CLAUDE.md`](CLAUDE.md)                      | Quy tắc làm việc trong repo và checklist trước khi commit             |

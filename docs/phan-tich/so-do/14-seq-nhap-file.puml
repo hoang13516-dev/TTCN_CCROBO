@@ -36,7 +36,7 @@ alt có ≥ 1 dòng tốt
     SV -> DB : COMMIT
   end
 end
-SV -> DB : INSERT import_errors; UPDATE import_jobs\n(success | partial | failed — BR-13)
+SV -> DB : INSERT import_errors; UPDATE import_jobs\n(success | partial | failed - BR-13)
 SV --> CT : kết quả lần nhập
 CT --> FE : 200 {status, total, ok, error, newOrders, updatedOrders}
 FE --> U : màn hình kết quả + bảng lỗi

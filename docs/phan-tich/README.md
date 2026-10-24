@@ -1,9 +1,9 @@
-# BÁO CÁO PHÂN TÍCH YÊU CẦU — CN-019 DASHBOARD PHÂN TÍCH DỮ LIỆU BÁN HÀNG
+# BÁO CÁO PHÂN TÍCH YÊU CẦU - CN-019 DASHBOARD PHÂN TÍCH DỮ LIỆU BÁN HÀNG
 
 > Phiên bản: **v2.0** · Ngày: 21/10/2026 · Người thực hiện: Nguyễn Minh Hoàng · GVHD: ThS. Dương Văn Đeo
-> Trạng thái: **Bản nháp chờ GVHD xác nhận** các quyết định phạm vi (O-15 ở [ch.7 §5](07-truy-vet-va-tu-kiem-tra.md#5-vấn-đề-còn-mở--cần-bạn-tự-xử-lý))
+> Trạng thái: **Bản nháp chờ GVHD xác nhận** các quyết định phạm vi (O-15 ở [ch.7 §5](07-truy-vet-va-tu-kiem-tra.md#5-vấn-đề-còn-mở---cần-bạn-tự-xử-lý))
 > v2.0 thay thế v1.0: phạm vi được rút gọn về mức cơ bản và bổ sung đủ "Kết quả cần đạt" của đề. Danh sách xung đột đã giải quyết: [ch.7 §4](07-truy-vet-va-tu-kiem-tra.md#4-các-xung-đột-đã-giải-quyết-21102026).
-> **Quan hệ với `ke-hoach.md`:** tài liệu này quyết định hệ thống làm _gì_ (ch.1–7) và được _xây thế nào_ (ch.8); `ke-hoach.md` chỉ quyết định làm _khi nào_ và trỏ tới UC/FR/AC ở đây. Tài liệu phân tích **không** trỏ ngược vào bước kế hoạch. Đổi phạm vi thì sửa ở đây trước rồi mới sửa kế hoạch.
+> **Quan hệ với `ke-hoach.md`:** tài liệu này quyết định hệ thống làm _gì_ (ch.1-7) và được _xây thế nào_ (ch.8); `ke-hoach.md` chỉ quyết định làm _khi nào_ và trỏ tới UC/FR/AC ở đây. Tài liệu phân tích **không** trỏ ngược vào bước kế hoạch. Đổi phạm vi thì sửa ở đây trước rồi mới sửa kế hoạch.
 
 ## Mục lục
 
@@ -57,16 +57,16 @@ Không muốn cài: dán nội dung file `.puml` vào https://www.plantuml.com/p
 
 | Tiền tố | Ý nghĩa                                                                       | Ví dụ                                 |
 | ------- | ----------------------------------------------------------------------------- | ------------------------------------- |
-| `G`     | Mục tiêu đo được                                                              | G5 — phát hiện sớm bất thường         |
-| `P`     | Vấn đề hiện trạng (pain point)                                                | P4 — không thấy lợi nhuận             |
-| `QT`    | Quy trình nghiệp vụ TO-BE                                                     | QT-01 — nhập dữ liệu từ file          |
-| `FR`    | Yêu cầu chức năng                                                             | FR-26 — drill-down thời gian          |
-| `NFR`   | Yêu cầu phi chức năng                                                         | NFR-01 — dashboard < 2 s              |
-| `BR`    | Quy tắc nghiệp vụ                                                             | BR-15 — phạm vi chi nhánh             |
-| `F`     | Chức năng trong BFD                                                           | F3.4 — nạp vào kho                    |
-| `UC`    | Use case                                                                      | UC06 — nhập dữ liệu từ file           |
+| `G`     | Mục tiêu đo được                                                              | G5 - phát hiện sớm bất thường         |
+| `P`     | Vấn đề hiện trạng (pain point)                                                | P4 - không thấy lợi nhuận             |
+| `QT`    | Quy trình nghiệp vụ TO-BE                                                     | QT-01 - nhập dữ liệu từ file          |
+| `FR`    | Yêu cầu chức năng                                                             | FR-26 - drill-down thời gian          |
+| `NFR`   | Yêu cầu phi chức năng                                                         | NFR-01 - dashboard < 2 s              |
+| `BR`    | Quy tắc nghiệp vụ                                                             | BR-15 - phạm vi chi nhánh             |
+| `F`     | Chức năng trong BFD                                                           | F3.4 - nạp vào kho                    |
+| `UC`    | Use case                                                                      | UC06 - nhập dữ liệu từ file           |
 | `AC`    | Tiêu chí chấp nhận                                                            | AC-06.2                               |
-| `O`     | Vấn đề mở                                                                     | O-15 — chờ GVHD xác nhận              |
-| `S`     | Bước trong kế hoạch — **chỉ dùng trong `ke-hoach.md`**, dạng `S<sprint>.<số>` | (không dùng trong tài liệu phân tích) |
+| `O`     | Vấn đề mở                                                                     | O-15 - chờ GVHD xác nhận              |
+| `S`     | Bước trong kế hoạch - **chỉ dùng trong `ke-hoach.md`**, dạng `S<sprint>.<số>` | (không dùng trong tài liệu phân tích) |
 
 Mã của v2.0 được đánh lại từ đầu (FR, BR, UC, AC khác v1.0). Trong cùng một phiên bản, mã là **ổn định**: xoá một mục thì đánh dấu "đã bỏ", không đánh lại số, để không gãy truy vết. Riêng mã vấn đề mở `O-xx` tiếp tục đánh số nối tiếp v1.0 (O-15 trở đi) để đối chiếu được với lịch sử.

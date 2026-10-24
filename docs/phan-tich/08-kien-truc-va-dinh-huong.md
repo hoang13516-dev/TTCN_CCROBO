@@ -1,6 +1,6 @@
 # Chương 8. KIẾN TRÚC, CÔNG NGHỆ & ĐỊNH HƯỚNG PHÁT TRIỂN
 
-> **Phạm vi:** phiên bản **đơn giản nhất đủ yêu cầu đề tài** — một web app 3 tầng, một server API, một CSDL. Mục tiêu là nắm chắc các quy tắc nền của một hệ thống web trước khi mở rộng.
+> **Phạm vi:** phiên bản **đơn giản nhất đủ yêu cầu đề tài** - một web app 3 tầng, một server API, một CSDL. Mục tiêu là nắm chắc các quy tắc nền của một hệ thống web trước khi mở rộng.
 > Chương này là **nguồn sự thật duy nhất** cho: kiến trúc, quy tắc phân lớp, cấu trúc thư mục, mô hình dữ liệu, công nghệ. Chương 3 định nghĩa hệ thống làm _gì_; chương này định nghĩa hệ thống được _xây thế nào_.
 
 ## 8.1 Tổng quan: kiến trúc 3 tầng
@@ -52,7 +52,7 @@
 | Lớp        | Đầu vào → đầu ra                                                     | Được gọi                 | Không được                                                            | Vì sao tách                                                                  |
 | ---------- | -------------------------------------------------------------------- | ------------------------ | --------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
 | Route      | URL → chuỗi middleware + controller                                  | Middleware, Controller   | Chứa logic                                                            | Nhìn 1 file là biết toàn bộ API và quyền của module                          |
-| Middleware | `req` → `req` đã bổ sung (`req.user`, bộ lọc đã áp phạm vi) hoặc lỗi | —                        | Chứa quy tắc nghiệp vụ; tự viết SQL (đọc user qua `users.repository`) | Một chỗ duy nhất cho xác thực/phân quyền → không sót endpoint                |
+| Middleware | `req` → `req` đã bổ sung (`req.user`, bộ lọc đã áp phạm vi) hoặc lỗi | -                        | Chứa quy tắc nghiệp vụ; tự viết SQL (đọc user qua `users.repository`) | Một chỗ duy nhất cho xác thực/phân quyền → không sót endpoint                |
 | Controller | `req` → gọi service → `res.status().json()`                          | Service                  | Viết SQL; chứa quy tắc nghiệp vụ                                      | Đổi framework (Express → khác) chỉ sửa lớp này                               |
 | Service    | tham số thuần → kết quả thuần / ném lỗi nghiệp vụ                    | Repository, service khác | Đọc `req`, `res`; viết SQL                                            | Test được bằng unit test không cần HTTP; dùng lại cho cảnh báo, xuất báo cáo |
 | Repository | tham số thuần → dòng dữ liệu                                         | `pg` Pool / client       | Quy tắc nghiệp vụ; nối chuỗi vào SQL                                  | Mọi SQL ở một chỗ → tối ưu, đọc execution plan, chống SQL injection          |
@@ -121,26 +121,26 @@ cn019-sales-dashboard/
 
 ### 8.3.1 Xem dashboard (đọc dữ liệu)
 
-![H13 — Luồng request dashboard](so-do/out/13-seq-dashboard.png)
+![H13 - Luồng request dashboard](so-do/out/13-seq-dashboard.png)
 
-_Hình H13 — `GET /api/analytics/summary` đi qua từng lớp._
+_Hình H13 - `GET /api/analytics/summary` đi qua từng lớp._
 
 | #   | Lớp                | Việc làm                                                                          | Lỗi → HTTP                         |
 | --- | ------------------ | --------------------------------------------------------------------------------- | ---------------------------------- |
-| 1   | Browser            | Hook `useSummary(filters)` gọi API; cùng bộ lọc → dùng cache                      | —                                  |
+| 1   | Browser            | Hook `useSummary(filters)` gọi API; cùng bộ lọc → dùng cache                      | -                                  |
 | 2   | `requireAuth`      | Đọc cookie, xác minh JWT, **đọc lại user từ CSDL** qua `users.repository` (BR-17) | thiếu/sai/hết hạn, bị khoá → 401   |
-| 3   | `applyBranchScope` | Manager → ghi đè `branch` bằng chi nhánh của user (BR-15)                         | —                                  |
+| 3   | `applyBranchScope` | Manager → ghi đè `branch` bằng chi nhánh của user (BR-15)                         | -                                  |
 | 4   | `validate`         | Zod `DashboardFilters`: ngày, khoảng ≤ 3 năm, cấp thuộc whitelist (BR-18, BR-19)  | sai → 400                          |
-| 5   | Controller         | Gọi `analyticsService.summary(filters)`                                           | —                                  |
-| 6   | Service            | Tính khoảng kỳ trước (BR-05), gọi repository, tính delta, AOV, biên LN            | —                                  |
+| 5   | Controller         | Gọi `analyticsService.summary(filters)`                                           | -                                  |
+| 6   | Service            | Tính khoảng kỳ trước (BR-05), gọi repository, tính delta, AOV, biên LN            | -                                  |
 | 7   | Repository         | 1 câu SQL tham số hoá trên `fact_sales JOIN dim_*`, `FILTER` cho 2 kỳ             | lỗi CSDL → 500 (không lộ chi tiết) |
-| 8   | Controller         | `200` + JSON                                                                      | —                                  |
+| 8   | Controller         | `200` + JSON                                                                      | -                                  |
 
 ### 8.3.2 Nhập file (ghi dữ liệu)
 
-![H14 — Luồng request nhập file](so-do/out/14-seq-nhap-file.png)
+![H14 - Luồng request nhập file](so-do/out/14-seq-nhap-file.png)
 
-_Hình H14 — `POST /api/imports`: ETL chạy trong service, Load trong một transaction._
+_Hình H14 - `POST /api/imports`: ETL chạy trong service, Load trong một transaction._
 
 Điểm khác với luồng đọc: (1) có **transaction** mở ở service, mọi câu ghi dùng chung một `client`; (2) lỗi từng dòng **không** làm hỏng request (ghi vào `import_errors`), chỉ lỗi hệ thống mới `ROLLBACK`; (3) kết quả luôn là `200` kèm trạng thái `success/partial/failed` (BR-13), vì "file có dòng lỗi" là kết quả nghiệp vụ, không phải lỗi HTTP.
 
@@ -161,7 +161,7 @@ Service ném lỗi có kiểu (`ValidationError`, `ForbiddenError`, `ConflictErr
 
 ## 8.4 Mô hình dữ liệu
 
-![H6 — Kho dữ liệu hình sao](so-do/out/06-star-schema.png)
+![H6 - Kho dữ liệu hình sao](so-do/out/06-star-schema.png)
 
 ### 8.4.1 Kho dữ liệu hình sao ([ADR-0003](../adr/0003-mo-hinh-hinh-sao.md))
 
@@ -225,7 +225,7 @@ alert_rules(id, code UNIQUE, name,
             threshold NUMERIC, severity TEXT CHECK IN ('warning','critical'), is_active DEFAULT true)
 ```
 
-**Dữ liệu khởi tạo:** 5 chi nhánh — HN01 Hà Nội, HP01 Hải Phòng (Miền Bắc); DN01 Đà Nẵng (Miền Trung); HCM01 TP.HCM, CT01 Cần Thơ (Miền Nam); nguồn `file` "Nhập file chung"; quy tắc cảnh báo R1–R5 (BR-20); 1 tài khoản admin.
+**Dữ liệu khởi tạo:** 5 chi nhánh - HN01 Hà Nội, HP01 Hải Phòng (Miền Bắc); DN01 Đà Nẵng (Miền Trung); HCM01 TP.HCM, CT01 Cần Thơ (Miền Nam); nguồn `file` "Nhập file chung"; quy tắc cảnh báo R1-R5 (BR-20); 1 tài khoản admin.
 
 ## 8.5 Công nghệ
 
@@ -245,12 +245,12 @@ alert_rules(id, code UNIQUE, name,
 
 ## 8.6 Định hướng phát triển
 
-Phiên bản hiện tại là **giai đoạn 1**. Mỗi giai đoạn sau chỉ bắt đầu khi có **dấu hiệu** cần thiết, và dùng lại các điểm mở rộng đã chừa sẵn (danh sách tính năng và cách mở rộng: [§3.1.7](03-dac-ta-yeu-cau.md#317-ngoài-phạm-vi-wont--ghi-là-hướng-phát-triển)).
+Phiên bản hiện tại là **giai đoạn 1**. Mỗi giai đoạn sau chỉ bắt đầu khi có **dấu hiệu** cần thiết, và dùng lại các điểm mở rộng đã chừa sẵn (danh sách tính năng và cách mở rộng: [§3.1.7](03-dac-ta-yeu-cau.md#317-ngoài-phạm-vi-wont---ghi-là-hướng-phát-triển)).
 
 | Giai đoạn                               | Dấu hiệu cần chuyển                                       | Thay đổi chính                                                                                             | Giữ nguyên                                         |
 | --------------------------------------- | --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
-| **1. Đồ án** (hiện tại)                 | —                                                         | 1 API, 1 CSDL, ETL trong request, truy vấn trực tiếp fact                                                  | —                                                  |
+| **1. Đồ án** (hiện tại)                 | -                                                         | 1 API, 1 CSDL, ETL trong request, truy vấn trực tiếp fact                                                  | -                                                  |
 | **2. Vận hành thật**                    | File > 10.000 dòng; cần dữ liệu tự cập nhật; API > 500 ms | Hàng đợi job + nhập nền; đồng bộ theo lịch; bảng tổng hợp theo ngày; thêm nguồn CSDL ngoài; mã hoá API key | Phân lớp, star schema, pipeline 4 bước, API cho FE |
 | **3. Nhiều doanh nghiệp / dữ liệu lớn** | Nhiều khách hàng dùng chung; hàng chục triệu dòng         | Tách dịch vụ ETL; nhiều instance API sau load balancer; cache; `tenant_id`; kho dữ liệu chuyên dụng        | Hợp đồng dữ liệu §3.5, định nghĩa KPI §3.3         |
 
-> **Vì sao không làm giai đoạn 2–3 ngay?** Mỗi thành phần thêm vào (hàng đợi, cron, cache) là một chỗ có thể hỏng và phải học, test, deploy. Làm đúng giai đoạn 1 với **ranh giới lớp rõ ràng** giúp lên giai đoạn 2 chủ yếu là _thêm_ chứ không phải _viết lại_.
+> **Vì sao không làm giai đoạn 2-3 ngay?** Mỗi thành phần thêm vào (hàng đợi, cron, cache) là một chỗ có thể hỏng và phải học, test, deploy. Làm đúng giai đoạn 1 với **ranh giới lớp rõ ràng** giúp lên giai đoạn 2 chủ yếu là _thêm_ chứ không phải _viết lại_.
