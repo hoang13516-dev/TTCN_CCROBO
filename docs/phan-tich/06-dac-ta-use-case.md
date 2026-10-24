@@ -1,6 +1,6 @@
 # Chương 6. ĐẶC TẢ USE CASE
 
-> **Mẫu đặc tả:** Tác nhân · Mục tiêu · Tiền điều kiện · Hậu điều kiện (thành công ✓ / thất bại ✗) · Luồng chính · Luồng thay thế (A) · Ngoại lệ (E) · Quy tắc · API · **Tiêu chí chấp nhận (AC)** dạng _Cho trước - Khi - Thì_.
+> **Mẫu đặc tả:** Tác nhân · Mục tiêu · Tiền điều kiện · Hậu điều kiện (thành công / thất bại) · Luồng chính · Luồng thay thế (A) · Ngoại lệ (E) · Quy tắc · API · **Tiêu chí chấp nhận (AC)** dạng _Cho trước - Khi - Thì_.
 >
 > **Mỗi AC = ít nhất 1 test case** (Supertest cho API, Testing Library hoặc thao tác tay cho UI). Một bước trong kế hoạch chỉ được coi là xong khi các AC nó trỏ tới đã pass.
 
@@ -12,12 +12,12 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ## 6.1 UC01 - Đăng nhập
 
-| Mục             | Nội dung                                                       |
-| --------------- | -------------------------------------------------------------- |
-| Tác nhân        | Manager, Analyst, Admin                                        |
-| Tiền điều kiện  | Tài khoản tồn tại và đang hoạt động                            |
-| Hậu điều kiện ✓ | Cookie `token` (httpOnly) được đặt; chuyển tới `next` hoặc `/` |
-| Hậu điều kiện ✗ | Không có cookie; không lộ thông tin email có tồn tại hay không |
+| Mục                        | Nội dung                                                       |
+| -------------------------- | -------------------------------------------------------------- |
+| Tác nhân                   | Manager, Analyst, Admin                                        |
+| Tiền điều kiện             | Tài khoản tồn tại và đang hoạt động                            |
+| Hậu điều kiện (thành công) | Cookie `token` (httpOnly) được đặt; chuyển tới `next` hoặc `/` |
+| Hậu điều kiện (thất bại)   | Không có cookie; không lộ thông tin email có tồn tại hay không |
 
 **Luồng chính:** 1) Nhập email, mật khẩu, bấm "Đăng nhập". 2) FE kiểm tra định dạng bằng schema `LoginInput`. 3) `POST /api/auth/login`. 4) BE tìm user theo email (không phân biệt hoa thường), `bcrypt.compare`. 5) BE ký JWT `{ sub }` hạn 8 giờ, đặt cookie, trả `{ id, email, fullName, role, branch }`. 6) FE chuyển tới `next` (chỉ nhận đường dẫn nội bộ bắt đầu bằng `/`) hoặc `/`.
 
@@ -39,14 +39,14 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ## 6.2 UC06 - Nhập dữ liệu từ file (gồm UC07 Ánh xạ cột)
 
-| Mục             | Nội dung                                                                                                    |
-| --------------- | ----------------------------------------------------------------------------------------------------------- |
-| Tác nhân        | Analyst (+)                                                                                                 |
-| Mục tiêu        | Đưa đơn hàng từ file vào kho, biết chính xác dòng nào lỗi và vì sao                                         |
-| Tiền điều kiện  | Đăng nhập analyst+; có ít nhất một nguồn loại `file` (dòng có chi nhánh chưa khai báo sẽ bị lỗi theo BR-11) |
-| Hậu điều kiện ✓ | 1 lần nhập `success`/`partial`; dòng hợp lệ đã nằm trong `fact_sales`; dòng lỗi nằm trong `import_errors`   |
-| Hậu điều kiện ✗ | Lần nhập `failed`; kho **không thay đổi** (rollback)                                                        |
-| Quy trình       | QT-01 (Hình H3)                                                                                             |
+| Mục                        | Nội dung                                                                                                    |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Tác nhân                   | Analyst (+)                                                                                                 |
+| Mục tiêu                   | Đưa đơn hàng từ file vào kho, biết chính xác dòng nào lỗi và vì sao                                         |
+| Tiền điều kiện             | Đăng nhập analyst+; có ít nhất một nguồn loại `file` (dòng có chi nhánh chưa khai báo sẽ bị lỗi theo BR-11) |
+| Hậu điều kiện (thành công) | 1 lần nhập `success`/`partial`; dòng hợp lệ đã nằm trong `fact_sales`; dòng lỗi nằm trong `import_errors`   |
+| Hậu điều kiện (thất bại)   | Lần nhập `failed`; kho **không thay đổi** (rollback)                                                        |
+| Quy trình                  | QT-01 (Hình H3)                                                                                             |
 
 **Luồng chính**
 
@@ -85,13 +85,13 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ## 6.3 UC11 - Đồng bộ dữ liệu từ REST API
 
-| Mục             | Nội dung                                                                                                        |
-| --------------- | --------------------------------------------------------------------------------------------------------------- |
-| Tác nhân        | Analyst (+); tác nhân phụ: Hệ thống nguồn API                                                                   |
-| Tiền điều kiện  | Nguồn loại `api` đang hoạt động, đã kiểm tra kết nối (UC10)                                                     |
-| Hậu điều kiện ✓ | Đơn mới/sửa từ API nằm trong kho; `last_synced_at` = thời điểm bắt đầu lần đồng bộ; có 1 lần nhập trong lịch sử |
-| Hậu điều kiện ✗ | Lần nhập `failed`; kho và `last_synced_at` **không đổi**                                                        |
-| Quy trình       | QT-02 (Hình H4)                                                                                                 |
+| Mục                        | Nội dung                                                                                                        |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| Tác nhân                   | Analyst (+); tác nhân phụ: Hệ thống nguồn API                                                                   |
+| Tiền điều kiện             | Nguồn loại `api` đang hoạt động, đã kiểm tra kết nối (UC10)                                                     |
+| Hậu điều kiện (thành công) | Đơn mới/sửa từ API nằm trong kho; `last_synced_at` = thời điểm bắt đầu lần đồng bộ; có 1 lần nhập trong lịch sử |
+| Hậu điều kiện (thất bại)   | Lần nhập `failed`; kho và `last_synced_at` **không đổi**                                                        |
+| Quy trình                  | QT-02 (Hình H4)                                                                                                 |
 
 **Luồng chính:** 1) Trên trang "Nguồn dữ liệu", bấm "Đồng bộ ngay" ở một nguồn API. 2) `POST /api/sources/:id/sync`. 3) Hệ thống lấy khoá `pg_try_advisory_lock(source_id)`. 4) Ghi `startedAt`, tạo lần nhập `running` (`trigger = 'sync'`). 5) Gọi `GET {api_url}/orders?updated_since={last_synced_at}&page=1` với header `x-api-key`; lặp tới khi `next_page = null`. 6) Mỗi trang đi qua Transform/Load **chung** với UC06 (không cần ánh xạ vì API trả đúng tên trường §3.5.1). 7) Thành công → `last_synced_at = startedAt`, nhả khoá, trả kết quả như UC06 bước 7.
 
@@ -110,18 +110,18 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ## 6.4 UC12 - Xem dashboard KPI (gồm UC13 Lọc đa chiều & lọc chéo, UC14 Drill-down)
 
-| Mục             | Nội dung                                                                                              |
-| --------------- | ----------------------------------------------------------------------------------------------------- |
-| Tác nhân        | Manager (+)                                                                                           |
-| Tiền điều kiện  | Đã đăng nhập                                                                                          |
-| Hậu điều kiện ✓ | Người dùng thấy cảnh báo, 6 KPI, 5 biểu đồ đúng bộ lọc và đúng phạm vi chi nhánh; URL phản ánh bộ lọc |
-| Quy trình       | QT-03 (Hình H5)                                                                                       |
+| Mục                        | Nội dung                                                                                              |
+| -------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Tác nhân                   | Manager (+)                                                                                           |
+| Tiền điều kiện             | Đã đăng nhập                                                                                          |
+| Hậu điều kiện (thành công) | Người dùng thấy cảnh báo, 6 KPI, 5 biểu đồ đúng bộ lọc và đúng phạm vi chi nhánh; URL phản ánh bộ lọc |
+| Quy trình                  | QT-03 (Hình H5)                                                                                       |
 
 **Bố cục** (≥ 1280 px; ở 375 px các khối xếp dọc, KPI lưới 2 cột):
 
 ```
 ┌ Bộ lọc: [30 ngày ▾] [Chi nhánh ▾] [Danh mục ▾] [Kênh ▾]   [Xoá lọc]  [Xuất Excel] [Xuất PDF] ┐
-├ ⚠ Cảnh báo (UC15) ───────────────────────────────────────────────────────────────────────────┤
+├ Cảnh báo (UC15) ─────────────────────────────────────────────────────────────────────────────┤
 ├ Doanh thu │ Lợi nhuận gộp │ Biên lợi nhuận │ Số đơn │ AOV │ Tỷ lệ giữ chân   (mỗi thẻ có delta) ┤
 ├ Xu hướng doanh thu & lợi nhuận   2026 › Tháng 10   (breadcrumb sau khi drill)        ──────────┤
 ├ Theo vùng (click → chi nhánh)            │ Top 10 sản phẩm   vùng: [Tất cả ▾]                 ┤
@@ -159,12 +159,12 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ## 6.5 UC15 - Xem cảnh báo chỉ số bất thường
 
-| Mục             | Nội dung                                                                                   |
-| --------------- | ------------------------------------------------------------------------------------------ |
-| Tác nhân        | Manager (+) - luôn được gọi khi xem dashboard (UC12 include UC15)                          |
-| Hậu điều kiện ✓ | Danh sách cảnh báo khớp đúng bộ lọc và phạm vi chi nhánh; không có cảnh báo → khối được ẩn |
+| Mục                        | Nội dung                                                                                   |
+| -------------------------- | ------------------------------------------------------------------------------------------ |
+| Tác nhân                   | Manager (+) - luôn được gọi khi xem dashboard (UC12 include UC15)                          |
+| Hậu điều kiện (thành công) | Danh sách cảnh báo khớp đúng bộ lọc và phạm vi chi nhánh; không có cảnh báo → khối được ẩn |
 
-**Luồng chính:** 1) FE gọi `GET /api/alerts?<bộ lọc>`. 2) Server áp phạm vi chi nhánh, đọc các quy tắc đang bật. 3) Với quy tắc `drop_vs_previous`/`below_threshold`: dùng lại kết quả tính KPI kỳ này + kỳ trước (cùng hàm với `summary`). 4) Với quy tắc `daily_zscore`: tính z-score cho từng ngày trong khoảng lọc. 5) Trả danh sách `{ ruleCode, severity, metric, value, previous?, threshold, message }`, sắp `critical` trước. 6) FE hiển thị, ví dụ: 🔴 "Biên lợi nhuận 12,4 % thấp hơn ngưỡng 15 %"; 🟡 "Doanh thu giảm 25,0 % so với kỳ trước (ngưỡng 20 %)"; 🟡 "Ngày 14/10/2026 doanh thu bất thường (z = −2,6)".
+**Luồng chính:** 1) FE gọi `GET /api/alerts?<bộ lọc>`. 2) Server áp phạm vi chi nhánh, đọc các quy tắc đang bật. 3) Với quy tắc `drop_vs_previous`/`below_threshold`: dùng lại kết quả tính KPI kỳ này + kỳ trước (cùng hàm với `summary`). 4) Với quy tắc `daily_zscore`: tính z-score cho từng ngày trong khoảng lọc. 5) Trả danh sách `{ ruleCode, severity, metric, value, previous?, threshold, message }`, sắp `critical` trước. 6) FE hiển thị, ví dụ: [critical] "Biên lợi nhuận 12,4 % thấp hơn ngưỡng 15 %"; [warning] "Doanh thu giảm 25,0 % so với kỳ trước (ngưỡng 20 %)"; [warning] "Ngày 14/10/2026 doanh thu bất thường (z = −2,6)".
 
 **Quy tắc:** BR-05, BR-15, BR-20 · **API:** `GET /api/alerts`
 
@@ -180,11 +180,11 @@ Dữ liệu kiểm thử chuẩn: file mẫu [§3.5.2](03-dac-ta-yeu-cau.md#352-
 
 ## 6.6 UC17 - Xuất báo cáo Excel/PDF
 
-| Mục             | Nội dung                                                                             |
-| --------------- | ------------------------------------------------------------------------------------ |
-| Tác nhân        | Manager (+)                                                                          |
-| Tiền điều kiện  | Đang xem dashboard với một bộ lọc                                                    |
-| Hậu điều kiện ✓ | Người dùng có file `.xlsx` hoặc `.pdf` mà số liệu **khớp** dashboard với cùng bộ lọc |
+| Mục                        | Nội dung                                                                             |
+| -------------------------- | ------------------------------------------------------------------------------------ |
+| Tác nhân                   | Manager (+)                                                                          |
+| Tiền điều kiện             | Đang xem dashboard với một bộ lọc                                                    |
+| Hậu điều kiện (thành công) | Người dùng có file `.xlsx` hoặc `.pdf` mà số liệu **khớp** dashboard với cùng bộ lọc |
 
 **Luồng chính - Excel:** 1) Bấm "Xuất Excel". 2) `GET /api/reports/excel?<bộ lọc>` (đã áp phạm vi chi nhánh). 3) Server gọi lại các hàm phân tích, ghi 5 sheet bằng exceljs (tiền định dạng `#,##0`), trả file `bao-cao_<from>_<to>.xlsx`.
 

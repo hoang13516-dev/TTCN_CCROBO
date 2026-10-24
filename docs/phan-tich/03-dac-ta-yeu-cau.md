@@ -123,7 +123,7 @@ Mọi KPI chỉ tính trên dòng có `status = 'completed'` và nằm trong b�
 | **BR-04** Tỷ lệ giữ chân khách | `P` = tập khách (bỏ khách lẻ) có ≥ 1 đơn trong **kỳ trước**; `C` = tập khách có ≥ 1 đơn trong **kỳ này**. Tỷ lệ giữ chân = số phần tử của `P ∩ C` ÷ số phần tử của `P`; `P` rỗng → `null`. Ví dụ: kỳ trước {A, B, C}, kỳ này {A, B, D} → 2/3 = **66,7 %**. Tooltip: "Trong số khách đã mua kỳ trước, bao nhiêu % quay lại mua kỳ này". |
 | **BR-05** Kỳ trước & delta     | Kỳ trước = khoảng **cùng số ngày, liền ngay trước** `from` (01/10-21/10 ↔ 10/09-30/09). Chỉ số tiền/số lượng: `delta = (này − trước) ÷ trước`, hiển thị `%`; trước = 0 và này > 0 → "Mới"; cả hai = 0 → "-". Chỉ số tỷ lệ (Biên lợi nhuận, Tỷ lệ giữ chân): `delta = này − trước`, hiển thị **điểm phần trăm** (`+2,3 đ%`).            |
 
-> ⚠️ **Bẫy chỉ số không cộng được:** Doanh thu, Lợi nhuận **cộng được** (additive) qua mọi chiều. Số đơn, Số khách, Tỷ lệ giữ chân **không cộng được** (non-additive): một đơn 2 sản phẩm nằm ở 2 dòng `fact_sales`. Vì vậy phải dùng `COUNT(DISTINCT …)` trên đúng phạm vi lọc, không cộng kết quả của các nhóm con. Biên lợi nhuận là tỷ lệ: phải tính `Σ lợi nhuận ÷ Σ doanh thu`, **không** lấy trung bình các biên lợi nhuận con.
+> **Lưu ý - Bẫy chỉ số không cộng được:** Doanh thu, Lợi nhuận **cộng được** (additive) qua mọi chiều. Số đơn, Số khách, Tỷ lệ giữ chân **không cộng được** (non-additive): một đơn 2 sản phẩm nằm ở 2 dòng `fact_sales`. Vì vậy phải dùng `COUNT(DISTINCT …)` trên đúng phạm vi lọc, không cộng kết quả của các nhóm con. Biên lợi nhuận là tỷ lệ: phải tính `Σ lợi nhuận ÷ Σ doanh thu`, **không** lấy trung bình các biên lợi nhuận con.
 
 ### 3.3.2 Quy tắc nhập dữ liệu (dùng chung cho file và API)
 
@@ -165,20 +165,20 @@ Mọi KPI chỉ tính trên dòng có `status = 'completed'` và nằm trong b�
 
 | #   | Trường (`ImportRow`) | Tên cột trong file mẫu | Cấp  | Bắt buộc                 | Kiểu sau chuẩn hoá          | Quy tắc | Ví dụ hợp lệ                     | Ví dụ lỗi → thông báo                            |
 | --- | -------------------- | ---------------------- | ---- | ------------------------ | --------------------------- | ------- | -------------------------------- | ------------------------------------------------ |
-| 1   | `order_code`         | Mã đơn                 | Đơn  | ✅                       | text 1-50                   | Trim    | `DH000123`                       | _(trống)_ → "Thiếu Mã đơn"                       |
-| 2   | `ordered_at`         | Ngày đặt               | Đơn  | ✅                       | timestamptz                 | BR-10   | `21/10/2026 14:30`, `2026-10-21` | `32/10/2026` → "Ngày không hợp lệ"               |
+| 1   | `order_code`         | Mã đơn                 | Đơn  | Có                       | text 1-50                   | Trim    | `DH000123`                       | _(trống)_ → "Thiếu Mã đơn"                       |
+| 2   | `ordered_at`         | Ngày đặt               | Đơn  | Có                       | timestamptz                 | BR-10   | `21/10/2026 14:30`, `2026-10-21` | `32/10/2026` → "Ngày không hợp lệ"               |
 | 3   | `order_status`       | Trạng thái             | Đơn  | - (mặc định `completed`) | enum                        | BR-08   | `Hoàn thành`, `Đã hủy`           | `Lạ` → "Trạng thái không nhận diện: 'Lạ'"        |
-| 4   | `branch_code`        | Mã chi nhánh           | Đơn  | ✅                       | → `dim_branch.code`         | BR-11   | `HN01`                           | `XX01` → "Chi nhánh 'XX01' chưa được khai báo"   |
-| 5   | `channel`            | Kênh bán               | Đơn  | ✅                       | → `dim_channel.code`        | BR-12   | `Tại quầy`, `Shopee`             | _(trống)_ → "Thiếu Kênh bán"                     |
+| 4   | `branch_code`        | Mã chi nhánh           | Đơn  | Có                       | → `dim_branch.code`         | BR-11   | `HN01`                           | `XX01` → "Chi nhánh 'XX01' chưa được khai báo"   |
+| 5   | `channel`            | Kênh bán               | Đơn  | Có                       | → `dim_channel.code`        | BR-12   | `Tại quầy`, `Shopee`             | _(trống)_ → "Thiếu Kênh bán"                     |
 | 6   | `customer_code`      | Mã khách               | Đơn  | -                        | text ≤ 50 / null            | BR-12   | `KH001`                          | -                                                |
 | 7   | `customer_name`      | Tên khách              | -    | -                        | text ≤ 150 / null           | Trim    | `Nguyễn Văn A`                   | -                                                |
-| 8   | `product_sku`        | SKU                    | Dòng | ✅                       | text ≤ 64, viết hoa         | BR-12   | `AO-01`                          | _(trống)_ → "Thiếu SKU"                          |
+| 8   | `product_sku`        | SKU                    | Dòng | Có                       | text ≤ 64, viết hoa         | BR-12   | `AO-01`                          | _(trống)_ → "Thiếu SKU"                          |
 | 9   | `product_name`       | Tên sản phẩm           | Dòng | - (bắt buộc với SKU mới) | text ≤ 255                  | BR-12   | `Áo thun trắng M`                | SKU mới, tên trống → "SKU mới cần Tên sản phẩm"  |
 | 10  | `category`           | Danh mục               | Dòng | -                        | text ≤ 100                  | BR-12   | `Áo`                             | -                                                |
-| 11  | `quantity`           | Số lượng               | Dòng | ✅                       | int 1-100.000               | BR-09   | `2`, `2.0`                       | `0`, `2.5` → "Số lượng phải là số nguyên ≥ 1"    |
-| 12  | `unit_price`         | Đơn giá                | Dòng | ✅                       | bigint ≥ 0                  | BR-09   | `150000`, `150.000 ₫`            | `-5`, `abc` → "Đơn giá không hợp lệ"             |
+| 11  | `quantity`           | Số lượng               | Dòng | Có                       | int 1-100.000               | BR-09   | `2`, `2.0`                       | `0`, `2.5` → "Số lượng phải là số nguyên ≥ 1"    |
+| 12  | `unit_price`         | Đơn giá                | Dòng | Có                       | bigint ≥ 0                  | BR-09   | `150000`, `150.000 ₫`            | `-5`, `abc` → "Đơn giá không hợp lệ"             |
 | 13  | `discount`           | Giảm giá               | Dòng | - (mặc định 0)           | bigint ≥ 0                  | BR-09   | `10.000`                         | `> SL × đơn giá` → "Giảm giá lớn hơn thành tiền" |
-| 14  | `cost_price`         | Giá vốn                | Dòng | ✅                       | bigint ≥ 0 (giá vốn/đơn vị) | BR-09   | `90.000`                         | _(trống)_ → "Thiếu Giá vốn"                      |
+| 14  | `cost_price`         | Giá vốn                | Dòng | Có                       | bigint ≥ 0 (giá vốn/đơn vị) | BR-09   | `90.000`                         | _(trống)_ → "Thiếu Giá vốn"                      |
 
 **Nguồn API** trả JSON với **đúng các tên trường ở cột 2** (`order_code`, `ordered_at`…), mỗi phần tử là một dòng; vì vậy không cần bước ánh xạ (UC07 chỉ dùng cho file).
 

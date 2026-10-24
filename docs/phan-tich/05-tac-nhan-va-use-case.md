@@ -85,19 +85,19 @@ _Hình H9 - Use case tổng quát. Đọc kèm Hình H9b (phân cấp tác nhân
 
 ### 5.4.1 Theo use case
 
-| Use case                                                 |        Manager        |                Analyst                 |   Admin   | Ghi chú                                       |
-| -------------------------------------------------------- | :-------------------: | :------------------------------------: | :-------: | --------------------------------------------- |
-| UC01-UC03 Đăng nhập, đăng xuất, đổi mật khẩu             |          ✅           |                   ✅                   |    ✅     | Chỉ đổi mật khẩu của chính mình               |
-| UC12-UC15 Dashboard, lọc, drill-down, cảnh báo           | ✅ **chi nhánh mình** |               ✅ tất cả                | ✅ tất cả | BR-15                                         |
-| UC17 Xuất báo cáo                                        | ✅ **chi nhánh mình** |               ✅ tất cả                | ✅ tất cả | Báo cáo chỉ chứa số liệu tổng hợp             |
-| UC06-UC09 Nhập file, ánh xạ, file mẫu, lịch sử           |          ❌           |                   ✅                   |    ✅     | Analyst xem lịch sử của mọi người để phối hợp |
-| UC11 Đồng bộ API                                         |          ❌           |                   ✅                   |    ✅     | Chỉ kích hoạt, không xem/sửa cấu hình         |
-| UC10 Quản lý nguồn                                       |          ❌           | ❌ (chỉ xem danh sách, không thấy key) |    ✅     | API key là bí mật                             |
-| UC04, UC05, UC16 Người dùng, chi nhánh, quy tắc cảnh báo |          ❌           |                   ❌                   |    ✅     |                                               |
+| Use case                                                 |        Manager         |                  Analyst                  |   Admin    | Ghi chú                                       |
+| -------------------------------------------------------- | :--------------------: | :---------------------------------------: | :--------: | --------------------------------------------- |
+| UC01-UC03 Đăng nhập, đăng xuất, đổi mật khẩu             |           Có           |                    Có                     |     Có     | Chỉ đổi mật khẩu của chính mình               |
+| UC12-UC15 Dashboard, lọc, drill-down, cảnh báo           | Có, **chi nhánh mình** |                Có, tất cả                 | Có, tất cả | BR-15                                         |
+| UC17 Xuất báo cáo                                        | Có, **chi nhánh mình** |                Có, tất cả                 | Có, tất cả | Báo cáo chỉ chứa số liệu tổng hợp             |
+| UC06-UC09 Nhập file, ánh xạ, file mẫu, lịch sử           |         Không          |                    Có                     |     Có     | Analyst xem lịch sử của mọi người để phối hợp |
+| UC11 Đồng bộ API                                         |         Không          |                    Có                     |     Có     | Chỉ kích hoạt, không xem/sửa cấu hình         |
+| UC10 Quản lý nguồn                                       |         Không          | Không (chỉ xem danh sách, không thấy key) |     Có     | API key là bí mật                             |
+| UC04, UC05, UC16 Người dùng, chi nhánh, quy tắc cảnh báo |         Không          |                   Không                   |     Có     |                                               |
 
 ### 5.4.2 Theo API (dùng để viết test phân quyền NFR-05)
 
-Quy ước: `public` = không cần đăng nhập; `manager+` = đăng nhập với vai trò bất kỳ; `analyst+` = analyst hoặc admin. 🔒 = áp dụng phạm vi chi nhánh BR-15.
+Quy ước: `public` = không cần đăng nhập; `manager+` = đăng nhập với vai trò bất kỳ; `analyst+` = analyst hoặc admin. `(phạm vi)` = áp dụng phạm vi chi nhánh BR-15.
 
 | Method & đường dẫn                                                                                   | Quyền tối thiểu | UC         |
 | ---------------------------------------------------------------------------------------------------- | --------------- | ---------- |
@@ -114,13 +114,13 @@ Quy ước: `public` = không cần đăng nhập; `manager+` = đăng nhập v�
 | `GET /api/sources` (không có API key)                                                                | analyst+        | UC10, UC11 |
 | `POST /api/sources` · `PATCH /api/sources/:id` · `POST /api/sources/:id/test`                        | admin           | UC10       |
 | `POST /api/sources/:id/sync` → `200` / `409 đang đồng bộ`                                            | analyst+        | UC11       |
-| `GET /api/analytics/summary\|trend\|top-products\|by-region\|by-category\|by-channel` 🔒             | manager+        | UC12-UC14  |
+| `GET /api/analytics/summary\|trend\|top-products\|by-region\|by-category\|by-channel` (phạm vi)      | manager+        | UC12-UC14  |
 | `GET /api/catalog/categories` · `GET /api/catalog/channels`                                          | manager+        | UC13       |
-| `GET /api/alerts` 🔒                                                                                 | manager+        | UC15       |
+| `GET /api/alerts` (phạm vi)                                                                          | manager+        | UC15       |
 | `GET /api/alert-rules` · `PATCH /api/alert-rules/:id`                                                | admin           | UC16       |
-| `GET /api/reports/excel` 🔒                                                                          | manager+        | UC17       |
+| `GET /api/reports/excel` (phạm vi)                                                                   | manager+        | UC17       |
 
-> **Thiết kế:** trang PDF (`/report`) là trang web gọi lại các API phân tích 🔒, nên không cần endpoint riêng và tự động đúng phạm vi chi nhánh.
+> **Thiết kế:** trang PDF (`/report`) là trang web gọi lại các API phân tích `(phạm vi)`, nên không cần endpoint riêng và tự động đúng phạm vi chi nhánh.
 
 ## 5.5 Sơ đồ Use Case phân rã
 

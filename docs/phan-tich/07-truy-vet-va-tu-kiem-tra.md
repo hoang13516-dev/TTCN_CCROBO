@@ -155,17 +155,17 @@ Script **không** hiểu nghĩa câu chữ. Những thông tin vẫn phải đ�
 
 ### 6.2 Đối chiếu tiêu chí của bản phân tích
 
-| Tiêu chí                    | Đáp ứng ở          | Bằng chứng                                                                                         | Đánh giá                                  |
-| --------------------------- | ------------------ | -------------------------------------------------------------------------------------------------- | ----------------------------------------- |
-| Đúng đề                     | §1 chương này      | 15/15 yêu cầu của đề có use case/sản phẩm                                                          | ✅                                        |
-| Phân tích đề tài            | Ch.1               | Bài toán, 6 mục tiêu đo được, stakeholder, 8 vấn đề có nguyên nhân gốc, so sánh giải pháp, phạm vi | ✅                                        |
-| Xác định yêu cầu            | Ch.3               | 35 FR · 14 NFR có cách đo · 21 BR · từ điển 14 trường có ví dụ đúng/sai                            | ✅                                        |
-| Quy trình nghiệp vụ         | Ch.2               | AS-IS + 4 quy trình TO-BE + máy trạng thái lần nhập                                                | ✅                                        |
-| Chức năng & BFD             | Ch.4, H8           | 29 chức năng lá, MVP, phụ thuộc                                                                    | ✅                                        |
-| Use case                    | Ch.5-6             | 4 tác nhân, 17 UC, phân rã 3 nhóm, ma trận quyền theo UC **và** theo API, 62 AC                    | ✅                                        |
-| Kiến trúc & mô hình dữ liệu | Ch.8, H6, H13, H14 | Phân lớp, luồng request, star schema có grain, khoá, ràng buộc, index                              | ✅                                        |
-| Mức "cơ bản, mở rộng được"  | §3.1.7, §8.6       | Mỗi tính năng cắt bỏ có cách mở rộng không phá kiến trúc                                           | ✅                                        |
-| Sát thực tế                 | Ch.1-3             | Tiền dạng chữ, ngày serial Excel, đơn hủy, đơn trùng giữa nguồn, giá vốn, khách lẻ                 | ⚠️ cần O-16 để xác nhận bằng dữ liệu thật |
+| Tiêu chí                    | Đáp ứng ở          | Bằng chứng                                                                                         | Đánh giá                                         |
+| --------------------------- | ------------------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| Đúng đề                     | §1 chương này      | 15/15 yêu cầu của đề có use case/sản phẩm                                                          | Đạt                                              |
+| Phân tích đề tài            | Ch.1               | Bài toán, 6 mục tiêu đo được, stakeholder, 8 vấn đề có nguyên nhân gốc, so sánh giải pháp, phạm vi | Đạt                                              |
+| Xác định yêu cầu            | Ch.3               | 35 FR · 14 NFR có cách đo · 21 BR · từ điển 14 trường có ví dụ đúng/sai                            | Đạt                                              |
+| Quy trình nghiệp vụ         | Ch.2               | AS-IS + 4 quy trình TO-BE + máy trạng thái lần nhập                                                | Đạt                                              |
+| Chức năng & BFD             | Ch.4, H8           | 29 chức năng lá, MVP, phụ thuộc                                                                    | Đạt                                              |
+| Use case                    | Ch.5-6             | 4 tác nhân, 17 UC, phân rã 3 nhóm, ma trận quyền theo UC **và** theo API, 62 AC                    | Đạt                                              |
+| Kiến trúc & mô hình dữ liệu | Ch.8, H6, H13, H14 | Phân lớp, luồng request, star schema có grain, khoá, ràng buộc, index                              | Đạt                                              |
+| Mức "cơ bản, mở rộng được"  | §3.1.7, §8.6       | Mỗi tính năng cắt bỏ có cách mở rộng không phá kiến trúc                                           | Đạt                                              |
+| Sát thực tế                 | Ch.1-3             | Tiền dạng chữ, ngày serial Excel, đơn hủy, đơn trùng giữa nguồn, giá vốn, khách lẻ                 | Một phần: cần O-16 để xác nhận bằng dữ liệu thật |
 
 ### 6.3 Mức độ sẵn sàng triển khai
 
