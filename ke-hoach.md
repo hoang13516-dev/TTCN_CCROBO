@@ -171,9 +171,9 @@ Khi xong mỗi sprint (bước "Báo cáo Sprint N"), tạo file `bao-cao/sprint
 
 | Bước     | Nội dung                                          | Ước lượng | Thực tế | Ngày xong  |
 | -------- | ------------------------------------------------- | --------- | ------- | ---------- |
-| [x] S0.1 | Khởi tạo monorepo (trước kế hoạch)                | 3h        |         | 2026-10-19 |
-| [x] S0.2 | Khung API Express (trước kế hoạch)                | 3h        |         | 2026-10-19 |
-| [x] S0.3 | Khung web React (trước kế hoạch)                  | 2h        |         | 2026-10-19 |
+| [ ] S0.1 | Khởi tạo monorepo (trước kế hoạch)                | 3h        |         |            |
+| [ ] S0.2 | Khung API Express (trước kế hoạch)                | 3h        |         |            |
+| [ ] S0.3 | Khung web React (trước kế hoạch)                  | 2h        |         |            |
 | [ ] S1.1 | Đọc lại phân tích; gửi GVHD câu hỏi phạm vi       | 1,5h      |         |            |
 | [ ] S1.2 | PostgreSQL + pool + health                        | 2h        |         |            |
 | [ ] S1.3 | Migration kho hình sao                            | 4,5h      |         |            |

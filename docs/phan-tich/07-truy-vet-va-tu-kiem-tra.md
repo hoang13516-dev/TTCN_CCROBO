@@ -155,26 +155,26 @@ Script **không** hiểu nghĩa câu chữ. Những thông tin vẫn phải đ�
 
 ### 6.2 Đối chiếu tiêu chí của bản phân tích
 
-| Tiêu chí                    | Đáp ứng ở          | Bằng chứng                                                                                         | Đánh giá                                         |
-| --------------------------- | ------------------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
-| Đúng đề                     | §1 chương này      | 15/15 yêu cầu của đề có use case/sản phẩm                                                          | Đạt                                              |
-| Phân tích đề tài            | Ch.1               | Bài toán, 6 mục tiêu đo được, stakeholder, 8 vấn đề có nguyên nhân gốc, so sánh giải pháp, phạm vi | Đạt                                              |
-| Xác định yêu cầu            | Ch.3               | 35 FR · 14 NFR có cách đo · 21 BR · từ điển 14 trường có ví dụ đúng/sai                            | Đạt                                              |
-| Quy trình nghiệp vụ         | Ch.2               | AS-IS + 4 quy trình TO-BE + máy trạng thái lần nhập                                                | Đạt                                              |
-| Chức năng & BFD             | Ch.4, H8           | 29 chức năng lá, MVP, phụ thuộc                                                                    | Đạt                                              |
-| Use case                    | Ch.5-6             | 4 tác nhân, 17 UC, phân rã 3 nhóm, ma trận quyền theo UC **và** theo API, 62 AC                    | Đạt                                              |
-| Kiến trúc & mô hình dữ liệu | Ch.8, H6, H13, H14 | Phân lớp, luồng request, star schema có grain, khoá, ràng buộc, index                              | Đạt                                              |
-| Mức "cơ bản, mở rộng được"  | §3.1.7, §8.6       | Mỗi tính năng cắt bỏ có cách mở rộng không phá kiến trúc                                           | Đạt                                              |
-| Sát thực tế                 | Ch.1-3             | Tiền dạng chữ, ngày serial Excel, đơn hủy, đơn trùng giữa nguồn, giá vốn, khách lẻ                 | Một phần: cần O-16 để xác nhận bằng dữ liệu thật |
+| Tiêu chí                    | Đáp ứng ở          | Bằng chứng                                                                                         | Đánh giá                                                |
+| --------------------------- | ------------------ | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| Đúng đề                     | §1 chương này      | 15/15 yêu cầu của đề có use case/sản phẩm                                                          | Chưa kiểm chứng                                         |
+| Phân tích đề tài            | Ch.1               | Bài toán, 6 mục tiêu đo được, stakeholder, 8 vấn đề có nguyên nhân gốc, so sánh giải pháp, phạm vi | Chưa kiểm chứng                                         |
+| Xác định yêu cầu            | Ch.3               | 35 FR · 14 NFR có cách đo · 21 BR · từ điển 14 trường có ví dụ đúng/sai                            | Chưa kiểm chứng                                         |
+| Quy trình nghiệp vụ         | Ch.2               | AS-IS + 4 quy trình TO-BE + máy trạng thái lần nhập                                                | Chưa kiểm chứng                                         |
+| Chức năng & BFD             | Ch.4, H8           | 29 chức năng lá, MVP, phụ thuộc                                                                    | Chưa kiểm chứng                                         |
+| Use case                    | Ch.5-6             | 4 tác nhân, 17 UC, phân rã 3 nhóm, ma trận quyền theo UC **và** theo API, 62 AC                    | Chưa kiểm chứng                                         |
+| Kiến trúc & mô hình dữ liệu | Ch.8, H6, H13, H14 | Phân lớp, luồng request, star schema có grain, khoá, ràng buộc, index                              | Chưa kiểm chứng                                         |
+| Mức "cơ bản, mở rộng được"  | §3.1.7, §8.6       | Mỗi tính năng cắt bỏ có cách mở rộng không phá kiến trúc                                           | Chưa kiểm chứng                                         |
+| Sát thực tế                 | Ch.1-3             | Tiền dạng chữ, ngày serial Excel, đơn hủy, đơn trùng giữa nguồn, giá vốn, khách lẻ                 | Chưa kiểm chứng; cần O-16 để xác nhận bằng dữ liệu thật |
 
 ### 6.3 Mức độ sẵn sàng triển khai
 
-| Hạng mục                            | Mức sẵn sàng | Còn thiếu gì                                    |
-| ----------------------------------- | ------------ | ----------------------------------------------- |
-| Phạm vi, chức năng, quyền           | ~100 %       | Chờ GVHD xác nhận (O-15)                        |
-| Quy tắc nghiệp vụ & dữ liệu đầu vào | ~90 %        | Xác nhận bằng file thật (O-16)                  |
-| Kiến trúc, mô hình dữ liệu          | ~90 %        | DDL chi tiết trong migration                    |
-| Đặc tả API                          | ~75 %        | Schema request/response đầy đủ, mã lỗi chi tiết |
-| Thiết kế giao diện                  | ~50 %        | Mới có bố cục dashboard dạng ASCII              |
+| Hạng mục                            | Mức sẵn sàng    | Còn thiếu gì                                    |
+| ----------------------------------- | --------------- | ----------------------------------------------- |
+| Phạm vi, chức năng, quyền           | Chưa kiểm chứng | Chờ GVHD xác nhận (O-15)                        |
+| Quy tắc nghiệp vụ & dữ liệu đầu vào | Chưa kiểm chứng | Xác nhận bằng file thật (O-16)                  |
+| Kiến trúc, mô hình dữ liệu          | Chưa kiểm chứng | DDL chi tiết trong migration                    |
+| Đặc tả API                          | Chưa kiểm chứng | Schema request/response đầy đủ, mã lỗi chi tiết |
+| Thiết kế giao diện                  | Chưa kiểm chứng | Mới có bố cục dashboard dạng ASCII              |
 
-> **Kết luận:** phần **phân tích và kiến trúc** đủ để bắt đầu code. Phần **thiết kế chi tiết** (DDL, đặc tả API, giao diện) làm dần trong các bước của kế hoạch.
+> **Kết luận (chưa kiểm chứng):** phần **phân tích và kiến trúc** đủ để bắt đầu code. Phần **thiết kế chi tiết** (DDL, đặc tả API, giao diện) làm dần trong các bước của kế hoạch.
