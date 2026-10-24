@@ -7,7 +7,7 @@ wbsDiagram {
   :depth(1) { BackgroundColor #dbeafe; FontStyle bold }
 }
 </style>
-title Sơ đồ phân rã chức năng (BFD) — CN-019
+title Sơ đồ phân rã chức năng (BFD) - CN-019
 * Hệ thống Dashboard\nphân tích dữ liệu bán hàng
 ** F1. Tài khoản &\nphân quyền
 *** F1.1 Đăng nhập
@@ -19,7 +19,7 @@ title Sơ đồ phân rã chức năng (BFD) — CN-019
 *** F2.1 Quản lý chi nhánh\n(tỉnh, vùng)
 *** F2.2 Quản lý nguồn\n(file / REST API)
 *** F2.3 Kiểm tra kết nối API
-** F3. ETL — nhập &\nđồng bộ dữ liệu
+** F3. ETL - nhập &\nđồng bộ dữ liệu
 *** F3.1 Tải file & xem trước\n(Extract)
 *** F3.2 Ánh xạ cột
 *** F3.3 Chuẩn hoá & kiểm tra\n(Transform)

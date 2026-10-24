@@ -18,7 +18,7 @@ end note
 :Chuẩn hoá tay: tên cột, định dạng ngày,
 bỏ dấu chấm ở số tiền;
 note right
-  **P2** Tốn 3–6 giờ mỗi kỳ, dễ sai
+  **P2** Tốn 3-6 giờ mỗi kỳ, dễ sai
 end note
 if (Có lọc đơn hủy, đơn trùng
 và ghép giá vốn?) then (thường bỏ qua)
@@ -43,7 +43,7 @@ if (Muốn xem góc khác
 (theo vùng, theo sản phẩm...)?) then (có)
   :Nhờ văn phòng làm lại;
   note right
-    **P5** Phản hồi chậm 1–2 ngày
+    **P5** Phản hồi chậm 1-2 ngày
   end note
   |Nhân viên văn phòng|
   :Làm lại pivot;

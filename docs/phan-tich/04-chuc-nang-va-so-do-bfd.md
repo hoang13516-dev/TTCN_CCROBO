@@ -5,7 +5,7 @@
 Chức năng không liệt kê theo cảm tính mà **suy ra** theo chuỗi:
 
 ```
-Đề bài ("Kết quả cần đạt") + Mục tiêu G1–G6 ─► Vấn đề P1–P8 ─► Quy trình TO-BE QT-01…QT-04
+Đề bài ("Kết quả cần đạt") + Mục tiêu G1-G6 ─► Vấn đề P1-P8 ─► Quy trình TO-BE QT-01…QT-04
       ─► Mỗi BƯỚC hệ thống trong quy trình = 1 chức năng lá trong BFD
       ─► Gom nhóm theo đối tượng nghiệp vụ ─► Gắn MoSCoW + sprint
 ```
@@ -18,9 +18,9 @@ Chức năng không liệt kê theo cảm tính mà **suy ra** theo chuỗi:
 
 ## 4.2 Sơ đồ phân rã chức năng
 
-![H8 — BFD](so-do/out/08-bfd.png)
+![H8 - BFD](so-do/out/08-bfd.png)
 
-_Hình H8 — BFD 3 mức: hệ thống → 7 nhóm chức năng → 29 chức năng lá. F7.1, F7.2 là tác vụ hệ thống: **có trong BFD nhưng không là use case** vì không có tác nhân nào dùng chúng để đạt một mục tiêu nghiệp vụ._
+_Hình H8 - BFD 3 mức: hệ thống → 7 nhóm chức năng → 29 chức năng lá. F7.1, F7.2 là tác vụ hệ thống: **có trong BFD nhưng không là use case** vì không có tác nhân nào dùng chúng để đạt một mục tiêu nghiệp vụ._
 
 > **BFD khác Use Case thế nào?** BFD trả lời "hệ thống **gồm những chức năng gì**" (cấu trúc, không có tác nhân). Use case trả lời "**ai** dùng hệ thống **để đạt mục tiêu gì**". Vì vậy F3.3 "Chuẩn hoá & kiểm tra từng dòng" có trong BFD nhưng không là use case riêng: không ai mở hệ thống với mục tiêu "chuẩn hoá dữ liệu", đó là một bước bên trong UC06.
 
@@ -32,7 +32,7 @@ _Hình H8 — BFD 3 mức: hệ thống → 7 nhóm chức năng → 29 chức n
 | ---- | ------------------------------ | ------------------------------------------------------ | ------- | ---- | ------------ |
 | F1.1 | Đăng nhập                      | Email + mật khẩu → cookie JWT httpOnly                 | Must    | UC01 | FR-01, FR-03 |
 | F1.2 | Đăng xuất                      | Xoá cookie                                             | Must    | UC02 | FR-02        |
-| F1.3 | Phân quyền & phạm vi chi nhánh | Kiểm tra vai trò, ép phạm vi chi nhánh cho manager     | Must    | —    | FR-06        |
+| F1.3 | Phân quyền & phạm vi chi nhánh | Kiểm tra vai trò, ép phạm vi chi nhánh cho manager     | Must    | -    | FR-06        |
 | F1.4 | Đổi mật khẩu                   | Cần mật khẩu hiện tại                                  | Should  | UC03 | FR-04        |
 | F1.5 | Quản lý người dùng             | Thêm, đổi vai trò/chi nhánh, khoá/mở, đặt lại mật khẩu | Should  | UC04 | FR-05        |
 
@@ -44,7 +44,7 @@ _Hình H8 — BFD 3 mức: hệ thống → 7 nhóm chức năng → 29 chức n
 | F2.2 | Quản lý nguồn        | Nguồn file / nguồn API (URL, key ẩn) | Must    | UC10 | FR-15 |
 | F2.3 | Kiểm tra kết nối API | Timeout 10 s, báo lỗi tiếng Việt     | Should  | UC10 | FR-16 |
 
-### F3. ETL — nhập & đồng bộ dữ liệu
+### F3. ETL - nhập & đồng bộ dữ liệu
 
 | Mã   | Chức năng                        | Mô tả ngắn                                             | Ưu tiên | UC   | FR           |
 | ---- | -------------------------------- | ------------------------------------------------------ | ------- | ---- | ------------ |
@@ -54,7 +54,7 @@ _Hình H8 — BFD 3 mức: hệ thống → 7 nhóm chức năng → 29 chức n
 | F3.4 | Nạp vào kho (Load)               | Transaction, idempotent theo đơn                       | Must    | UC06 | FR-11, FR-12 |
 | F3.5 | Lịch sử & dòng lỗi               | Danh sách lần nhập, tải CSV lỗi                        | Must    | UC09 | FR-13        |
 | F3.6 | Tải file mẫu                     | `mau-du-lieu.xlsx`                                     | Should  | UC08 | FR-14        |
-| F3.7 | Đồng bộ REST API                 | Tăng dần, phân trang, chống chạy chồng; dùng F3.3–F3.4 | Must    | UC11 | FR-17, FR-18 |
+| F3.7 | Đồng bộ REST API                 | Tăng dần, phân trang, chống chạy chồng; dùng F3.3-F3.4 | Must    | UC11 | FR-17, FR-18 |
 
 ### F4. Phân tích & trực quan hoá
 
@@ -77,10 +77,10 @@ _Hình H8 — BFD 3 mức: hệ thống → 7 nhóm chức năng → 29 chức n
 | F5.3 | Cấu hình quy tắc cảnh báo    | Bật/tắt, ngưỡng, mức                  | Should  | UC16 | FR-31 |
 | F6.1 | Xuất Excel                   | 5 sheet theo bộ lọc                   | Must    | UC17 | FR-32 |
 | F6.2 | Xuất PDF                     | Trang in A4 → lưu PDF                 | Must    | UC17 | FR-33 |
-| F7.1 | Kiểm tra sức khoẻ            | `/api/health` + CSDL                  | Must    | —    | FR-34 |
-| F7.2 | Sinh dữ liệu demo            | Seed ~100.000 dòng tái lập được       | Must    | —    | FR-35 |
+| F7.1 | Kiểm tra sức khoẻ            | `/api/health` + CSDL                  | Must    | -    | FR-34 |
+| F7.2 | Sinh dữ liệu demo            | Seed ~100.000 dòng tái lập được       | Must    | -    | FR-35 |
 
-**Thống kê:** 29 chức năng lá — **Must 22** · **Should 7**.
+**Thống kê:** 29 chức năng lá - **Must 22** · **Should 7**.
 
 ## 4.4 Bộ chức năng tối thiểu chạy được (MVP) và thứ tự phụ thuộc
 
@@ -89,7 +89,7 @@ Nếu chỉ còn thời gian cho phần Must, hệ thống vẫn phải demo đ�
 ```
  F7.1 health ─► F1.1 đăng nhập ─► F3.1 tải file ─► F3.2 ánh xạ ─► F3.3 chuẩn hoá ─► F3.4 nạp kho
                                                                                     │
-  F6.1/F6.2 xuất ◄── F5.1 cảnh báo ◄── F4.6/F4.7 lọc, drill ◄── F4.1–F4.5 dashboard ◄┘
+  F6.1/F6.2 xuất ◄── F5.1 cảnh báo ◄── F4.6/F4.7 lọc, drill ◄── F4.1-F4.5 dashboard ◄┘
 ```
 
 **Phụ thuộc giữa các nhóm** (đọc là "A cần B có trước"):

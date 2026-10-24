@@ -1,6 +1,6 @@
 @startuml 09-uc-tong-quat
 !include _style.iuml
-title Sơ đồ Use Case tổng quát — CN-019
+title Sơ đồ Use Case tổng quát - CN-019
 left to right direction
 skinparam packageStyle rectangle
 

@@ -1,4 +1,4 @@
-# CN-019 — Dashboard phân tích dữ liệu bán hàng
+# CN-019 - Dashboard phân tích dữ liệu bán hàng
 
 Đồ án chuyên ngành: web BI cho chuỗi bán lẻ nhiều chi nhánh. Hệ thống gom dữ liệu bán hàng từ file CSV/Excel và REST API, nạp vào kho dữ liệu hình sao, rồi hiển thị dashboard KPI có lọc, drill-down và cảnh báo.
 
@@ -17,7 +17,7 @@ Chưa có: CSDL, đăng nhập, ETL, dashboard thật. Tiến độ theo bước
 
 | Tài liệu                                      | Nội dung                                                              |
 | --------------------------------------------- | --------------------------------------------------------------------- |
-| [`docs/phan-tich/`](docs/phan-tich/README.md) | Phân tích yêu cầu (ch.1–7) và kiến trúc, công nghệ, định hướng (ch.8) |
+| [`docs/phan-tich/`](docs/phan-tich/README.md) | Phân tích yêu cầu (ch.1-7) và kiến trúc, công nghệ, định hướng (ch.8) |
 | [`docs/adr/`](docs/adr/)                      | Lý do các quyết định kiến trúc                                        |
 | [`ke-hoach.md`](ke-hoach.md)                  | Lịch sprint, các bước, giờ, bảng tiến độ                              |
 | [`CLAUDE.md`](CLAUDE.md)                      | Quy tắc làm việc trong repo và checklist trước khi commit             |

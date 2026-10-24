@@ -1,4 +1,4 @@
-# CLAUDE.md — Quy tắc làm việc trong repo CN-019
+# CLAUDE.md - Quy tắc làm việc trong repo CN-019
 
 Đồ án chuyên ngành của Nguyễn Minh Hoàng (1 sinh viên). Mục tiêu: **phiên bản đơn giản nhất đủ "Kết quả cần đạt" của đề**, hiểu nghiệp vụ, mở rộng được sau. Người dùng đang học: khi viết code hay tài liệu, giải thích _vì sao_, không chỉ đưa kết quả.
 
@@ -40,14 +40,14 @@ Tài liệu ôn tập, câu hỏi gửi GVHD, ghi chú cá nhân: tạo **ngoài
 | 3 vai trò, phạm vi chi nhánh                     | BR-15, ADR-0002    | ch.5 §5.1, §5.4; ch.8 bảng `users`; H9, H9b, H10                        |
 | Giới hạn file (5 MB, 10.000 dòng, 30 cột)        | BR-14              | ch.2 QT-01 + E2, ch.6 AC-06.8, H3                                       |
 | Bộ lọc mặc định, cấp drill-down                  | BR-18, BR-19       | ch.2 §2.4, ch.6 bố cục + AC-14.1, H5, H12                               |
-| Quy tắc cảnh báo R1–R5                           | BR-20              | ch.6 UC15 + AC-15.x, ch.8 bảng `alert_rules`                            |
+| Quy tắc cảnh báo R1-R5                           | BR-20              | ch.6 UC15 + AC-15.x, ch.8 bảng `alert_rules`                            |
 | Trạng thái lần nhập, thời gian dọn lần nhập treo | BR-13              | ch.2 §2.6, ch.8 bảng `import_jobs`, H7, H14                             |
 | 14 trường dữ liệu nhập                           | ch.3 §3.5.1        | §3.5.2 file mẫu, §3.5.3, ch.8 `fact_sales`, ch.6 AC-07.x                |
 | 5 chi nhánh khởi tạo                             | ch.8 §8.4.2        | ch.3 §3.5.2, ch.6 AC dùng `HN01`, `DN01`, `HCM01`                       |
 | Danh sách API và quyền                           | ch.5 §5.4.2        | dòng "API" trong từng đặc tả ch.6, ch.8 §8.3                            |
 | Ai mở transaction                                | ch.8 §8.2.1        | ch.8 §8.2.2, H14                                                        |
 | 50 ngày, ~13 giờ/tuần                            | ch.1 §1.5.3 (C1)   | đầu `ke-hoach.md`                                                       |
-| Mã bước trong chú thích code, README             | `ke-hoach.md`      | `apps/**`, `README.md` — nội dung bước phải đúng việc chú thích nói tới |
+| Mã bước trong chú thích code, README             | `ke-hoach.md`      | `apps/**`, `README.md` - nội dung bước phải đúng việc chú thích nói tới |
 
 4. Báo lại cho người dùng mọi chỗ lệch tìm thấy và cách đã sửa; ghi lệch đáng kể vào ch.7 §4.
 

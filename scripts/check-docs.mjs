@@ -110,11 +110,11 @@ for (const t of tables(text[ch(4)]))
   for (const r of t.rows)
     if (/^F\d\.\d$/.test(r[0])) defs.F.set(r[0], { pr: r[col(t, "Ưu tiên")], fr: r[col(t, "FR")] });
 
-// Mở rộng tham chiếu, kể cả dạng khoảng: FR-19…FR-23, UC06–UC09, AC-06.1…AC-06.7
+// Mở rộng tham chiếu, kể cả dạng khoảng: FR-19…FR-23, UC06-UC09, AC-06.1…AC-06.7
 function refs(src) {
   const out = [];
   const range =
-    /\b(FR|NFR|BR)-(\d\d)\s*[…–]\s*(?:\1-)?(\d\d)\b|\bUC(\d\d)\s*[…–]\s*UC(\d\d)\b|\bAC-(\d\d)\.(\d+)\s*…\s*AC-\d\d\.(\d+)/g;
+    /\b(FR|NFR|BR)-(\d\d)\s*[…-]\s*(?:\1-)?(\d\d)\b|\bUC(\d\d)\s*[…-]\s*UC(\d\d)\b|\bAC-(\d\d)\.(\d+)\s*…\s*AC-\d\d\.(\d+)/g;
   let s = src.replace(range, (m, k, a, b, ua, ub, acu, aa, ab) => {
     if (k) for (let i = +a; i <= +b; i++) out.push(`${k}-${pad(i)}`);
     else if (ua) for (let i = +ua; i <= +ub; i++) out.push(`UC${pad(i)}`);
@@ -194,20 +194,20 @@ function expectText(f, re, expected, what) {
 }
 expectText(
   ch(3),
-  /\*\*Thống kê:\*\* (\d+) FR — Must (\d+) · Should (\d+)/,
+  /\*\*Thống kê:\*\* (\d+) FR - Must (\d+) · Should (\d+)/,
   [defs.FR.size, count(defs.FR, "Must"), count(defs.FR, "Should")],
   "FR",
 );
 expectText(
   ch(4),
-  /\*\*Thống kê:\*\* (\d+) chức năng lá — \*\*Must (\d+)\*\* · \*\*Should (\d+)\*\*/,
+  /\*\*Thống kê:\*\* (\d+) chức năng lá - \*\*Must (\d+)\*\* · \*\*Should (\d+)\*\*/,
   [defs.F.size, count(defs.F, "Must"), count(defs.F, "Should")],
   "chức năng lá",
 );
 expectText(ch(4), /→ (\d+) chức năng lá/, [defs.F.size], "chức năng lá (chú thích H8)");
 expectText(
   ch(5),
-  /\*\*Thống kê:\*\* (\d+) use case — Must (\d+) .* Should (\d+)/,
+  /\*\*Thống kê:\*\* (\d+) use case - Must (\d+) .* Should (\d+)/,
   [defs.UC.size, count(defs.UC, "Must"), count(defs.UC, "Should")],
   "use case",
 );
@@ -317,5 +317,5 @@ if (errors.length) {
   process.exit(1);
 }
 console.log(
-  `✓ check-docs: nhất quán — ${defs.FR.size} FR, ${defs.NFR.size} NFR, ${defs.BR.size} BR, ${defs.UC.size} UC, ${defs.AC.size} AC, ${defs.F.size} chức năng lá, ${steps.size} bước kế hoạch`,
+  `✓ check-docs: nhất quán - ${defs.FR.size} FR, ${defs.NFR.size} NFR, ${defs.BR.size} BR, ${defs.UC.size} UC, ${defs.AC.size} AC, ${defs.F.size} chức năng lá, ${steps.size} bước kế hoạch`,
 );

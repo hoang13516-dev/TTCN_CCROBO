@@ -1,6 +1,6 @@
 # ADR-0002: 3 vai trò (manager / analyst / admin) và phạm vi dữ liệu theo chi nhánh
 
-- **Trạng thái:** Đã chấp nhận (chờ GVHD xác nhận — O-15)
+- **Trạng thái:** Đã chấp nhận (chờ GVHD xác nhận - O-15)
 - **Ngày:** 21/10/2026
 - **Thay thế:** [ADR-0001](0001-ba-vai-tro-nguoi-dung.md)
 - **Liên quan:** `docs/phan-tich/08-kien-truc-va-dinh-huong.md` §8.3.1, §8.4.2; `docs/phan-tich/03-dac-ta-yeu-cau.md` BR-15; `05-tac-nhan-va-use-case.md` §5.4
