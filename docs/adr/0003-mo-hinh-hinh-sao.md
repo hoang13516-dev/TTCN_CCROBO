@@ -6,7 +6,7 @@
 
 ## Bối cảnh
 
-Đề bài yêu cầu kiến thức "mô hình dữ liệu phục vụ phân tích thống kê (OLAP/Star Schema)" và "tối ưu hoá truy vấn tổng hợp". Bản v1 dùng schema chuẩn hoá (`orders`, `order_items`, `products`, `categories`…) kèm một materialized view, khi bảo vệ khó giải thích là "star schema".
+Đề bài yêu cầu kiến thức "mô hình dữ liệu phục vụ phân tích thống kê (OLAP/Star Schema)" và "tối ưu hoá truy vấn tổng hợp". Bản đầu dùng schema chuẩn hoá (`orders`, `order_items`, `products`, `categories`…) kèm một materialized view, khi bảo vệ khó giải thích là "star schema".
 
 ## Quyết định
 

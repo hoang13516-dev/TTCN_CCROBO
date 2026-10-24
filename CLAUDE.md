@@ -20,7 +20,8 @@
 | Truy vết, xung đột đã giải quyết, vấn đề mở (O-xx)                                       | `docs/phan-tich/07-…` |
 | Kiến trúc phân lớp, luồng request, thư mục, mô hình dữ liệu, công nghệ, lộ trình mở rộng | `docs/phan-tich/08-…` |
 | Lý do của quyết định kiến trúc                                                           | `docs/adr/`           |
-| Lịch, bước, giờ, tiến độ                                                                 | `ke-hoach.md`         |
+| Lịch, bước, giờ, tiến độ, quy trình sprint, mẫu báo cáo sprint                           | `ke-hoach.md`         |
+| Nội dung báo cáo từng sprint (đã làm gì, giờ thực tế, cải tiến)                          | `bao-cao/sprint-N.md` |
 
 Nơi khác chỉ **trỏ tới**, không chép lại. Chiều tham chiếu: `ke-hoach.md` → phân tích (UC/FR/AC). **Tài liệu phân tích và ADR không bao giờ trỏ vào mã bước kế hoạch** (`S1.2`…).
 

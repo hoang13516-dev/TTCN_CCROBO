@@ -5,7 +5,7 @@
 
 ## Tóm tắt (giữ lại để truy vết)
 
-Bản phân tích v1 dùng 3 vai trò có thứ bậc `viewer < analyst < admin`, trong đó `viewer` xem toàn bộ dữ liệu. Lý do chọn 3 vai thay vì 2: tách người thao tác dữ liệu khỏi người cấu hình hệ thống (nguyên tắc đặc quyền tối thiểu).
+Bản phân tích đầu tiên dùng 3 vai trò có thứ bậc `viewer < analyst < admin`, trong đó `viewer` xem toàn bộ dữ liệu. Lý do chọn 3 vai thay vì 2: tách người thao tác dữ liệu khỏi người cấu hình hệ thống (nguyên tắc đặc quyền tối thiểu).
 
 ## Vì sao bị thay thế
 

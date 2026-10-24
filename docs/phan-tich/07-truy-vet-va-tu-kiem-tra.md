@@ -83,35 +83,35 @@
 
 ## 4. Các xung đột đã giải quyết (21/10/2026)
 
-Bản v1 (lịch sử git) mâu thuẫn với đề bài ở 7 điểm và có 9 chỗ không nhất quán nội bộ; lần rà soát thứ hai tìm thêm 9 chỗ lệch trong chính bản v2. Bảng dưới ghi lại cách giải quyết, để trả lời khi GVHD hỏi "vì sao đổi".
+Bản đầu (lịch sử git) mâu thuẫn với đề bài ở 7 điểm và có 9 chỗ không nhất quán nội bộ; lần rà soát thứ hai tìm thêm 9 chỗ lệch trong chính bản hiện tại. Bảng dưới ghi lại cách giải quyết, để trả lời khi GVHD hỏi "vì sao đổi".
 
 ### 4.1 Mâu thuẫn với đề bài
 
-| Mã v1 | Mâu thuẫn                                                             | Quyết định v2                                                         | Ở đâu                  |
-| ----- | --------------------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------- |
-| O-02  | Đề "CSDL **hoặc** API" nhưng v1 làm cả 3 loại nguồn                   | File + **REST API**; CSDL ngoài là hướng phát triển                   | §3.1.3, §3.1.7         |
-| O-10  | Đề yêu cầu KPI **lợi nhuận**, v1 xếp Won't                            | Cột **giá vốn** trong mỗi dòng bán; KPI lợi nhuận gộp, biên lợi nhuận | BR-02, §3.5.1          |
-| -     | Đề yêu cầu **tỷ lệ giữ chân khách**, v1 để Could                      | Thành KPI Must                                                        | BR-04, FR-19           |
-| O-11  | Không có **vùng miền**, "chi nhánh" bị hiểu là kênh                   | Chi nhánh = cửa hàng thật, có tỉnh và vùng; kênh là chiều riêng       | `dim_branch`, BR-11    |
-| O-12  | Đề yêu cầu **Star Schema**, drill-down; v1 dùng schema chuẩn hoá + MV | Kho hình sao thật; drill-down thời gian, vùng, danh mục               | ADR-0003, FR-26, FR-27 |
-| O-13  | Đề yêu cầu **cảnh báo bất thường**, v1 không có                       | Quy tắc cảnh báo cấu hình được                                        | FR-29…FR-31, BR-20     |
-| O-14  | Đề yêu cầu xuất **PDF/Excel**, v1 chỉ có CSV                          | Excel ở server; PDF qua trang in                                      | FR-32, FR-33           |
+| Mã bản đầu | Mâu thuẫn                                                                  | Quyết định hiện tại                                                   | Ở đâu                  |
+| ---------- | -------------------------------------------------------------------------- | --------------------------------------------------------------------- | ---------------------- |
+| O-02       | Đề "CSDL **hoặc** API" nhưng bản đầu làm cả 3 loại nguồn                   | File + **REST API**; CSDL ngoài là hướng phát triển                   | §3.1.3, §3.1.7         |
+| O-10       | Đề yêu cầu KPI **lợi nhuận**, bản đầu xếp Won't                            | Cột **giá vốn** trong mỗi dòng bán; KPI lợi nhuận gộp, biên lợi nhuận | BR-02, §3.5.1          |
+| -          | Đề yêu cầu **tỷ lệ giữ chân khách**, bản đầu để Could                      | Thành KPI Must                                                        | BR-04, FR-19           |
+| O-11       | Không có **vùng miền**, "chi nhánh" bị hiểu là kênh                        | Chi nhánh = cửa hàng thật, có tỉnh và vùng; kênh là chiều riêng       | `dim_branch`, BR-11    |
+| O-12       | Đề yêu cầu **Star Schema**, drill-down; bản đầu dùng schema chuẩn hoá + MV | Kho hình sao thật; drill-down thời gian, vùng, danh mục               | ADR-0003, FR-26, FR-27 |
+| O-13       | Đề yêu cầu **cảnh báo bất thường**, bản đầu không có                       | Quy tắc cảnh báo cấu hình được                                        | FR-29…FR-31, BR-20     |
+| O-14       | Đề yêu cầu xuất **PDF/Excel**, bản đầu chỉ có CSV                          | Excel ở server; PDF qua trang in                                      | FR-32, FR-33           |
 
-### 4.2 Không nhất quán nội bộ của v1
+### 4.2 Không nhất quán nội bộ của bản đầu
 
-| #   | Không nhất quán                                                                                        | Cách giải quyết                                      |
-| --- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
-| 1   | BR-06 ghi "đơn xác định bởi `external_code`" trong khi O-03 đã chốt `UNIQUE(source_id, external_code)` | BR-06 v2: đơn xác định bởi `(source_id, order_code)` |
-| 2   | Ch.1 ghi "kế hoạch có 2 vai trò" dù kế hoạch đã chuyển 3 vai                                           | Viết lại ch.1; vai trò mới ở ADR-0002                |
-| 3   | Ch.3 ghi "kế hoạch chưa nói rõ bẫy MV" dù kế hoạch đã nói                                              | Bỏ MV; bẫy chỉ số không cộng được ghi ở §3.3.1       |
-| 4   | Rủi ro trong kế hoạch tính tới "bắt buộc 3 loại nguồn" dù đề chỉ cần một trong hai                     | Kế hoạch mới sinh lại từ phân tích                   |
-| 5   | Định nghĩa "xong" của bước hoàn thiện phân tích chỉ nhắc O-01…O-09, bỏ sót O-10…O-14                   | Mọi O-xx đã có quyết định (bảng 4.1)                 |
-| 6   | Code ghi mã bước cũ (B2.7, B3.3, B4.1, B5.2) và sai sprint                                             | Sửa chú thích theo kế hoạch mới                      |
-| 7   | `.env.example` có `JWT_SECRET`, `ENCRYPTION_KEY` nhưng `env.ts` không kiểm tra                         | Bỏ `ENCRYPTION_KEY`; `env.ts` kiểm tra `JWT_SECRET`  |
-| 8   | Hai bảng markdown vỡ cột do ký tự `\|` trong mã                                                        | Viết lại bảng; script kiểm tra số cột mọi bảng       |
-| 9   | Báo cáo `docs/bao-cao/*.docx, *.pdf` là bản v1                                                         | Xoá; xuất lại từ tài liệu v2 khi nộp                 |
+| #   | Không nhất quán                                                                                        | Cách giải quyết                                            |
+| --- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
+| 1   | BR-06 ghi "đơn xác định bởi `external_code`" trong khi O-03 đã chốt `UNIQUE(source_id, external_code)` | BR-06 hiện tại: đơn xác định bởi `(source_id, order_code)` |
+| 2   | Ch.1 ghi "kế hoạch có 2 vai trò" dù kế hoạch đã chuyển 3 vai                                           | Viết lại ch.1; vai trò mới ở ADR-0002                      |
+| 3   | Ch.3 ghi "kế hoạch chưa nói rõ bẫy MV" dù kế hoạch đã nói                                              | Bỏ MV; bẫy chỉ số không cộng được ghi ở §3.3.1             |
+| 4   | Rủi ro trong kế hoạch tính tới "bắt buộc 3 loại nguồn" dù đề chỉ cần một trong hai                     | Kế hoạch mới sinh lại từ phân tích                         |
+| 5   | Định nghĩa "xong" của bước hoàn thiện phân tích chỉ nhắc O-01…O-09, bỏ sót O-10…O-14                   | Mọi O-xx đã có quyết định (bảng 4.1)                       |
+| 6   | Code ghi mã bước cũ (B2.7, B3.3, B4.1, B5.2) và sai sprint                                             | Sửa chú thích theo kế hoạch mới                            |
+| 7   | `.env.example` có `JWT_SECRET`, `ENCRYPTION_KEY` nhưng `env.ts` không kiểm tra                         | Bỏ `ENCRYPTION_KEY`; `env.ts` kiểm tra `JWT_SECRET`        |
+| 8   | Hai bảng markdown vỡ cột do ký tự `\|` trong mã                                                        | Viết lại bảng; script kiểm tra số cột mọi bảng             |
+| 9   | Báo cáo `docs/bao-cao/*.docx, *.pdf` là bản đầu                                                        | Xoá; xuất lại từ tài liệu hiện tại khi nộp                 |
 
-### 4.3 Lệch tìm thấy ở lần rà soát thứ hai (bản v2)
+### 4.3 Lệch tìm thấy ở lần rà soát thứ hai (bản hiện tại)
 
 | #   | Lệch                                                                                                  | Cách giải quyết                                                                   |
 | --- | ----------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |

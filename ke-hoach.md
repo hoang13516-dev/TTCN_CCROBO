@@ -9,13 +9,24 @@
 
 ## 0. HƯỚNG DẪN CHO MỖI PHIÊN LÀM VIỆC
 
-1. Tìm **bước đầu tiên chưa tick** ở [§6](#6-bảng-theo-dõi-tiến-độ). Mỗi lần làm **một bước**.
+1. Tìm **bước đầu tiên chưa tick** ở [§6](#6-bảng-theo-dõi-tiến-độ). Mỗi lần làm **một bước**. Đầu sprint, đọc báo cáo sprint gần nhất trong `bao-cao/` (mục "Đánh giá và cải tiến" và "Chưa hoàn thành") để biết cần cải tiến gì và việc nào chuyển sang.
 2. Mỗi bước ghi: use case (UC) và yêu cầu (FR/NFR) nó phục vụ, các **tiêu chí chấp nhận (AC) phải pass**, số giờ. Nội dung AC: `docs/phan-tich/06-dac-ta-use-case.md`. Cách xây (lớp, thư mục, bảng dữ liệu): `docs/phan-tich/08-kien-truc-va-dinh-huong.md`.
 3. Chỉ tick khi mọi AC của bước đã được kiểm chứng bằng test hoặc thao tác thật. Bước không có AC thì dùng cột "Xong khi".
 4. **Kế hoạch không định nghĩa yêu cầu.** Muốn đổi phạm vi, quy tắc, kiến trúc: sửa `docs/phan-tich/` (và ADR nếu là quyết định kiến trúc) trước, rồi mới sửa kế hoạch.
 5. Trước mỗi commit: `npm run check` (hook pre-commit tự chạy); đọc checklist trong `CLAUDE.md`.
 6. Commit theo quy ước `feat(api): …`, `fix(web): …`, `docs: …`, `test: …`; tick bảng tiến độ, ghi giờ thực tế.
-7. Cuối mỗi tuần (Thứ Ba): báo cáo sprint theo mẫu §5. Lệch > 3 giờ → áp dụng thứ tự cắt ở §4.
+7. Cuối mỗi sprint (Thứ Ba): làm Sprint Review và Retrospective, ghi vào báo cáo sprint theo mẫu §5. Lệch > 3 giờ → áp dụng thứ tự cắt ở §4.
+
+**Quy trình mỗi sprint (Scrum rút gọn cho 1 người).** Dự án chỉ có một người nên mỗi sự kiện được thu nhỏ và nằm trong 13 giờ của sprint, không thêm bước hay thêm giờ vào bảng. Product Backlog là các FR/NFR đã xếp Must/Should ở `docs/phan-tich/03-…`; Sprint Backlog là bảng bước của sprint ở §3.
+
+| Sự kiện            | Khi nào                    | Làm gì                                                                                                                       | Ghi ở đâu                                 |
+| ------------------ | -------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------- |
+| Sprint Planning    | Đầu sprint, ~15-30 phút    | Chọn bước từ Product Backlog theo thứ tự phụ thuộc (§1) và MoSCoW; đọc báo cáo sprint trước; viết Sprint Goal 1 câu; nghĩ trước cách làm từng bước     | Mục "Mục tiêu sprint" của báo cáo sprint  |
+| Daily Scrum        | Đầu mỗi phiên làm, ~15 phút | Tự trả lời 3 câu: hôm qua xong gì, hôm nay làm bước nào, đang vướng gì; vướng quá 1 phiên thì ghi để hỏi GVHD                | Một dòng trong ghi chú phiên (ngoài repo) |
+| Sprint Review      | Cuối sprint                | Chạy thử phần đã xong theo AC của bước (Increment chạy được, không chỉ code); gửi GVHD ảnh chụp/video hoặc trình bày nếu gặp  | Mục "Đã hoàn thành" + "Câu hỏi cho GVHD"  |
+| Sprint Retrospective | Cuối sprint, sau Review  | Tự đánh giá: làm tốt gì, chưa tốt gì, một việc cụ thể cải tiến cho sprint sau; ước lượng giờ lệch thì chỉnh sprint kế tiếp   | Mục "Đánh giá và cải tiến"                |
+
+Điều chỉnh Product Backlog (đổi phạm vi, đổi ưu tiên) sau Review/Retrospective tuân theo mục 4 ở trên: sửa `docs/phan-tich/` trước, rồi mới sửa kế hoạch. Sprint Review là cơ hội phản hồi duy nhất từ bên ngoài, nên ưu tiên gửi GVHD sớm (Sprint 4 có video demo giữa kỳ).
 
 ## 1. CÁCH KẾ HOẠCH ĐƯỢC SINH TỪ PHÂN TÍCH
 
@@ -54,7 +65,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | S1.2 | PostgreSQL + kết nối pool + `/api/health` kiểm tra CSDL      | -  | FR-34         | Kiểm chứng FR-34 (ch.7 §3)                                                              | 2   |
 | S1.3 | Migration kho hình sao + bảng vận hành + dữ liệu khởi tạo     | -  | NFR-11        | Bảng, ràng buộc, index đúng §8.4; `migrate up/down` chạy được 2 lần                     | 4,5 |
 | S1.4 | Script sinh dữ liệu demo                                     | -  | FR-35         | Kiểm chứng FR-35 (ch.7 §3); chạy < 60 s                                                 | 4   |
-| S1.5 | Báo cáo Sprint 1                                             | -  | -             | `docs/bao-cao/sprint-1.md`                                                              | 1   |
+| S1.5 | Báo cáo Sprint 1                                             | -  | -             | `bao-cao/sprint-1.md`                                                              | 1   |
 
 ### Sprint 2 (28/10 → 03/11) - Đăng nhập, phân quyền, chuẩn hoá dùng chung
 
@@ -64,7 +75,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | S2.2 | API đăng nhập/đăng xuất; middleware xác thực, phân quyền, phạm vi chi nhánh | UC01, UC02 | FR-01, FR-02, FR-06, NFR-03, NFR-04 | AC-01.1…AC-01.4, AC-02.1                    | 4   |
 | S2.3 | Trang đăng nhập, bảo vệ route, menu theo vai trò                          | UC01       | FR-03               | AC-01.5…AC-01.7                                                | 2,5 |
 | S2.4 | Câu SQL KPI trên kho + `EXPLAIN` làm mốc hiệu năng                        | UC12       | FR-19, NFR-01       | Kết quả trên dữ liệu §3.5.2 khớp bảng kỳ vọng; ghi lại thời gian | 2   |
-| S2.5 | Báo cáo Sprint 2                                                         | -          | -                   | `docs/bao-cao/sprint-2.md`                                     | 1   |
+| S2.5 | Báo cáo Sprint 2                                                         | -          | -                   | `bao-cao/sprint-2.md`                                     | 1   |
 | S2.6 | Nộp tuần 2/3 (hạn 01/11): wireframe giao diện cơ bản (ảnh, vẽ bằng Figma hoặc tool khác); xuất `docs/phan-tich/` sang Google Doc; xác nhận tên repo theo định dạng `TTCN_MANHOM`; trang kế hoạch (timeline, phân công) trên website | - | - | Ảnh wireframe trong `docs/wireframe/`; link Google Doc và link repo gửi GVHD trước 01/11 | 2   |
 
 ### Sprint 3 (04/11 → 10/11) - ETL file
@@ -74,7 +85,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | S3.1 | Upload, Extract CSV/XLSX, xem trước, gợi ý ánh xạ              | UC06, UC07      | FR-08, FR-09                | AC-06.8, AC-06.10, AC-07.1                 | 3   |
 | S3.2 | Transform + Load trong 1 transaction; ghi lần nhập, dòng lỗi   | UC06            | FR-10, FR-11, FR-12, NFR-02, NFR-07 | AC-06.1…AC-06.7, AC-06.9           | 4,5 |
 | S3.3 | Giao diện nhập 3 bước, lịch sử, tải dòng lỗi, file mẫu         | UC06-UC09       | FR-12, FR-13, FR-14, NFR-08 | AC-07.2, AC-08.1, AC-09.1, AC-09.2         | 4,5 |
-| S3.4 | Báo cáo Sprint 3                                             | -               | -                           | `docs/bao-cao/sprint-3.md`                 | 1   |
+| S3.4 | Báo cáo Sprint 3                                             | -               | -                           | `bao-cao/sprint-3.md`                 | 1   |
 
 ### Sprint 4 (11/11 → 17/11) - Dashboard
 
@@ -83,7 +94,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | S4.1 | API phân tích (KPI, xu hướng, top SP, vùng, danh mục, kênh) + danh mục lọc | UC12-UC14 | FR-19…FR-23, FR-26, FR-27, NFR-05, NFR-06 | AC-12.1…AC-12.4, AC-12.6, AC-13.1, AC-13.4, AC-14.2 | 4,5 |
 | S4.2 | Bộ lọc đa chiều đồng bộ URL + 6 thẻ KPI                           | UC12, UC13 | FR-19, FR-24                     | AC-13.2                                                  | 3   |
 | S4.3 | Biểu đồ, drill-down, lọc chéo, trạng thái tải/rỗng/lỗi            | UC12-UC14  | FR-20…FR-23, FR-25…FR-28, NFR-09 | AC-12.5, AC-13.3, AC-14.1, AC-14.3                       | 4,5 |
-| S4.4 | Báo cáo Sprint 4 + video demo giữa kỳ                            | -          | -                                | `docs/bao-cao/sprint-4.md`                               | 1   |
+| S4.4 | Báo cáo Sprint 4 + video demo giữa kỳ                            | -          | -                                | `bao-cao/sprint-4.md`                               | 1   |
 
 ### Sprint 5 (18/11 → 24/11) - Cảnh báo, xuất báo cáo, nguồn API
 
@@ -92,7 +103,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | S5.1 | Đánh giá quy tắc cảnh báo + khối cảnh báo trên dashboard | UC15       | FR-29, FR-30               | AC-15.1…AC-15.5                      | 3,5 |
 | S5.2 | Xuất Excel; trang báo cáo in A4 (PDF)                    | UC17       | FR-32, FR-33               | AC-17.1…AC-17.4                      | 3,5 |
 | S5.3 | Mock shop API; quản lý nguồn; đồng bộ tăng dần           | UC10, UC11 | FR-15…FR-18, NFR-13, NFR-14 | AC-10.1…AC-10.3, AC-11.1…AC-11.4    | 5   |
-| S5.4 | Báo cáo Sprint 5                                         | -          | -                          | `docs/bao-cao/sprint-5.md`           | 1   |
+| S5.4 | Báo cáo Sprint 5                                         | -          | -                          | `bao-cao/sprint-5.md`           | 1   |
 
 ### Sprint 6 (25/11 → 01/12) - Quản trị, tối ưu, deploy
 
@@ -102,7 +113,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | S6.2 | Cấu hình quy tắc cảnh báo                         | UC16             | FR-31                | AC-16.1, AC-16.2                                               | 1,5 |
 | S6.3 | Tối ưu truy vấn tổng hợp (`EXPLAIN` trước/sau)    | -                | NFR-01               | Bảng so sánh trước/sau; đạt NFR-01                             | 2   |
 | S6.4 | Chuẩn bị production + deploy                      | -                | NFR-04, NFR-12, NFR-14 | Mở URL công khai từ điện thoại, đăng nhập và xem dashboard   | 4,5 |
-| S6.5 | Báo cáo Sprint 6                                  | -                | -                    | `docs/bao-cao/sprint-6.md`                                     | 1   |
+| S6.5 | Báo cáo Sprint 6                                  | -                | -                    | `bao-cao/sprint-6.md`                                     | 1   |
 
 ### Sprint 7 (02/12 → 08/12) - Kiểm thử, tài liệu, UAT
 
@@ -138,17 +149,20 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 4. FR-14 (file mẫu tạo động) → file mẫu tĩnh (tiết kiệm 0,5 giờ).
 5. S6.3 → chỉ thêm index còn thiếu (tiết kiệm 1 giờ).
 
-## 5. MẪU BÁO CÁO SPRINT (`docs/bao-cao/sprint-N.md`)
+## 5. MẪU BÁO CÁO SPRINT (`bao-cao/sprint-N.md`)
+
+Khi xong mỗi sprint (bước "Báo cáo Sprint N"), tạo file `bao-cao/sprint-N.md` ở gốc repo theo mẫu dưới. Thư mục `bao-cao/` tách khỏi `docs/` (docs chỉ chứa phân tích và ADR); báo cáo ghi _thực tế đã làm_ nên không nằm trong tài liệu phân tích. Sprint sau đọc file này ở Sprint Planning. Sprint 1 tạo thư mục `bao-cao/`.
 
 ```markdown
 # Báo cáo Sprint N (dd/MM - dd/MM/2026) - CN-019
-## 1. Mục tiêu sprint
-## 2. Đã hoàn thành (bước, link commit, AC đã pass, ảnh chụp)
+## 1. Mục tiêu sprint (Sprint Goal 1 câu + các bước đã chọn)
+## 2. Đã hoàn thành - Sprint Review (bước, link commit, AC đã pass, ảnh chụp, phản hồi nhận được)
 ## 3. Chưa hoàn thành & lý do
 ## 4. Khó khăn kỹ thuật & cách giải quyết (bài học)
 ## 5. Số giờ thực tế / ước lượng
-## 6. Kế hoạch sprint tiếp theo
-## 7. Câu hỏi cho GVHD
+## 6. Đánh giá và cải tiến - Retrospective (làm tốt, chưa tốt, 1 việc cải tiến)
+## 7. Kế hoạch sprint tiếp theo
+## 8. Câu hỏi cho GVHD
 ```
 
 ## 6. BẢNG THEO DÕI TIẾN ĐỘ

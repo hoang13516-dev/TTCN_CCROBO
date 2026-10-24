@@ -20,6 +20,7 @@ Chưa có: CSDL, đăng nhập, ETL, dashboard thật. Tiến độ theo bước
 | [`docs/phan-tich/`](docs/phan-tich/README.md) | Phân tích yêu cầu (ch.1-7) và kiến trúc, công nghệ, định hướng (ch.8) |
 | [`docs/adr/`](docs/adr/)                      | Lý do các quyết định kiến trúc                                        |
 | [`ke-hoach.md`](ke-hoach.md)                  | Lịch sprint, các bước, giờ, bảng tiến độ                              |
+| `bao-cao/`                                    | Báo cáo từng sprint (`sprint-N.md`), tạo khi xong sprint              |
 | [`CLAUDE.md`](CLAUDE.md)                      | Quy tắc làm việc trong repo và checklist trước khi commit             |
 
 ## Cấu trúc
@@ -33,6 +34,7 @@ apps/
 packages/
   shared/       Schema Zod và hàm chuẩn hoá dùng chung cho FE và BE (@cn019/shared)
 docs/           Tài liệu phân tích và ADR
+bao-cao/        Báo cáo từng sprint (tạo khi xong Sprint 1)
 scripts/        Script kiểm tra nhất quán tài liệu (check-docs.mjs)
 ```
 
