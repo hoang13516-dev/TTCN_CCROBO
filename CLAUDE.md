@@ -56,3 +56,4 @@ Tài liệu ôn tập, câu hỏi gửi GVHD, ghi chú cá nhân: tạo **ngoài
 - Commit: `feat(api): …`, `fix(web): …`, `docs: …`, `test: …`, `chore: …`.
 - Code: TypeScript strict; module backend theo lớp `routes → controller → service → repository` (ch.8 §8.2); SQL chỉ ở repository, luôn tham số hoá.
 - Văn bản tiếng Việt, câu ngắn, thuật ngữ kỹ thuật giữ nguyên tiếng Anh khi cần.
+- Không dùng icon (emoji, dấu tích, dấu chéo, ô vuông, biểu tượng cảnh báo, ổ khoá…) trong tài liệu, code, sơ đồ, commit, PR. Thay bằng chữ: `Có`/`Không`, `Đạt`, `[ ]`, `(phạm vi)`, `[warning]`… Mũi tên `→`, `↔` vẫn được dùng.

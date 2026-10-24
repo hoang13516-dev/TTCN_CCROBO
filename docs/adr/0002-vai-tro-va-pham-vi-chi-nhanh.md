@@ -19,7 +19,7 @@
 ## Hệ quả
 
 - **Tích cực:** đáp ứng đúng "phân quyền xem báo cáo"; một chỗ duy nhất áp phạm vi nên không sót endpoint; link chia sẻ từ giám đốc vẫn mở được ở tài khoản quản lý (thấy số của chi nhánh mình).
-- **Tiêu cực:** mọi truy vấn phân tích phải nhận bộ lọc chi nhánh; cần test phân quyền cho từng endpoint 🔒 (bảng §5.4.2).
+- **Tiêu cực:** mọi truy vấn phân tích phải nhận bộ lọc chi nhánh; cần test phân quyền cho từng endpoint đánh dấu `(phạm vi)` (bảng §5.4.2).
 - **Phương án đã loại:**
   - _2 vai admin/viewer:_ đơn giản nhưng không thể hiện phân quyền theo đơn vị.
   - _Trả 403 khi manager hỏi chi nhánh khác:_ an toàn nhưng làm hỏng link chia sẻ.

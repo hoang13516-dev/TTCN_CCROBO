@@ -4,33 +4,33 @@
 
 ## Thông tin buổi phỏng vấn
 
-| Mục                          | Ghi chú                                                      |
-| ---------------------------- | ------------------------------------------------------------ |
-| Ngày, giờ                    |                                                              |
-| Vai trò người được hỏi       | ☐ Chủ/giám đốc ☐ Quản lý cửa hàng ☐ Kế toán/văn phòng ☐ Khác |
-| Số chi nhánh / số tỉnh       |                                                              |
-| Quy mô đơn/tháng (ước lượng) | ☐ < 500 ☐ 500-2.000 ☐ 2.000-10.000 ☐ > 10.000                |
-| Đồng ý ghi chú (có / không)  |                                                              |
+| Mục                          | Ghi chú                                                              |
+| ---------------------------- | -------------------------------------------------------------------- |
+| Ngày, giờ                    |                                                                      |
+| Vai trò người được hỏi       | [ ] Chủ/giám đốc [ ] Quản lý cửa hàng [ ] Kế toán/văn phòng [ ] Khác |
+| Số chi nhánh / số tỉnh       |                                                                      |
+| Quy mô đơn/tháng (ước lượng) | [ ] < 500 [ ] 500-2.000 [ ] 2.000-10.000 [ ] > 10.000                |
+| Đồng ý ghi chú (có / không)  |                                                                      |
 
 > **Lưu ý đạo đức:** không ghi tên, SĐT, địa chỉ của khách hoặc của người được hỏi. File mẫu nhận được phải xoá cột thông tin cá nhân trước khi lưu vào repo.
 
 ## Phần A - Chi nhánh, kênh bán, phần mềm
 
 **Q1. Doanh nghiệp có bao nhiêu chi nhánh, ở những tỉnh nào? Bán qua những kênh nào?**
-Chi nhánh/tỉnh: … Kênh: ☐ Tại quầy ☐ Website ☐ Shopee ☐ TikTok Shop ☐ Facebook/Zalo ☐ Khác: …
+Chi nhánh/tỉnh: … Kênh: [ ] Tại quầy [ ] Website [ ] Shopee [ ] TikTok Shop [ ] Facebook/Zalo [ ] Khác: …
 _Kiểm chứng:_ `dim_branch`, `dim_channel`, giả định A4 (đơn online gắn với một chi nhánh xử lý).
 
 **Q2. Mỗi chi nhánh dùng phần mềm bán hàng nào? Xuất được Excel/CSV không?**
-☐ KiotViet ☐ Sapo ☐ Haravan ☐ Excel tự làm ☐ Khác: … - xin **1 file mẫu đã xoá thông tin khách**.
+[ ] KiotViet [ ] Sapo [ ] Haravan [ ] Excel tự làm [ ] Khác: … - xin **1 file mẫu đã xoá thông tin khách**.
 _Kiểm chứng:_ tên cột thật cho từ điển §3.5.3.
 
-**Q3. Website/kênh online có API để lấy đơn không?** ☐ Có ☐ Không ☐ Không biết
+**Q3. Website/kênh online có API để lấy đơn không?** [ ] Có [ ] Không [ ] Không biết
 _Kiểm chứng:_ ưu tiên UC10, UC11.
 
 ## Phần B - Dữ liệu đơn hàng
 
 **Q4. Mỗi đơn có mã đơn không? Một đơn nhiều sản phẩm thì file thể hiện thế nào?**
-☐ Nhiều dòng, lặp lại mã đơn ☐ Một dòng, gộp sản phẩm trong một ô ☐ Khác: …
+[ ] Nhiều dòng, lặp lại mã đơn [ ] Một dòng, gộp sản phẩm trong một ô [ ] Khác: …
 _Câu phụ:_ "Hai chi nhánh có thể cùng có mã `HD0001` không?"
 _Kiểm chứng:_ A1, BR-06 (đơn xác định bởi nguồn + mã đơn), BR-07.
 
@@ -49,7 +49,7 @@ _Kiểm chứng:_ BR-01, BR-08; voucher toàn đơn nằm ngoài phạm vi (§3.
 _Kiểm chứng:_ G1 (giả định 3-6 giờ/kỳ). **Ghi con số thực tế.**
 
 **Q9. Hay xem những con số nào? Xếp hạng 3 con số quan trọng nhất.**
-☐ Doanh thu ☐ Lợi nhuận ☐ Số đơn ☐ Giá trị đơn trung bình ☐ Khách quay lại ☐ Sản phẩm bán chạy ☐ So sánh chi nhánh/vùng
+[ ] Doanh thu [ ] Lợi nhuận [ ] Số đơn [ ] Giá trị đơn trung bình [ ] Khách quay lại [ ] Sản phẩm bán chạy [ ] So sánh chi nhánh/vùng
 _Kiểm chứng:_ 6 KPI của FR-19.
 
 **Q10. Khi nào thì anh/chị coi là "bất thường, cần xử lý ngay"?** (vd. doanh thu giảm bao nhiêu %, biên lãi dưới bao nhiêu %)
@@ -61,24 +61,24 @@ _Kiểm chứng:_ ngưỡng mặc định R1-R5 (BR-20).
 
 | Vai trò             | Xem chi nhánh mình | Xem toàn chuỗi | Nhập dữ liệu | Xuất báo cáo |
 | ------------------- | ------------------ | -------------- | ------------ | ------------ |
-| Chủ / giám đốc      | ☐                  | ☐              | ☐            | ☐            |
-| Kế toán / văn phòng | ☐                  | ☐              | ☐            | ☐            |
-| Quản lý chi nhánh   | ☐                  | ☐              | ☐            | ☐            |
+| Chủ / giám đốc      | [ ]                | [ ]            | [ ]          | [ ]          |
+| Kế toán / văn phòng | [ ]                | [ ]            | [ ]          | [ ]          |
+| Quản lý chi nhánh   | [ ]                | [ ]            | [ ]          | [ ]          |
 
 _Kiểm chứng:_ 3 vai trò, BR-15, ma trận §5.4.
 
-**Q12. Điều gì khiến anh/chị không dùng công cụ này?** ☐ Mất thời gian học ☐ Không tin số liệu tự động ☐ Phải đổi cách ghi sổ ☐ Lộ dữ liệu ☐ Khác: …
+**Q12. Điều gì khiến anh/chị không dùng công cụ này?** [ ] Mất thời gian học [ ] Không tin số liệu tự động [ ] Phải đổi cách ghi sổ [ ] Lộ dữ liệu [ ] Khác: …
 _Kiểm chứng:_ rủi ro chấp nhận, NFR-08.
 
 ## Phần E - Đối chiếu giả định (điền sau buổi hỏi)
 
-| Mã  | Giả định                                           | Kết luận                      | Bằng chứng |
-| --- | -------------------------------------------------- | ----------------------------- | ---------- |
-| A1  | Mỗi đơn có mã duy nhất trong nguồn của nó          | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
-| A2  | SKU ổn định, giống nhau giữa các nguồn             | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
-| A3  | Dữ liệu xuất có giá vốn từng dòng                  | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
-| A4  | Mỗi đơn (kể cả online) gắn với một chi nhánh       | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
-| A5  | Nhập liệu trên máy tính, điện thoại chủ yếu để xem | ☐ Xác nhận ☐ Bác bỏ ☐ Chưa rõ |            |
-| G1  | Hiện mất 3-6 giờ mỗi kỳ để tổng hợp                | Thực tế: … giờ/kỳ             |            |
+| Mã  | Giả định                                           | Kết luận                            | Bằng chứng |
+| --- | -------------------------------------------------- | ----------------------------------- | ---------- |
+| A1  | Mỗi đơn có mã duy nhất trong nguồn của nó          | [ ] Xác nhận [ ] Bác bỏ [ ] Chưa rõ |            |
+| A2  | SKU ổn định, giống nhau giữa các nguồn             | [ ] Xác nhận [ ] Bác bỏ [ ] Chưa rõ |            |
+| A3  | Dữ liệu xuất có giá vốn từng dòng                  | [ ] Xác nhận [ ] Bác bỏ [ ] Chưa rõ |            |
+| A4  | Mỗi đơn (kể cả online) gắn với một chi nhánh       | [ ] Xác nhận [ ] Bác bỏ [ ] Chưa rõ |            |
+| A5  | Nhập liệu trên máy tính, điện thoại chủ yếu để xem | [ ] Xác nhận [ ] Bác bỏ [ ] Chưa rõ |            |
+| G1  | Hiện mất 3-6 giờ mỗi kỳ để tổng hợp                | Thực tế: … giờ/kỳ                   |            |
 
 Sau buổi hỏi: giả định nào bị **bác bỏ** → sửa `03-dac-ta-yeu-cau.md` trước, rồi cập nhật O-16 trong `07-…` §5.

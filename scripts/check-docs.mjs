@@ -312,10 +312,10 @@ for (const o of fs.readdirSync(path.join(ROOT, `${SD}/out`)))
 
 // ---------- Kết quả ----------
 if (errors.length) {
-  console.error(`✗ check-docs: ${errors.length} lỗi nhất quán\n`);
+  console.error(`check-docs: ${errors.length} lỗi nhất quán\n`);
   for (const e of [...new Set(errors)]) console.error("  - " + e);
   process.exit(1);
 }
 console.log(
-  `✓ check-docs: nhất quán - ${defs.FR.size} FR, ${defs.NFR.size} NFR, ${defs.BR.size} BR, ${defs.UC.size} UC, ${defs.AC.size} AC, ${defs.F.size} chức năng lá, ${steps.size} bước kế hoạch`,
+  `check-docs: nhất quán - ${defs.FR.size} FR, ${defs.NFR.size} NFR, ${defs.BR.size} BR, ${defs.UC.size} UC, ${defs.AC.size} AC, ${defs.F.size} chức năng lá, ${steps.size} bước kế hoạch`,
 );
