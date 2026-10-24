@@ -1,7 +1,7 @@
 # KẾ HOẠCH THỰC HIỆN - CN-019 DASHBOARD PHÂN TÍCH DỮ LIỆU BÁN HÀNG
 
 > Đồ án chuyên ngành - GVHD: ThS. Dương Văn Đeo (GV001) - Thực hiện: Nguyễn Minh Hoàng (nhóm CCROBO, 1 sinh viên)
-> Phiên bản **v3.0** (21/10/2026), **sinh lại từ tài liệu phân tích** `docs/phan-tich/` (thay thế hoàn toàn các kế hoạch trước, xem lịch sử git)
+> Cập nhật 21/10/2026, **sinh lại từ tài liệu phân tích** `docs/phan-tich/` (thay thế hoàn toàn các kế hoạch trước, xem lịch sử git)
 > Ràng buộc (ch.1 §1.5.3, C1): **50 ngày, 21/10 → 09/12/2026** · **~13 giờ/tuần** · phạm vi **Must + Should**
 > Tổng: **7 sprint × 13 giờ + 1,5 giờ ngày nộp = 92,5 giờ** (S2.6 thêm 2 giờ vào Sprint 2, lấy từ vùng đệm S7.5)
 
