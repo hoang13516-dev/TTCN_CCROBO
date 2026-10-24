@@ -235,55 +235,30 @@ for (const f of mdFiles.filter((f) => f.startsWith(PT) || f.startsWith("docs/adr
   for (const m of text[f].matchAll(STEP))
     err(`${f}: trỏ vào bước kế hoạch ${m[0]} (chỉ ke-hoach.md được trỏ tới UC/FR/AC)`);
 
-// ---------- 8. Kế hoạch: phủ đủ FR, NFR, AC; giờ cộng đúng ----------
+// ---------- 8. Kế hoạch: mã bước khớp giữa bảng sprint và bảng tiến độ ----------
+// Kế hoạch chỉ ghi nhiệm vụ đã giao, giờ để trống đến khi có ước lượng, nên không ép tổng giờ hay độ phủ FR/AC.
 const plan = text["ke-hoach.md"];
 const steps = new Map();
-const planRefs = new Set();
-const sprints = plan.split(/^### /m).slice(1);
-for (const sp of sprints) {
-  let sum = 0;
+for (const sp of plan.split(/^### /m).slice(1))
   for (const t of tables(sp)) {
     if (col(t, "Giờ") < 0) continue;
-    for (const r of t.rows) {
-      const h = Number(r[col(t, "Giờ")].replace(",", "."));
-      steps.set(r[0], h);
-      sum += h;
-      refs(r.join(" ")).forEach((x) => planRefs.add(x));
-    }
+    for (const r of t.rows) steps.set(r[0], r[col(t, "Giờ")].replace(",", "."));
   }
-  const title = sp.split("\n")[0];
-  // Sprint 2 thêm S2.6 (2 giờ, hạn nộp tuần 2/3); Sprint 7 bớt 2 giờ vùng đệm để tổng giữ 92,5
-  const expected = /^Ngày 50/.test(title)
-    ? 1.5
-    : /^Sprint 2 /.test(title)
-      ? 15
-      : /^Sprint 7 /.test(title)
-        ? 11
-        : 13;
-  if (Math.abs(sum - expected) > 1e-9)
-    err(`ke-hoach.md "${title}": tổng giờ ${sum}, phải là ${expected}`);
+const progress = new Map();
+for (const m of plan.matchAll(/^\| \[[ x]\] (S\d\.\d) \|[^|]+\| ([\d,]*)h?\s*\|/gm))
+  progress.set(m[1], m[2].replace(",", "."));
+for (const [id, h] of progress) {
+  if (!steps.has(id)) err(`ke-hoach.md: ${id} ở bảng tiến độ nhưng không có ở bảng sprint`);
+  else if (h !== "" && steps.get(id) !== "" && Number(steps.get(id)) !== Number(h))
+    err(`ke-hoach.md: ${id} ở bảng tiến độ ${h}h, ở bảng sprint ${steps.get(id)}h`);
 }
-for (const id of [...defs.FR.keys(), ...defs.NFR, ...defs.AC])
-  if (!planRefs.has(id)) err(`ke-hoach.md: không bước nào phủ ${id}`);
-let total = 0;
-for (const m of plan.matchAll(/^\| \[[ x]\] (S\d\.\d) \|[^|]+\| ([\d,]+)h/gm)) {
-  const h = Number(m[2].replace(",", "."));
-  if (m[1].startsWith("S0")) continue;
-  total += h;
-  if (steps.get(m[1]) !== h)
-    err(`ke-hoach.md: ${m[1]} ở bảng tiến độ ${h}h, ở bảng sprint ${steps.get(m[1])}h`);
-}
-for (const s of steps.keys())
-  if (!new RegExp(`\\| \\[[ x]\\] ${s} \\|`).test(plan))
-    err(`ke-hoach.md: ${s} thiếu trong bảng tiến độ`);
-if (Math.abs(total - 92.5) > 1e-9 || !plan.includes(`${String(total).replace(".", ",")} giờ`))
-  err(`ke-hoach.md: tổng bảng tiến độ ${total} giờ không khớp tổng ghi trong kế hoạch`);
+for (const id of steps.keys())
+  if (!progress.has(id)) err(`ke-hoach.md: ${id} thiếu trong bảng tiến độ`);
 // Mã bước được nhắc ở code/README/CLAUDE.md phải tồn tại trong kế hoạch
 for (const [f, src] of Object.entries(text))
   if (!f.startsWith(PT) && !f.startsWith("docs/adr") && f !== "ke-hoach.md")
     for (const m of src.matchAll(STEP))
-      if (!steps.has(m[0]) && !m[0].startsWith("S0"))
-        err(`${f}: bước ${m[0]} không có trong kế hoạch`);
+      if (!steps.has(m[0])) err(`${f}: bước ${m[0]} không có trong kế hoạch`);
 
 // ---------- 9. Link nội bộ, anchor, sơ đồ ----------
 const slug = (h) =>

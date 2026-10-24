@@ -1,6 +1,6 @@
 # Chương 7. MA TRẬN TRUY VẾT & TỰ KIỂM TRA
 
-> Chương này chỉ truy vết **bên trong tài liệu phân tích** (đề bài → vấn đề → yêu cầu → use case → tiêu chí chấp nhận). Việc **bước nào trong kế hoạch phủ yêu cầu nào** nằm ở `ke-hoach.md`, để sửa kế hoạch không làm gãy tài liệu phân tích. Script `npm run check:docs` kiểm tra cả hai chiều.
+> Chương này chỉ truy vết **bên trong tài liệu phân tích** (đề bài → vấn đề → yêu cầu → use case → tiêu chí chấp nhận). Kế hoạch (`ke-hoach.md`) chỉ ghi nhiệm vụ đã giao; việc bước nào phục vụ yêu cầu nào (nếu có) ghi ở đó, để sửa kế hoạch không làm gãy tài liệu phân tích.
 
 ## 1. Đề bài → use case (độ phủ "Kết quả cần đạt")
 
@@ -140,16 +140,16 @@ Bản đầu (lịch sử git) mâu thuẫn với đề bài ở 7 điểm và c
 
 Chạy `npm run check:docs` (tự chạy trước mỗi commit qua git hook). Script kiểm tra:
 
-| Kiểm tra                                                                           | Bắt được loại lỗi                          |
-| ---------------------------------------------------------------------------------- | ------------------------------------------ |
-| Mọi mã FR/NFR/BR/UC/AC được tham chiếu đều đã định nghĩa (kể cả dạng khoảng `X…Y`) | Tham chiếu treo sau khi xoá/đổi số         |
-| FR ↔ UC khai báo hai chiều khớp nhau (ch.3 ↔ ch.5); bảng §3 chương này khớp ch.3   | Sửa một bên quên bên kia                   |
-| Mọi AC được ít nhất một FR trỏ tới                                                 | Tiêu chí chấp nhận "mồ côi"                |
-| Các con số "Thống kê" khớp số dòng thật (FR, AC, UC, chức năng lá)                 | Đếm sai sau khi thêm/bớt                   |
-| Kế hoạch phủ đủ mọi FR và AC; giờ các bước cộng đúng tổng sprint và tổng kế hoạch  | Kế hoạch bỏ sót yêu cầu, sai ngân sách giờ |
-| Tài liệu phân tích và ADR không trỏ vào mã bước kế hoạch                           | Ràng buộc ngược phân tích → kế hoạch       |
-| Bảng markdown đủ cột; link nội bộ và anchor tồn tại; mỗi `.puml` có ảnh PNG/SVG    | Bảng vỡ, link chết, sơ đồ chưa xuất lại    |
-| Không có file ngoài phạm vi repo (tài liệu ôn tập, câu hỏi GVHD)                   | Đưa nhầm tài liệu cá nhân vào repo         |
+| Kiểm tra                                                                                         | Bắt được loại lỗi                                 |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| Mọi mã FR/NFR/BR/UC/AC được tham chiếu đều đã định nghĩa (kể cả dạng khoảng `X…Y`)               | Tham chiếu treo sau khi xoá/đổi số                |
+| FR ↔ UC khai báo hai chiều khớp nhau (ch.3 ↔ ch.5); bảng §3 chương này khớp ch.3                 | Sửa một bên quên bên kia                          |
+| Mọi AC được ít nhất một FR trỏ tới                                                               | Tiêu chí chấp nhận "mồ côi"                       |
+| Các con số "Thống kê" khớp số dòng thật (FR, AC, UC, chức năng lá)                               | Đếm sai sau khi thêm/bớt                          |
+| Mã bước trong kế hoạch khớp giữa bảng sprint và bảng tiến độ; mã bước nhắc ở code/README tồn tại | Kế hoạch lệch giữa hai bảng, code trỏ bước đã xoá |
+| Tài liệu phân tích và ADR không trỏ vào mã bước kế hoạch                                         | Ràng buộc ngược phân tích → kế hoạch              |
+| Bảng markdown đủ cột; link nội bộ và anchor tồn tại; mỗi `.puml` có ảnh PNG/SVG                  | Bảng vỡ, link chết, sơ đồ chưa xuất lại           |
+| Không có file ngoài phạm vi repo (tài liệu ôn tập, câu hỏi GVHD)                                 | Đưa nhầm tài liệu cá nhân vào repo                |
 
 Script **không** hiểu nghĩa câu chữ. Những thông tin vẫn phải đối chiếu bằng mắt mỗi khi sửa được liệt kê trong `CLAUDE.md` ở gốc repo.
 

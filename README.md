@@ -6,7 +6,7 @@ Phạm vi và yêu cầu chi tiết nằm trong [`docs/phan-tich/`](docs/phan-ti
 
 ## Trạng thái hiện tại
 
-Dự án đang ở **Sprint 1** (nền tảng dữ liệu). Hiện mới có:
+Dự án đang ở **Sprint 1**, chủ yếu là giai đoạn phân tích. Hiện mới có:
 
 - API Express với endpoint `GET /api/health`, kiểm tra cấu hình `.env` khi khởi động.
 - Web React với layout (sidebar) và 3 trang khung: Dashboard, Nhập dữ liệu, Nguồn dữ liệu.
@@ -38,13 +38,13 @@ bao-cao/        Báo cáo từng sprint (tạo khi xong Sprint 1)
 scripts/        Script kiểm tra nhất quán tài liệu (check-docs.mjs)
 ```
 
-`apps/mock-shop-api` (REST API giả lập website bán hàng để demo đồng bộ) sẽ thêm ở Sprint 5.
+`apps/mock-shop-api` (REST API giả lập website bán hàng để demo đồng bộ) chưa có, sẽ thêm khi làm UC11.
 
 ## Yêu cầu
 
 - Node.js >= 20
 - npm >= 10
-- PostgreSQL >= 15 (từ bước S1.2)
+- PostgreSQL >= 15 (khi làm phần CSDL)
 
 ## Cài đặt
 

@@ -6,7 +6,7 @@
 
 ## Bối cảnh
 
-Kế hoạch đầu cần 131 giờ cho 1 sinh viên, gồm nhiều cơ chế hạ tầng (xử lý nhập nền + polling, mã hoá AES cấu hình nguồn, cron + advisory lock, hủy lần nhập, lưu mẫu ánh xạ, materialized view) nhưng lại thiếu các chức năng đề bài yêu cầu. Mục tiêu mới: **hoàn thành ở mức cơ bản, hiểu nghiệp vụ, mở rộng được sau**, khoảng 92 giờ.
+Kế hoạch đầu cần 131 giờ cho 1 sinh viên, gồm nhiều cơ chế hạ tầng (xử lý nhập nền + polling, mã hoá AES cấu hình nguồn, cron + advisory lock, hủy lần nhập, lưu mẫu ánh xạ, materialized view) nhưng lại thiếu các chức năng đề bài yêu cầu. Mục tiêu mới: **hoàn thành ở mức cơ bản, hiểu nghiệp vụ, mở rộng được sau**.
 
 ## Quyết định
 

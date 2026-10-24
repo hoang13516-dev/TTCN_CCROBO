@@ -32,7 +32,7 @@ Tài liệu ôn tập, câu hỏi gửi GVHD, ghi chú cá nhân: tạo **ngoài
 ## 4. Trước MỖI commit
 
 1. Sửa file `.puml` → xuất lại ảnh: `cd docs/phan-tich/so-do && java -jar plantuml.jar -tpng -o out *.puml && java -jar plantuml.jar -tsvg -o out *.puml`, rồi **mở ảnh xem** (lỗi cú pháp vẫn có thể ra ảnh sai).
-2. Chạy `npm run check` (hook pre-commit cũng tự chạy): kiểm tra mã định danh, FR ↔ UC, độ phủ AC, số thống kê, giờ kế hoạch, bảng, link/anchor, sơ đồ, file cấm, rồi Prettier và ESLint.
+2. Chạy `npm run check` (hook pre-commit cũng tự chạy): kiểm tra mã định danh, FR ↔ UC, độ phủ AC, số thống kê, mã bước kế hoạch, bảng, link/anchor, sơ đồ, file cấm, rồi Prettier và ESLint.
 3. Script không hiểu nghĩa câu chữ. Nếu đã sửa một trong các thông tin dưới đây, **đối chiếu tay mọi nơi nhắc tới nó**:
 
 | Thông tin dễ lệch                                | Định nghĩa ở       | Còn xuất hiện ở                                                         |

@@ -14,7 +14,7 @@ const EnvSchema = z.object({
   DATABASE_URL: z
     .string({ error: "DATABASE_URL là bắt buộc (xem .env.example)" })
     .min(1, "DATABASE_URL không được để trống"),
-  // Khoá ký JWT (S2.2). Ngắn quá thì dễ bị dò ngược bằng brute force.
+  // Khoá ký JWT (đăng nhập, UC01). Ngắn quá thì dễ bị dò ngược bằng brute force.
   JWT_SECRET: z
     .string({ error: "JWT_SECRET là bắt buộc (xem .env.example)" })
     .min(32, "JWT_SECRET phải dài ít nhất 32 ký tự"),
