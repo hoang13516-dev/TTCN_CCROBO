@@ -252,7 +252,14 @@ for (const sp of sprints) {
     }
   }
   const title = sp.split("\n")[0];
-  const expected = /^Ngày 50/.test(title) ? 1.5 : 13;
+  // Sprint 2 thêm S2.6 (2 giờ, hạn nộp tuần 2/3); Sprint 7 bớt 2 giờ vùng đệm để tổng giữ 92,5
+  const expected = /^Ngày 50/.test(title)
+    ? 1.5
+    : /^Sprint 2 /.test(title)
+      ? 15
+      : /^Sprint 7 /.test(title)
+        ? 11
+        : 13;
   if (Math.abs(sum - expected) > 1e-9)
     err(`ke-hoach.md "${title}": tổng giờ ${sum}, phải là ${expected}`);
 }

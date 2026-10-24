@@ -3,7 +3,7 @@
 > Đồ án chuyên ngành - GVHD: ThS. Dương Văn Đeo (GV001) - Thực hiện: Nguyễn Minh Hoàng (nhóm CCROBO, 1 sinh viên)
 > Phiên bản **v3.0** (21/10/2026), **sinh lại từ tài liệu phân tích** `docs/phan-tich/` (thay thế hoàn toàn các kế hoạch trước, xem lịch sử git)
 > Ràng buộc (ch.1 §1.5.3, C1): **50 ngày, 21/10 → 09/12/2026** · **~13 giờ/tuần** · phạm vi **Must + Should**
-> Tổng: **7 sprint × 13 giờ + 1,5 giờ ngày nộp = 92,5 giờ**
+> Tổng: **7 sprint × 13 giờ + 1,5 giờ ngày nộp = 92,5 giờ** (S2.6 thêm 2 giờ vào Sprint 2, lấy từ vùng đệm S7.5)
 
 ---
 
@@ -65,6 +65,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | S2.3 | Trang đăng nhập, bảo vệ route, menu theo vai trò                          | UC01       | FR-03               | AC-01.5…AC-01.7                                                | 2,5 |
 | S2.4 | Câu SQL KPI trên kho + `EXPLAIN` làm mốc hiệu năng                        | UC12       | FR-19, NFR-01       | Kết quả trên dữ liệu §3.5.2 khớp bảng kỳ vọng; ghi lại thời gian | 2   |
 | S2.5 | Báo cáo Sprint 2                                                         | -          | -                   | `docs/bao-cao/sprint-2.md`                                     | 1   |
+| S2.6 | Nộp tuần 2/3 (hạn 01/11): wireframe giao diện cơ bản (ảnh, vẽ bằng Figma hoặc tool khác); xuất `docs/phan-tich/` sang Google Doc; xác nhận tên repo theo định dạng `TTCN_MANHOM`; trang kế hoạch (timeline, phân công) trên website | - | - | Ảnh wireframe trong `docs/wireframe/`; link Google Doc và link repo gửi GVHD trước 01/11 | 2   |
 
 ### Sprint 3 (04/11 → 10/11) - ETL file
 
@@ -111,7 +112,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | S7.2 | Hướng dẫn sử dụng + hướng dẫn triển khai                       | -  | NFR-08, NFR-12  | Người không học IT tự nhập được file mẫu; người khác dựng lại được   | 2,5 |
 | S7.3 | UAT 2 người theo kịch bản câu hỏi kinh doanh (ch.2 §2.4)       | -  | -               | ≥ 2 phiếu góp ý; lỗi chặn sử dụng đã sửa                              | 2   |
 | S7.4 | Báo cáo tổng kết + slide bảo vệ                               | -  | -               | Báo cáo xuất từ `docs/phan-tich/` (O-18)                             | 2,5 |
-| S7.5 | Vùng đệm                                                      | -  | -               | Dùng cho lỗi tồn đọng; nếu không cần: quay video demo hoàn chỉnh     | 3   |
+| S7.5 | Vùng đệm                                                      | -  | -               | Dùng cho lỗi tồn đọng; nếu không cần: quay video demo hoàn chỉnh     | 1   |
 
 ### Ngày 50 (09/12) - Nộp
 
@@ -169,6 +170,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | [ ] S2.3 | Trang đăng nhập, bảo vệ route                     | 2,5h      |         |            |
 | [ ] S2.4 | SQL KPI + EXPLAIN mốc                             | 2h        |         |            |
 | [ ] S2.5 | Báo cáo Sprint 2                                  | 1h        |         |            |
+| [ ] S2.6 | Nộp tuần 2/3: wireframe, Google Doc, repo, kế hoạch | 2h      |         |            |
 | [ ] S3.1 | Upload, Extract, xem trước, gợi ý ánh xạ          | 3h        |         |            |
 | [ ] S3.2 | Transform + Load                                  | 4,5h      |         |            |
 | [ ] S3.3 | Giao diện nhập, lịch sử, file mẫu                 | 4,5h      |         |            |
@@ -190,7 +192,7 @@ Mốc M4 phủ đủ "Kết quả cần đạt" của đề (ch.7 §1) trước 
 | [ ] S7.2 | Hướng dẫn sử dụng + triển khai                    | 2,5h      |         |            |
 | [ ] S7.3 | UAT                                               | 2h        |         |            |
 | [ ] S7.4 | Báo cáo tổng kết + slide                          | 2,5h      |         |            |
-| [ ] S7.5 | Vùng đệm                                          | 3h        |         |            |
+| [ ] S7.5 | Vùng đệm                                          | 1h        |         |            |
 | [ ] S8.1 | Nộp sản phẩm cuối                                 | 1,5h      |         |            |
 
 **Tổng kế hoạch:** 92,5 giờ (không tính 8 giờ của S0 đã làm trước).
