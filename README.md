@@ -1,4 +1,4 @@
-# CN-019 — Dashboard phân tích dữ liệu bán hàng
+# CN-019 - Dashboard phân tích dữ liệu bán hàng
 
 Đồ án chuyên ngành: web BI cho chuỗi bán lẻ nhiều chi nhánh. Hệ thống gom dữ liệu bán hàng từ file CSV/Excel và REST API, nạp vào kho dữ liệu hình sao, rồi hiển thị dashboard KPI có lọc, drill-down và cảnh báo.
 
