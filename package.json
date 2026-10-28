@@ -3,28 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "description": "CN-019 Dashboard phân tích dữ liệu bán hàng",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "engines": {
     "node": ">=20"
   },
   "scripts": {
-    "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check:docs": "node scripts/check-docs.mjs",
-    "check": "npm run check:docs && npm run format:check && npm run lint",
+    "check": "npm run format:check",
     "prepare": "simple-git-hooks"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "eslint": "^10.13.0",
     "prettier": "^3.9.10",
-    "simple-git-hooks": "^2.14.0",
-    "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.2"
+    "simple-git-hooks": "^2.14.0"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run check"

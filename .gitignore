@@ -19,6 +19,3 @@ Thumbs.db
 # editor
 .vscode/
 .idea/
-
-# công cụ xuất sơ đồ (tải riêng, ~30 MB)
-docs/phan-tich/so-do/plantuml.jar
